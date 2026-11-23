@@ -108,6 +108,22 @@ def test_m7_notebook_embeds_the_adapter_and_benchmarks_validation_only(tmp_path:
         main(["--out", str(out), "--kind", "m7"])
 
 
+def test_m9_notebook_runs_odometry_and_cross_checks_with_evo(tmp_path: Path) -> None:
+    out = tmp_path / "m9.ipynb"
+    assert main(["--out", str(out), "--kind", "m9"]) == 0
+    nb = json.loads(out.read_text(encoding="utf-8"))
+    text = "".join("".join(c["source"]) for c in nb["cells"])
+    assert "sitesight.geometry.run" in text and "evo_ape" in text and "GITHUB_TOKEN" not in text
+    assert "rgbd_dataset_freiburg1_desk.tgz" in text
+    # the regex in the generated cell must keep its backslash (it is code, not a string escape)
+    assert r'r"rmse\s+' in text
+    cell = "".join(nb["cells"][1]["source"])
+    m = re.search(r"B64 = '''(.*?)'''", cell, re.S)
+    assert m is not None and max(len(line) for line in cell.splitlines()) <= 4100
+    z = zipfile.ZipFile(io.BytesIO(base64.b64decode("".join(m.group(1).split()))))
+    assert "sitesight/geometry/vo.py" in z.namelist()
+
+
 @pytest.mark.embed
 def test_adapter_fp16_rounds_weights_within_half_precision(tmp_path: Path) -> None:
     import numpy as np

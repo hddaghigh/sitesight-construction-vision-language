@@ -429,6 +429,86 @@ ANN, IMG = f"{DATA}/derived/annotations_curated.json", f"{DATA}/extracted/UAVdat
     }
 
 
+def build_m9_notebook(zip_bytes: bytes) -> dict[str, object]:
+    """TUM RGB-D fr1/desk: RGB-D odometry, ATE/RPE, cross-check of our ATE against ``evo``."""
+    raw = base64.b64encode(zip_bytes).decode()
+    b64 = chr(10).join(raw[i : i + 4000] for i in range(0, len(raw), 4000))
+    cells = [
+        _md(
+            """
+# SiteSight M9: RGB-D visual odometry on TUM fr1/desk
+
+Self-contained (code embedded, no GitHub token). CPU runtime is enough. Downloads the public TUM
+RGB-D sequence `freiburg1_desk` (about 0.36 GB), runs frame-to-frame and keyframe RGB-D odometry
+(ORB + depth + PnP/RANSAC, TUM's recommended ROS-default intrinsics, no undistortion) and scores both
+against the motion-capture ground truth: ATE (own Umeyama alignment) and RPE, plus the "camera never
+moved" baseline. Our ATE is cross-checked against `evo_ape` on the very same frames. The ground truth
+is used only for scoring.
+"""
+        ),
+        _code(
+            f"""
+import base64, io, os, zipfile
+B64 = '''
+{b64}
+'''
+zipfile.ZipFile(io.BytesIO(base64.b64decode("".join(B64.split())))).extractall("/content/sitesight")
+print(sorted(os.listdir("/content/sitesight")))
+"""
+        ),
+        _code(
+            """
+%cd /content/sitesight
+%pip -q uninstall -y opencv-python opencv-contrib-python opencv-python-headless
+%pip -q install -e . "opencv-python-headless>=4.9,<5" evo
+import cv2, evo, os
+print("cv2", cv2.__version__, "| evo", evo.__version__, "| cpus", os.cpu_count())
+"""
+        ),
+        _code(
+            """
+!curl -sSL -o /content/desk.tgz https://cvg.cit.tum.de/rgbd/dataset/freiburg1/rgbd_dataset_freiburg1_desk.tgz
+!ls -la /content/desk.tgz && sha256sum /content/desk.tgz
+!tar xzf /content/desk.tgz -C /content
+ROOT = "/content/rgbd_dataset_freiburg1_desk"
+!ls {ROOT} && ls {ROOT}/rgb | wc -l && ls {ROOT}/depth | wc -l && wc -l {ROOT}/groundtruth.txt
+"""
+        ),
+        _code(
+            """
+!python -m sitesight.geometry.run --root {ROOT} --out-dir /content/m9
+"""
+        ),
+        _code(
+            """
+# Cross-check our ATE against evo (same frames, SE(3) alignment, no scale).
+import json, re, subprocess
+m = json.load(open("/content/m9/metrics.json"))
+for mode in m["modes"]:
+    out = subprocess.run(
+        ["evo_ape", "tum", "/content/m9/gt.txt", f"/content/m9/est_{mode}.txt", "-a", "--t_max_diff", "0.01"],
+        capture_output=True, text=True,
+    ).stdout
+    print(out)
+    m["modes"][mode]["evo_ate_rmse_m"] = float(re.search(r"rmse\\s+([0-9.eE+-]+)", out).group(1))
+print("M9_JSON_BEGIN")
+print(json.dumps(m, separators=(",", ":"), sort_keys=True))
+print("M9_JSON_END")
+"""
+        ),
+    ]
+    return {
+        "cells": cells,
+        "metadata": {
+            "colab": {"provenance": []},
+            "kernelspec": {"display_name": "Python 3", "name": "python3"},
+            "language_info": {"name": "python"},
+        },
+        "nbformat": 4,
+        "nbformat_minor": 5,
+    }
+
+
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--out", type=Path, required=True)
@@ -437,10 +517,18 @@ def main(argv: list[str] | None = None) -> int:
         "--adapter-fp16", action="store_true", help="m7: round the adapter to float16 (smaller)"
     )
     p.add_argument(
-        "--kind", choices=["m4", "m5", "m6", "m7"], default="m4", help="which notebook to build"
+        "--kind",
+        choices=["m4", "m5", "m6", "m7", "m9"],
+        default="m4",
+        help="which notebook to build",
     )
     args = p.parse_args(argv)
-    builders = {"m4": build_notebook, "m5": build_m5_notebook, "m6": build_m6_notebook}
+    builders = {
+        "m4": build_notebook,
+        "m5": build_m5_notebook,
+        "m6": build_m6_notebook,
+        "m9": build_m9_notebook,
+    }
     if args.kind == "m7":
         if not args.adapter_dir:
             p.error("--kind m7 needs --adapter-dir (the M5 LoRA adapter to export)")

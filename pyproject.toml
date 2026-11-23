@@ -19,6 +19,11 @@ dev = [
     "mypy>=1.11",
     "httpx2>=2.0",  # what starlette.testclient imports
     {include-group = "serve"},
+    {include-group = "geometry"},
+]
+# RGB-D visual odometry (M9). evo (trajectory error) is only used in the Colab run.
+geometry = [
+    "opencv-python-headless>=4.9,<5",
 ]
 # Serving (M7): HTTP API + ONNX Runtime inference. No torch: the image stays small.
 serve = [
