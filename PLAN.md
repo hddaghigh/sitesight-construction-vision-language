@@ -193,6 +193,7 @@ Estimated total local add ≈ 0.7 GB (M1–M7) beyond the dataset, leaving rough
 
 - **M1 done** (2026-11-22): parser/validator/schema/downloader; real-data findings reproduced.
 - **M2 done** (2026-11-22): caption-field parser (99.63% coverage), pHash + DINOv2-small dedup, grouped split (428 groups; naive split leaks a mean 1,210 train-test pairs vs 0), DATASHEET.md. Embeddings were computed on the laptop (710 MB venv `.venv-embed`) rather than Colab, by agreement, so results could be verified; the Colab notebook is written but not yet run.
+- **M3 built** (2026-11-23): PyQt6 review tool, shared predictions format, audit sampling/matching/agreement/taxonomy code, 100-image sample (`reports/m3/audit_sample.json`, seed 0), protocol in AUDIT.md. **Not done: the audit itself (needs your 2 to 3 h in blind mode, 45 to 90 min in review mode, both rough estimates) and therefore no agreement numbers or error-taxonomy results exist yet.**
 - **New risk found in M2:** residual same-site leakage under looser similarity (297 train-test pairs at pHash <= 16 / cosine >= 0.85). Mitigation options for M5: report val/test scores with this caveat; try average-linkage clustering (needs scipy) or manual site labels from the M3 audit set; never describe the test set as "unseen sites".
 
 ## 11. Open items for you

@@ -43,6 +43,13 @@ Quality gate before any commit: `ruff check`, `ruff format --check`, `mypy`, `py
 - Local torch exception: embeddings were computed on the laptop in a separate venv `.venv-embed` (`uv sync --group embed`; 710 MB) with HF cache in `sitesight_data\.hf`, because 1,431 images take only ~4 min. The Colab notebook `notebooks/01_data_splits.ipynb` runs the same CLIs but has **not been executed** yet.
 - Opt-in tests: `pytest -m real_data` (needs `SITESIGHT_DATA_DIR`), `pytest -m embed` (run in `.venv-embed`).
 
+## M3 (viewer + audit)
+- Qt-free logic: `sitesight/viewer/state.py` (layers original/edit, undo/redo, blind-mode hiding, export), `sitesight/data/audit.py` (sampling, greedy IoU matching, agreement, kappa, bootstrap CI, taxonomy), `sitesight/data/predictions.py` (shared prediction file format for the viewer and M4). Qt layer: `sitesight/viewer/canvas.py`, `app.py`.
+- Run with `make view` / `make audit` (blind by default). Tests: default suite is Qt-free; `pytest -m viewer` runs the GUI headless (`QT_QPA_PLATFORM=offscreen`, set `QT_QPA_FONTDIR=C:\Windows\Fonts` to render text in screenshots).
+- **The audit has NOT been performed**; `reports/m3/audit_sample.json` is the fixed sample (seed 0). Never fabricate audit numbers; `audit_report.json` must come from the user's `audit.json`. Use throwaway audit files for tests/screenshots, never `sitesight_data\audit\audit.json`.
+- PyQt6 stub quirks are handled with targeted `# type: ignore[...]` (typed `pyqtSignal`, `QTest` static calls, `QGraphicsItem(parent=)`).
+
 ## Status
 - **M1 done** (parser, validator, schema, downloader, tests, CI).
-- **M2 done** (caption parser, pHash+DINOv2 dedup, grouped split, leakage report, datasheet, Colab notebook not yet run). Next: **M3** (PyQt6 viewer + 100-image label audit).
+- **M2 done** (caption parser, pHash+DINOv2 dedup, grouped split, leakage report, datasheet, Colab notebook not yet run).
+- **M3 done except the human part**: viewer, audit analysis, sample and protocol are built and tested; the 100-image audit awaits the user's labelling. Next: **M4** (zero-shot baselines + evaluation harness).

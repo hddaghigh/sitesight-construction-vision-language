@@ -3,7 +3,7 @@
 DATA_DIR ?= sitesight_data
 RUN = uv run
 
-.PHONY: sync lint format typecheck test check download data parse fields embed curate check-real
+.PHONY: sync lint format typecheck test check download data parse fields embed curate view audit audit-report check-real
 
 sync:
 	uv sync
@@ -55,6 +55,25 @@ curate:
 	  --images $(DATA_DIR)/extracted/UAVdata \
 	  --embeddings $(DATA_DIR)/derived/dinov2_small.npy \
 	  --out-dir $(DATA_DIR)/derived/curated
+
+# M3: review/debug viewer (needs `uv sync --group viewer`); PRED=file1.json file2.json to compare models
+view:
+	$(RUN) python -m sitesight.viewer.app \
+	  --annotations $(DATA_DIR)/derived/curated/annotations_curated.json \
+	  --images $(DATA_DIR)/extracted/UAVdata $(if $(PRED),--predictions $(PRED),)
+
+# Blind label audit of the 100-image sample (see AUDIT.md); resumes if audit.json exists
+audit:
+	$(RUN) python -m sitesight.viewer.app \
+	  --annotations $(DATA_DIR)/derived/curated/annotations_curated.json \
+	  --images $(DATA_DIR)/extracted/UAVdata \
+	  --audit-sample reports/m3/audit_sample.json \
+	  --audit-file $(DATA_DIR)/audit/audit.json --audit-mode $(or $(MODE),blind)
+
+audit-report:
+	$(RUN) python -m sitesight.data.audit report \
+	  --annotations $(DATA_DIR)/derived/curated/annotations_curated.json \
+	  --audit $(DATA_DIR)/audit/audit.json --out reports/m3/audit_report.json
 
 # Assert the parser reproduces the independently measured findings on the real data.
 check-real:

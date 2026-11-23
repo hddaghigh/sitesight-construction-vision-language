@@ -13,6 +13,8 @@ Suggested dataset citation (the Mendeley page does not give a ready-made string)
 
 > Kim, H.; Bang, S. (2020). *Data for: Context-based information generation from construction site images using unmanned aerial vehicle (UAV)-acquired data and image captioning*. Mendeley Data, V1. https://doi.org/10.17632/4h68fmktwh.1
 
+`docs/images/viewer_ground_truth.png` is a screenshot that includes one image and its annotations from this dataset (CC BY 4.0, same attribution as above).
+
 The data itself is **not** redistributed in this repository; it lives outside the repo and is fetched by `scripts/download_data.py` (to be written in M1). The file `image_with_captions.zip` (593,575,014 bytes) has SHA-256 `d1860ae77b885ad87dfee0f530606a2b227dfc776a50dc55a20024e9a40f7333`.
 
 ## Models (to be completed per milestone)

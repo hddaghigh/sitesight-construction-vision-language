@@ -18,7 +18,11 @@ dev = [
     "ruff>=0.6",
     "mypy>=1.11",
 ]
-# Colab only (not installed on the laptop): image embeddings for dedup / grouped splits.
+# Desktop review/audit tool (laptop only; Colab has no display).
+viewer = [
+    "PyQt6>=6.6",
+]
+# Image embeddings for dedup / grouped splits (laptop `.venv-embed` or Colab).
 embed = [
     "torch",
     "transformers",
@@ -53,8 +57,10 @@ testpaths = ["tests"]
 # Opt-in tests (not run by default / in CI):
 #   real_data: needs the extracted dataset (SITESIGHT_DATA_DIR)      pytest -m real_data
 #   embed:     needs torch + transformers + the DINOv2 weights       pytest -m embed
-addopts = "-m 'not real_data and not embed' -ra"
+#   viewer:    needs PyQt6 (offscreen platform)                      pytest -m viewer
+addopts = "-m 'not real_data and not embed and not viewer' -ra"
 markers = [
     "real_data: needs the real extracted dataset; run with -m real_data",
     "embed: needs torch/transformers and DINOv2 weights; run with -m embed",
+    "viewer: needs PyQt6; run with -m viewer",
 ]
