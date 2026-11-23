@@ -49,6 +49,14 @@ Quality gate before any commit: `ruff check`, `ruff format --check`, `mypy`, `py
 - **The audit has NOT been performed**; `reports/m3/audit_sample.json` is the fixed sample (seed 0). Never fabricate audit numbers; `audit_report.json` must come from the user's `audit.json`. Use throwaway audit files for tests/screenshots, never `sitesight_data\audit\audit.json`.
 - PyQt6 stub quirks are handled with targeted `# type: ignore[...]` (typed `pyqtSignal`, `QTest` static calls, `QGraphicsItem(parent=)`).
 
+## M4 (zero-shot baselines + evaluation harness)
+- Harness (pure numpy, `sitesight/eval/`): `boxes.py` (IoU, NMS), `grounding.py` (AP all-point, COCO-style matching, recall@IoU with `top_k`, size/crowding/kind breakdowns, two protocols `detection` vs `given_phrases`: never compare across them), `calibration.py` (ECE, 10 equal-width bins), `captioning.py` (BLEU, CIDEr-D as in coco-caption, METEOR with **exact matching only**, loose + strict field accuracy), `summary.py` (image-level resource presence F1), `data.py` (GT building + exclusion report), `run.py` (CLI + markdown tables). Every formula has a hand-derived test; mutation-checked (12/13 killed, survivor is an equivalent mutant).
+- Baselines (`sitesight/baselines/`): OWLv2-base (all 31 classes, per-class NMS) and **native** `florence-community/Florence-2-base` (no `trust_remote_code`, MIT). Prompts are pre-registered in `prompts.py` and must not be tuned on val. Florence confidence = geometric-mean token probability under greedy decoding.
+- **Compute reality (laptop i7-8565U, 4 threads):** Florence-2-base vision tower ~45 s per image (80% of a query; `channels_last` does not help), so image features are cached per image and both Florence tasks run in one pass (~140 s/image total). OWLv2 ~11 s/image for all 31 classes. Full val for Florence is therefore a Colab job (`notebooks/02_baselines.ipynb`, not yet run); locally Florence runs on a seeded 30-image subset (`--limit 30 --seed 0`).
+- Predictions live in `sitesight_data\derived\predictions\` (tens of MB; not committed). Committed: metrics + tables in `reports/m4/`.
+- Zero-shot is run on `val` only; `baselines/run.py` refuses `--split test`.
+- Opt-in `pytest -m embed` runs the real-model tests (slow: minutes on CPU); it needs `SITESIGHT_DATA_DIR`.
+
 ## Status
 - **M1 done** (parser, validator, schema, downloader, tests, CI).
 - **M2 done** (caption parser, pHash+DINOv2 dedup, grouped split, leakage report, datasheet, Colab notebook not yet run).

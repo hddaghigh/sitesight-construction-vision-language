@@ -153,6 +153,41 @@ def assign_splits(ds: Dataset, labels: NDArray[np.int64], split: Sequence[str]) 
         img.split = s
 
 
+def apply_saved_splits(ds: Dataset, saved: dict[str, dict[str, Any]]) -> None:
+    """Copy ``group_id`` / ``split`` from a saved ``splits.json`` (file name -> {split, group_id}).
+
+    Used to reproduce the exact split elsewhere (e.g. Colab) without recomputing embeddings,
+    whose last digits can differ between CPU and GPU. Raises if the file names do not match the
+    dataset exactly, so a stale or foreign split file can never be applied silently.
+    """
+    names = {i.file_name for i in ds.images}
+    if names != set(saved):
+        missing, extra = sorted(names - set(saved))[:3], sorted(set(saved) - names)[:3]
+        raise ValueError(
+            f"split file does not match the dataset (missing {missing}, extra {extra})"
+        )
+    for img in ds.images:
+        entry = saved[img.file_name]
+        img.split, img.group_id = entry["split"], entry["group_id"]
+
+
+def main(argv: list[str] | None = None) -> int:
+    import argparse
+    import json
+    from pathlib import Path
+
+    p = argparse.ArgumentParser(description="Apply a saved splits.json to an annotations file.")
+    p.add_argument("--annotations", type=Path, required=True)
+    p.add_argument("--splits", type=Path, required=True)
+    p.add_argument("--out", type=Path, required=True)
+    args = p.parse_args(argv)
+    ds = Dataset.load(args.annotations)
+    apply_saved_splits(ds, json.loads(args.splits.read_text(encoding="utf-8")))
+    ds.save(args.out)
+    print(f"applied splits to {len(ds.images)} images: {summarise_splits(ds).images}")
+    return 0
+
+
 def summarise_splits(ds: Dataset) -> SplitSummary:
     """Images, annotations and per-class annotation counts in each split."""
     split_of = {i.id: i.split for i in ds.images}

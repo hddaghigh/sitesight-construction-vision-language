@@ -3,7 +3,7 @@
 DATA_DIR ?= sitesight_data
 RUN = uv run
 
-.PHONY: sync lint format typecheck test check download data parse fields embed curate view audit audit-report check-real
+.PHONY: sync lint format typecheck test check download data parse fields embed curate view audit audit-report check-real baseline-owlv2 baseline-florence eval-zero-shot
 
 sync:
 	uv sync
@@ -61,6 +61,29 @@ view:
 	$(RUN) python -m sitesight.viewer.app \
 	  --annotations $(DATA_DIR)/derived/curated/annotations_curated.json \
 	  --images $(DATA_DIR)/extracted/UAVdata $(if $(PRED),--predictions $(PRED),)
+
+# M4: zero-shot baselines on val (torch venv: `uv sync --group embed`; slow on CPU, see CONTRIBUTING.md)
+#   OWLv2: all val images (~40 min on the dev laptop). Florence-2: seeded 30-image subset (~70 min).
+baseline-owlv2:
+	python -m sitesight.baselines.run --model owlv2 \
+	  --annotations $(DATA_DIR)/derived/curated/annotations_curated.json \
+	  --images $(DATA_DIR)/extracted/UAVdata --split val \
+	  --out $(DATA_DIR)/derived/predictions/owlv2_val.json
+
+baseline-florence:
+	python -m sitesight.baselines.run --model florence --limit 30 --seed 0 \
+	  --annotations $(DATA_DIR)/derived/curated/annotations_curated.json \
+	  --images $(DATA_DIR)/extracted/UAVdata --split val \
+	  --out $(DATA_DIR)/derived/predictions/florence2_base_val30.json
+
+# Score prediction files on val; --common-images compares models on the images ALL of them cover
+eval-zero-shot:
+	$(RUN) python -m sitesight.eval.run --split val --common-images \
+	  --annotations $(DATA_DIR)/derived/curated/annotations_curated.json \
+	  --predictions $(DATA_DIR)/derived/predictions/owlv2_val.json \
+	    $(DATA_DIR)/derived/predictions/florence2_base_val30_grounding.json \
+	    $(DATA_DIR)/derived/predictions/florence2_base_val30_regions.json \
+	  --out reports/m4/zero_shot_val30.json
 
 # Blind label audit of the 100-image sample (see AUDIT.md); resumes if audit.json exists
 audit:

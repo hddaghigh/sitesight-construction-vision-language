@@ -26,6 +26,7 @@ viewer = [
 embed = [
     "torch",
     "transformers",
+    "scipy",  # required by the OWLv2 image processor (zero-shot baseline)
 ]
 
 [build-system]
@@ -42,6 +43,10 @@ extend-exclude = ["notebooks"]  # Colab cells use shell magics and are not libra
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP", "SIM", "RUF"]
+
+[tool.ruff.lint.per-file-ignores]
+# Tests carry hand-derivations in comments; wrapping them would hurt readability.
+"tests/*" = ["E501"]
 
 [tool.mypy]
 python_version = "3.11"

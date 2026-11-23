@@ -35,6 +35,9 @@ class Prediction:
     score: float
     caption: str | None = None
     category_id: int | None = None
+    region_id: int | None = (
+        None  # annotation id when the prediction answers one GT region (captioning)
+    )
 
 
 @dataclass

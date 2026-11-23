@@ -2,12 +2,16 @@
 
 from __future__ import annotations
 
+import json
+from pathlib import Path
+
 import numpy as np
 import pytest
 
 from sitesight.data.dedup import connected_groups
 from sitesight.data.schema import AnnotationRecord, CategoryRecord, Dataset, ImageRecord
 from sitesight.data.splits import (
+    apply_saved_splits,
     assign_splits,
     grouped_split,
     leakage,
@@ -15,6 +19,7 @@ from sitesight.data.splits import (
     random_split,
     summarise_splits,
 )
+from sitesight.data.splits import main as split_main
 
 
 def _counts(split: list[str]) -> tuple[int, int, int]:
@@ -115,6 +120,30 @@ def _tiny_dataset() -> Dataset:
         )
     del cats
     return ds
+
+
+def test_apply_saved_splits_and_cli(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    ds = _tiny_dataset()
+    saved = {
+        "1.jpg": {"split": "train", "group_id": 0},
+        "2.jpg": {"split": "train", "group_id": 0},
+        "3.jpg": {"split": "val", "group_id": 1},
+        "4.jpg": {"split": "test", "group_id": 2},
+    }
+    apply_saved_splits(ds, saved)
+    assert [i.split for i in ds.images] == ["train", "train", "val", "test"]
+    assert [i.group_id for i in ds.images] == [0, 0, 1, 2]
+    with pytest.raises(ValueError, match="does not match"):
+        apply_saved_splits(_tiny_dataset(), {k: v for k, v in saved.items() if k != "4.jpg"})
+    with pytest.raises(ValueError, match="does not match"):
+        apply_saved_splits(_tiny_dataset(), {**saved, "5.jpg": saved["1.jpg"]})
+    ann, spl, out = tmp_path / "a.json", tmp_path / "s.json", tmp_path / "o.json"
+    _tiny_dataset().save(ann)
+    spl.write_text(json.dumps(saved))
+    assert split_main(["--annotations", str(ann), "--splits", str(spl), "--out", str(out)]) == 0
+    assert (
+        Dataset.load(out).images[3].split == "test" and "applied splits" in capsys.readouterr().out
+    )
 
 
 def test_assign_and_summarise_splits() -> None:

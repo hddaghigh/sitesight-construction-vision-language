@@ -187,6 +187,21 @@ CATEGORY_NAMES: tuple[str, ...] = tuple(sorted(RESOURCE_LEXICON))
 CATEGORY_IDS: dict[str, int] = {name: i for i, name in enumerate(CATEGORY_NAMES, start=1)}
 
 
+def tokenize_caption(caption: str) -> list[str]:
+    """Lower-cased tokens with 'H-beam' protected, punctuation removed and typo repairs applied."""
+    return _prepare(caption)[0]
+
+
+def parse_number_at(tokens: list[str], i: int) -> tuple[int, int] | None:
+    """Public wrapper of the number-word parser: ``(value, tokens used)`` or ``None``."""
+    return _number(tokens, i)
+
+
+def find_resource(tokens: list[str], i: int) -> tuple[str, int] | None:
+    """Longest resource phrase starting at ``tokens[i]``: ``(canonical name, tokens used)``."""
+    return _longest_resource(tokens, i)
+
+
 @dataclass
 class CaptionFields:
     resource: str
