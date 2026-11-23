@@ -70,7 +70,7 @@ un\epoch_4`. Gallery images are regenerated, not committed.
 
 ## M6 (active learning)
 - Code: `sitesight/active/` (ranking.py strategies + curve summaries, simulate.py runner), `configs/active.toml`, Colab notebook via `scripts/build_colab_notebook.py --kind m6`. Report: `reports/m6/README.md`.
-- Result (val, 3 seeds): labels to reach 90% of full-data score: random 283, uncertainty 238, uncertainty+diversity 239. Diversity gave no gain over plain uncertainty. Per-round rows were not committed.
+- Result (val, 3 seeds): labels to reach 90% of full-data score: random 283.0, uncertainty 238.2, uncertainty+diversity 238.5. Diversity gave no gain over plain uncertainty. Per-round rows were not committed.
 - Unit of cost = image; boxes assumed known; captioning only; the test split is never read.
 
 ## M7 (serving)
@@ -90,4 +90,7 @@ un\epoch_4`. Gallery images are regenerated, not committed.
 ## Status
 - **M1 done** (parser, validator, schema, downloader, tests, CI).
 - **M2 done** (caption parser, pHash+DINOv2 dedup, grouped split, leakage report, datasheet, Colab notebook not yet run).
-- **M3 done except the human part**: viewer, audit analysis, sample and protocol are built and tested; the 100-image audit awaits the user's labelling. Next: **M4** (zero-shot baselines + evaluation harness).
+- **M3 done except the human part**: viewer, audit analysis, sample and protocol are built and tested; the 100-image audit awaits the user's labelling (label accuracy is unmeasured everywhere).
+- **M4 to M9 done** (zero-shot baselines and eval harness; LoRA fine-tune; active learning; ONNX/int8 serving; monitoring; RGB-D odometry). Results and caveats: `reports/m4` to `reports/m9`.
+- **M10 done**: README headline table with sources, `TECHNICAL_REPORT.md`, `tests/test_headline_numbers.py` (fails if a README number and its committed evidence disagree). When a report changes, update the README row and rerun that test.
+- Open items: the 100-image audit (the user's labelling), calibration (temperature scaling), KV-cached decoder, embedding drift and real output-drift logs, M6 raw per-round rows were never committed.
