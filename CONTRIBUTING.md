@@ -64,8 +64,14 @@ Quality gate before any commit: `ruff check`, `ruff format --check`, `mypy`, `py
 ## M5 (LoRA fine-tune of Florence-2-base)
 - Code: `sitesight/train/{data,lora}.py`, `eval/gallery.py`, `scripts/build_colab_notebook.py --kind m5`. Run on Colab only.
 - Vision features are cached (frozen tower), so no augmentation. Epoch chosen by val loss (epoch 4). Test split evaluated once.
-- Results (val/test mAP@0.5 39.2/34.0; ECE 0.43-0.46, worse than zero-shot) and caveats: `reports/m5/README.md`. Adapter (13 MB) is not committed; it lives in `sitesight_data\derived\m5un\epoch_4`. Gallery images are regenerated, not committed.
+- Results (val/test mAP@0.5 39.2/34.0; ECE 0.43-0.46, worse than zero-shot) and caveats: `reports/m5/README.md`. Adapter (13 MB) is not committed; it lives in `sitesight_data\derived\m5
+un\epoch_4`. Gallery images are regenerated, not committed.
 - Never pass `--allow-test` again for model selection; the test set is spent for this protocol.
+
+## M6 (active learning)
+- Code: `sitesight/active/` (ranking.py strategies + curve summaries, simulate.py runner), `configs/active.toml`, Colab notebook via `scripts/build_colab_notebook.py --kind m6`. Report: `reports/m6/README.md`.
+- Result (val, 3 seeds): labels to reach 90% of full-data score: random 283, uncertainty 238, uncertainty+diversity 239. Diversity gave no gain over plain uncertainty. Per-round rows were not committed.
+- Unit of cost = image; boxes assumed known; captioning only; the test split is never read.
 
 ## Status
 - **M1 done** (parser, validator, schema, downloader, tests, CI).
