@@ -77,14 +77,15 @@ def main(argv: list[str] | None = None) -> int:
         rows = stats_for(list_images(args.images, args.annotations, args.split))
         cols = stack(rows)
         flags_rows = rows
-        source = f"images in {args.images}" + (f" (split {args.split})" if args.split else "")
+        # only the folder / file name: reports are shared and must not leak local paths
+        source = f"images in {args.images.name}" + (f" (split {args.split})" if args.split else "")
     else:
         records, bad = read_log(args.log)
         cols = log_features(records)
         flags_rows = [
             r["image"] for r in records if r.get("status") == 200 and r.get("image") is not None
         ]
-        source = f"request log {args.log} ({len(records)} lines, {bad} malformed skipped)"
+        source = f"request log {args.log.name} ({len(records)} lines, {bad} malformed skipped)"
 
     if args.cmd == "fit":
         n = len(next(iter(cols.values())))
