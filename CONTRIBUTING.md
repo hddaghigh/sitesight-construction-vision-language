@@ -73,6 +73,11 @@ un\epoch_4`. Gallery images are regenerated, not committed.
 - Result (val, 3 seeds): labels to reach 90% of full-data score: random 283, uncertainty 238, uncertainty+diversity 239. Diversity gave no gain over plain uncertainty. Per-round rows were not committed.
 - Unit of cost = image; boxes assumed known; captioning only; the test split is never read.
 
+## M7 (serving)
+- Code: `sitesight/serve/` (export.py ONNX+int8, codec.py numpy pre/post, onnx_backend.py greedy loop, api.py FastAPI, cli.py batch, bench.py), `Dockerfile`, CI `docker` job. Colab notebook: `build_colab_notebook.py --kind m7`.
+- Result (300 val regions, 2-vCPU Colab, cold): PyTorch p50 85.1 s, ONNX fp32 12.1 s, int8 9.5 s; int8 574 MB vs 1,242 MB; int8 identical caption 76%, field accuracy within 2 regions. Details and caveats in `reports/m7/README.md`.
+- Weights must be registered as initializers (model as submodule) or int8 quantisation silently does nothing. Docker image untested locally. API confidence is not calibrated.
+
 ## Status
 - **M1 done** (parser, validator, schema, downloader, tests, CI).
 - **M2 done** (caption parser, pHash+DINOv2 dedup, grouped split, leakage report, datasheet, Colab notebook not yet run).
