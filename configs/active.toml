@@ -1,0 +1,38 @@
+# Active-learning simulation (milestone M6). Fixed before any run.
+#
+# Pool = training images. Labelling cost = images (all of an image's region captions together).
+# Region boxes are assumed known for pool images; only captions are "bought". Every round trains a
+# FRESH LoRA from the pretrained model on the labelled images (same recipe as M5 but 3 epochs) and
+# scores the validation split. The test split is never used.
+
+[model]
+id = "florence-community/Florence-2-base"
+
+[lora]
+r = 16
+alpha = 32
+dropout = 0.05
+target_regex = ".*language_model.*\\.(q_proj|k_proj|v_proj|out_proj|fc1|fc2)"
+
+[train]
+epochs = 3
+batch_size = 16
+lr = 1e-4
+weight_decay = 0.01
+warmup_frac = 0.05
+grad_clip = 1.0
+max_target_tokens = 256
+
+[active]
+seeds = [0, 1, 2]
+# Cumulative labelled-image budgets as fractions of the training pool; the first is the random seed set.
+budget_fractions = [0.05, 0.10, 0.20, 0.40]
+strategies = ["random", "uncertainty", "uncertainty_diversity"]
+candidate_multiplier = 3
+max_new_tokens = 48
+gen_batch_size = 64
+target_fraction = 0.90      # "labels needed to reach 90% of the full-data score"
+
+[data]
+train_split = "train"
+val_split = "val"

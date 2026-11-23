@@ -69,3 +69,16 @@ def test_notebook_is_valid_and_embeds_the_code(tmp_path: Path) -> None:
         timeout=120,
     )
     assert r.returncode == 0 and "usage:" in r.stdout.lower(), r.stderr[-400:]
+
+
+def test_m6_notebook_is_resumable_smoke_tested_and_never_touches_test(tmp_path: Path) -> None:
+    out = tmp_path / "m6.ipynb"
+    assert main(["--out", str(out), "--kind", "m6"]) == 0
+    nb = json.loads(out.read_text(encoding="utf-8"))
+    text = "".join("".join(c["source"]) for c in nb["cells"])
+    assert "sitesight.active.simulate" in text and "--limit-images 24" in text
+    assert "GITHUB_TOKEN" not in text and "--split test" not in text and "--allow-test" not in text
+    m = re.search(r'B64 = "([^"]+)"', "".join(nb["cells"][1]["source"]))
+    assert m is not None
+    names = set(zipfile.ZipFile(io.BytesIO(base64.b64decode(m.group(1)))).namelist())
+    assert {"configs/active.toml", "sitesight/active/simulate.py"} <= names

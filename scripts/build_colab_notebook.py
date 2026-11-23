@@ -247,12 +247,98 @@ print("METRICS_JSON_END")
     }
 
 
+def build_m6_notebook(zip_bytes: bytes) -> dict[str, object]:
+    """Active-learning simulation (random vs uncertainty vs uncertainty + diversity)."""
+    b64 = base64.b64encode(zip_bytes).decode()
+    cells = [
+        _md(
+            """
+# SiteSight M6: active-learning simulation (GPU)
+
+Self-contained (code embedded, no GitHub token). Compares random, uncertainty and uncertainty +
+diversity acquisition at 5/10/20/40% of the training images (3 seeds, a fresh LoRA each round) plus a
+full-data reference. Uses only train and validation images; the test split is not read. Results are
+appended to `results.jsonl` after every round, so if the session drops, reconnect and Run all again:
+finished rounds are skipped. Set **Runtime > Change runtime type > T4 GPU**, then Run all.
+"""
+        ),
+        _code(
+            f"""
+import base64, io, os, zipfile
+B64 = "{b64}"
+zipfile.ZipFile(io.BytesIO(base64.b64decode(B64))).extractall("/content/sitesight")
+print(sorted(os.listdir("/content/sitesight")))
+"""
+        ),
+        _code(
+            """
+%cd /content/sitesight
+%pip -q install -e . transformers scipy peft
+%pip -q uninstall -y torchao
+import torch
+assert torch.cuda.is_available(), "switch the runtime to a GPU"
+print("torch", torch.__version__, "| GPU:", torch.cuda.get_device_name(0))
+"""
+        ),
+        _code(
+            """
+DATA = "/content/sitesight_data"
+!python scripts/download_data.py --data-dir {DATA} --min-free-gb 3
+!python -m sitesight.data.via_parse --via {DATA}/extracted/via_region_data_final.json \
+    --images {DATA}/extracted/UAVdata --out {DATA}/derived/annotations.json
+!python -m sitesight.data.caption_fields --annotations {DATA}/derived/annotations.json \
+    --out {DATA}/derived/annotations_fields.json
+!python -m sitesight.data.splits --annotations {DATA}/derived/annotations_fields.json \
+    --splits reports/m2/splits.json --out {DATA}/derived/annotations_curated.json
+ANN, IMG = f"{DATA}/derived/annotations_curated.json", f"{DATA}/extracted/UAVdata"
+"""
+        ),
+        _code(
+            """
+# Smoke test (tiny pool, about 2 minutes): fails fast if anything is wrong.
+!python -m sitesight.active.simulate --config configs/active.toml --annotations {ANN} --images {IMG} \
+    --out-dir /content/active_smoke --device cuda --limit-images 24
+"""
+        ),
+        _code(
+            """
+# The real run. Resumable: re-running skips finished rounds.
+!python -m sitesight.active.simulate --config configs/active.toml --annotations {ANN} --images {IMG} \
+    --out-dir /content/active_run --device cuda
+"""
+        ),
+        _code(
+            """
+import json
+s = json.load(open("/content/active_run/summary.json"))
+print("METRICS_JSON_BEGIN")
+print(json.dumps(s, separators=(",", ":"), sort_keys=True))
+print("METRICS_JSON_END")
+"""
+        ),
+    ]
+    return {
+        "cells": cells,
+        "metadata": {
+            "colab": {"provenance": []},
+            "kernelspec": {"display_name": "Python 3", "name": "python3"},
+            "language_info": {"name": "python"},
+            "accelerator": "GPU",
+        },
+        "nbformat": 4,
+        "nbformat_minor": 5,
+    }
+
+
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--out", type=Path, required=True)
-    p.add_argument("--kind", choices=["m4", "m5"], default="m4", help="which notebook to build")
+    p.add_argument(
+        "--kind", choices=["m4", "m5", "m6"], default="m4", help="which notebook to build"
+    )
     args = p.parse_args(argv)
-    nb = (build_m5_notebook if args.kind == "m5" else build_notebook)(embedded_zip())
+    builders = {"m4": build_notebook, "m5": build_m5_notebook, "m6": build_m6_notebook}
+    nb = builders[args.kind](embedded_zip())
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(json.dumps(nb, indent=1) + "\n", encoding="utf-8", newline="\n")
     print(f"wrote {args.out} ({args.out.stat().st_size // 1024} KB, {len(nb['cells'])} cells)")  # type: ignore[arg-type]

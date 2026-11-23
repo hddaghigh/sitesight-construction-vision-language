@@ -22,6 +22,7 @@ CLI_MODULES = [
     "sitesight.eval.run",
     "sitesight.baselines.run",
     "sitesight.train.lora",
+    "sitesight.active.simulate",
 ]
 
 
