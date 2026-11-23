@@ -33,6 +33,10 @@ class _Handler(BaseHTTPRequestHandler):
         super().__init__(*args, **kw)  # type: ignore[arg-type]
 
     def do_GET(self) -> None:
+        # Behave like the real host: the default "Python-urllib/x" client gets 403 Forbidden.
+        if self.headers.get("User-Agent", "").startswith("Python-urllib"):
+            self.send_error(403, "Forbidden")
+            return
         m = re.match(r"bytes=(\d+)-", self.headers.get("Range", ""))
         if m and not self.ignore_range:
             start = int(m.group(1))
@@ -67,6 +71,28 @@ def dataset_zip(tmp_path: Path) -> Iterator[tuple[bytes, Path]]:
         for img in sorted(images.glob("*.jpg")):
             zf.write(img, f"UAVdata/{img.name}")
     yield zpath.read_bytes(), zpath
+
+
+def test_server_rejects_default_python_client_but_downloader_is_accepted(
+    tmp_path: Path, dataset_zip: tuple[bytes, Path]
+) -> None:
+    """Regression test for the 403 seen on the real host: our requests must not look like
+    the default urllib client."""
+    import urllib.error
+    import urllib.request
+
+    payload, _ = dataset_zip
+    server, url = _serve(payload)
+    try:
+        default_client = urllib.request.Request(url, headers={"User-Agent": "Python-urllib/3.13"})
+        with pytest.raises(urllib.error.HTTPError) as err:
+            urllib.request.urlopen(default_client)
+        assert err.value.code == 403  # the test server really does reject that client
+        dest = tmp_path / "ok.zip"
+        download(url, dest, len(payload), hashlib.sha256(payload).hexdigest())  # must succeed
+    finally:
+        server.shutdown()
+    assert dest.read_bytes() == payload
 
 
 def test_download_verifies_and_renames(tmp_path: Path, dataset_zip: tuple[bytes, Path]) -> None:

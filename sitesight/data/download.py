@@ -35,6 +35,7 @@ IMAGES_SUBDIR = "UAVdata"
 EXPECTED_IMAGES = 1431
 
 CHUNK = 1 << 20
+USER_AGENT = "dataset-downloader/1.0"  # generic on purpose: no project or user name
 
 
 class DownloadError(Exception):
@@ -69,7 +70,9 @@ def download(url: str, dest: Path, expected_size: int, expected_sha256: str) -> 
         part.unlink()
         have = 0
     if have < expected_size:
-        req = urllib.request.Request(url)
+        # Mendeley's CDN answers the default "Python-urllib/x" client with HTTP 403 (found when
+        # this first ran against the real server on Colab), so identify with a neutral name.
+        req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
         if have:
             req.add_header("Range", f"bytes={have}-")
         with urllib.request.urlopen(req) as resp:

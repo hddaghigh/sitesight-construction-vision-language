@@ -207,3 +207,7 @@ def summarise_splits(ds: Dataset) -> SplitSummary:
     all_classes = {n for c in per_class.values() for n in c}
     out.classes_missing_in_test = sorted(all_classes - set(per_class.get("test", {})))
     return out
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
