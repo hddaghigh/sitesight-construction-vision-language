@@ -61,6 +61,12 @@ Quality gate before any commit: `ruff check`, `ruff format --check`, `mypy`, `py
 - Zero-shot is run on `val` only; `baselines/run.py` refuses `--split test`.
 - Opt-in `pytest -m embed` runs the real-model tests (slow: minutes on CPU); it needs `SITESIGHT_DATA_DIR`.
 
+## M5 (LoRA fine-tune of Florence-2-base)
+- Code: `sitesight/train/{data,lora}.py`, `eval/gallery.py`, `scripts/build_colab_notebook.py --kind m5`. Run on Colab only.
+- Vision features are cached (frozen tower), so no augmentation. Epoch chosen by val loss (epoch 4). Test split evaluated once.
+- Results (val/test mAP@0.5 39.2/34.0; ECE 0.43-0.46, worse than zero-shot) and caveats: `reports/m5/README.md`. Adapter (13 MB) is not committed; it lives in `sitesight_data\derived\m5un\epoch_4`. Gallery images are regenerated, not committed.
+- Never pass `--allow-test` again for model selection; the test set is spent for this protocol.
+
 ## Status
 - **M1 done** (parser, validator, schema, downloader, tests, CI).
 - **M2 done** (caption parser, pHash+DINOv2 dedup, grouped split, leakage report, datasheet, Colab notebook not yet run).

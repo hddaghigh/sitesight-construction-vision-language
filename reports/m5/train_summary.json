@@ -1,0 +1,65 @@
+{
+ "best_epoch": 4,
+ "best_val_loss": 1.275121290097648,
+ "config": {
+  "data": {
+   "train_split": "train",
+   "val_split": "val"
+  },
+  "lora": {
+   "alpha": 32,
+   "dropout": 0.05,
+   "r": 16,
+   "target_regex": ".*language_model.*\\.(q_proj|k_proj|v_proj|out_proj|fc1|fc2)"
+  },
+  "model": {
+   "id": "florence-community/Florence-2-base"
+  },
+  "train": {
+   "batch_size": 16,
+   "epochs": 5,
+   "grad_clip": 1.0,
+   "lr": 0.0001,
+   "max_target_tokens": 256,
+   "seed": 0,
+   "warmup_frac": 0.05,
+   "weight_decay": 0.01
+  }
+ },
+ "device": "cuda",
+ "gpu": "Tesla T4",
+ "limit_images": null,
+ "n_images_cached": 1203,
+ "n_train_samples": 10247,
+ "n_val_samples": 1920,
+ "peft": "0.21.2",
+ "pretrained_val_loss": 5.314352667062434,
+ "python": "3.13.16",
+ "seed": 0,
+ "torch": "2.14.1+cu130",
+ "total_parameters": 234688000,
+ "total_seconds": 1763.3,
+ "train_data": {
+  "annotations_in_split": 6128,
+  "evaluated": 6096,
+  "excluded_duplicate": 10,
+  "excluded_unparsed": 22,
+  "images": 1002,
+  "n_grounding_samples": 4151,
+  "n_images_with_samples": 990,
+  "n_region_samples": 6096
+ },
+ "trainable_parameters": 3244032,
+ "transformers": "5.22.1",
+ "val_data": {
+  "annotations_in_split": 1111,
+  "evaluated": 1102,
+  "excluded_duplicate": 2,
+  "excluded_empty_caption": 1,
+  "excluded_unparsed": 6,
+  "images": 215,
+  "n_grounding_samples": 818,
+  "n_images_with_samples": 213,
+  "n_region_samples": 1102
+ }
+}

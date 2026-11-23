@@ -1,0 +1,736 @@
+{
+ "split": "val",
+ "seed": 0,
+ "grounding": {
+  "n_total": 1102,
+  "n_failures": 589,
+  "by_kind": {
+   "no_overlap": 273,
+   "small_missed": 156,
+   "poor_localisation": 148,
+   "group_split": 12
+  },
+  "false_positives": {
+   "spurious": 406,
+   "duplicate": 20
+  }
+ },
+ "captioning": {
+  "n_total": 1102,
+  "n_failures": 652,
+  "by_kind": {
+   "resource_mismatch": 281,
+   "count_mismatch": 145,
+   "state_mismatch": 113,
+   "target_mismatch": 64,
+   "colour_mismatch": 47,
+   "unparsed": 2
+  }
+ },
+ "examples": [
+  {
+   "task": "grounding",
+   "kind": "duplicate",
+   "file_name": "527.jpg",
+   "category": "dump_truck",
+   "gt_bbox": [],
+   "pred_bboxes": [
+    [
+     67.0,
+     102.0,
+     112.0,
+     124.0
+    ]
+   ],
+   "best_iou": 0.0,
+   "detail": "score 0.07",
+   "image": "grounding/duplicate_1.png"
+  },
+  {
+   "task": "grounding",
+   "kind": "duplicate",
+   "file_name": "576.jpg",
+   "category": "excavator",
+   "gt_bbox": [],
+   "pred_bboxes": [
+    [
+     26.0,
+     208.0,
+     260.0,
+     104.0
+    ]
+   ],
+   "best_iou": 0.0,
+   "detail": "score 0.04",
+   "image": "grounding/duplicate_2.png"
+  },
+  {
+   "task": "grounding",
+   "kind": "duplicate",
+   "file_name": "1066.jpg",
+   "category": "excavator",
+   "gt_bbox": [],
+   "pred_bboxes": [
+    [
+     393.0,
+     51.0,
+     52.0,
+     42.0
+    ]
+   ],
+   "best_iou": 0.0,
+   "detail": "score 0.07",
+   "image": "grounding/duplicate_3.png"
+  },
+  {
+   "task": "grounding",
+   "kind": "group_split",
+   "file_name": "430.jpg",
+   "category": "excavator",
+   "gt_bbox": [
+    609.0,
+    253.0,
+    190.0,
+    190.0
+   ],
+   "pred_bboxes": [
+    [
+     603.0,
+     244.0,
+     188.0,
+     68.0
+    ],
+    [
+     603.0,
+     244.0,
+     187.0,
+     68.0
+    ]
+   ],
+   "best_iou": 0.28149740470822626,
+   "detail": "2 predicted boxes inside the group box",
+   "image": "grounding/group_split_1.png"
+  },
+  {
+   "task": "grounding",
+   "kind": "group_split",
+   "file_name": "524.jpg",
+   "category": "worker",
+   "gt_bbox": [
+    642.0,
+    240.0,
+    166.0,
+    202.0
+   ],
+   "pred_bboxes": [
+    [
+     715.0,
+     361.0,
+     78.0,
+     75.0
+    ],
+    [
+     653.0,
+     236.0,
+     43.0,
+     92.0
+    ]
+   ],
+   "best_iou": 0.17446021710604795,
+   "detail": "2 predicted boxes inside the group box",
+   "image": "grounding/group_split_2.png"
+  },
+  {
+   "task": "grounding",
+   "kind": "group_split",
+   "file_name": "508.jpg",
+   "category": "excavator",
+   "gt_bbox": [
+    28.0,
+    229.0,
+    484.0,
+    127.0
+   ],
+   "pred_bboxes": [
+    [
+     100.0,
+     230.0,
+     93.0,
+     55.0
+    ],
+    [
+     31.0,
+     316.0,
+     121.0,
+     56.0
+    ],
+    [
+     100.0,
+     230.0,
+     94.0,
+     55.0
+    ],
+    [
+     31.0,
+     316.0,
+     122.0,
+     56.0
+    ]
+   ],
+   "best_iou": 0.08410880458124552,
+   "detail": "2 predicted boxes inside the group box",
+   "image": "grounding/group_split_3.png"
+  },
+  {
+   "task": "grounding",
+   "kind": "no_overlap",
+   "file_name": "568.jpg",
+   "category": "h_beam",
+   "gt_bbox": [
+    667.0,
+    238.0,
+    275.0,
+    137.0
+   ],
+   "pred_bboxes": [
+    [
+     301.0,
+     377.0,
+     254.0,
+     151.0
+    ]
+   ],
+   "best_iou": 0.0,
+   "detail": "no predicted box overlaps",
+   "image": "grounding/no_overlap_1.png"
+  },
+  {
+   "task": "grounding",
+   "kind": "no_overlap",
+   "file_name": "423.jpg",
+   "category": "dust_protection",
+   "gt_bbox": [
+    543.0,
+    39.0,
+    272.0,
+    468.0
+   ],
+   "pred_bboxes": [
+    [
+     364.0,
+     5.0,
+     208.0,
+     168.0
+    ]
+   ],
+   "best_iou": 0.024539954784849136,
+   "detail": "no predicted box overlaps",
+   "image": "grounding/no_overlap_2.png"
+  },
+  {
+   "task": "grounding",
+   "kind": "no_overlap",
+   "file_name": "71.jpg",
+   "category": "container",
+   "gt_bbox": [
+    639.0,
+    408.0,
+    91.0,
+    126.0
+   ],
+   "pred_bboxes": [
+    [
+     687.0,
+     34.0,
+     189.0,
+     111.0
+    ]
+   ],
+   "best_iou": 0.0,
+   "detail": "no predicted box overlaps",
+   "image": "grounding/no_overlap_3.png"
+  },
+  {
+   "task": "grounding",
+   "kind": "poor_localisation",
+   "file_name": "514.jpg",
+   "category": "excavator",
+   "gt_bbox": [
+    164.0,
+    162.0,
+    593.0,
+    211.0
+   ],
+   "pred_bboxes": [
+    [
+     608.0,
+     285.0,
+     160.0,
+     110.0
+    ],
+    [
+     608.0,
+     285.0,
+     159.0,
+     110.0
+    ],
+    [
+     219.0,
+     169.0,
+     107.0,
+     66.0
+    ]
+   ],
+   "best_iou": 0.10125018339626721,
+   "detail": "best IoU 0.10",
+   "image": "grounding/poor_localisation_1.png"
+  },
+  {
+   "task": "grounding",
+   "kind": "poor_localisation",
+   "file_name": "217.jpg",
+   "category": "excavator",
+   "gt_bbox": [
+    310.0,
+    11.0,
+    137.0,
+    62.0
+   ],
+   "pred_bboxes": [
+    [
+     317.0,
+     6.0,
+     128.0,
+     68.0
+    ]
+   ],
+   "best_iou": 0.8568343770244008,
+   "detail": "best IoU 0.86",
+   "image": "grounding/poor_localisation_2.png"
+  },
+  {
+   "task": "grounding",
+   "kind": "poor_localisation",
+   "file_name": "698.jpg",
+   "category": "excavator",
+   "gt_bbox": [
+    711.0,
+    34.0,
+    133.0,
+    248.0
+   ],
+   "pred_bboxes": [
+    [
+     677.0,
+     15.0,
+     188.0,
+     378.0
+    ],
+    [
+     677.0,
+     15.0,
+     189.0,
+     378.0
+    ]
+   ],
+   "best_iou": 0.4641449960598897,
+   "detail": "best IoU 0.46",
+   "image": "grounding/poor_localisation_3.png"
+  },
+  {
+   "task": "grounding",
+   "kind": "small_missed",
+   "file_name": "1135.jpg",
+   "category": "rebar",
+   "gt_bbox": [
+    215.0,
+    212.0,
+    58.0,
+    54.0
+   ],
+   "pred_bboxes": [
+    [
+     377.0,
+     316.0,
+     49.0,
+     46.0
+    ]
+   ],
+   "best_iou": 0.0,
+   "detail": "GT covers 0.60% of the image",
+   "image": "grounding/small_missed_1.png"
+  },
+  {
+   "task": "grounding",
+   "kind": "small_missed",
+   "file_name": "175.jpg",
+   "category": "container",
+   "gt_bbox": [
+    111.0,
+    5.0,
+    83.0,
+    35.0
+   ],
+   "pred_bboxes": [
+    [
+     766.0,
+     128.0,
+     102.0,
+     93.0
+    ]
+   ],
+   "best_iou": 0.0,
+   "detail": "GT covers 0.56% of the image",
+   "image": "grounding/small_missed_2.png"
+  },
+  {
+   "task": "grounding",
+   "kind": "small_missed",
+   "file_name": "1113.jpg",
+   "category": "worker",
+   "gt_bbox": [
+    271.0,
+    423.0,
+    69.0,
+    44.0
+   ],
+   "pred_bboxes": [
+    [
+     689.0,
+     14.0,
+     18.0,
+     30.0
+    ]
+   ],
+   "best_iou": 0.0,
+   "detail": "GT covers 0.59% of the image",
+   "image": "grounding/small_missed_3.png"
+  },
+  {
+   "task": "grounding",
+   "kind": "spurious",
+   "file_name": "622.jpg",
+   "category": "concrete_pipe",
+   "gt_bbox": [],
+   "pred_bboxes": [
+    [
+     301.0,
+     228.0,
+     66.0,
+     100.0
+    ]
+   ],
+   "best_iou": 0.0,
+   "detail": "score 0.04",
+   "image": "grounding/spurious_1.png"
+  },
+  {
+   "task": "grounding",
+   "kind": "spurious",
+   "file_name": "1242.jpg",
+   "category": "mold",
+   "gt_bbox": [],
+   "pred_bboxes": [
+    [
+     754.0,
+     193.0,
+     75.0,
+     97.0
+    ]
+   ],
+   "best_iou": 0.0,
+   "detail": "score 0.05",
+   "image": "grounding/spurious_2.png"
+  },
+  {
+   "task": "grounding",
+   "kind": "spurious",
+   "file_name": "521.jpg",
+   "category": "mold",
+   "gt_bbox": [],
+   "pred_bboxes": [
+    [
+     12.0,
+     241.0,
+     54.0,
+     36.0
+    ]
+   ],
+   "best_iou": 0.0,
+   "detail": "score 0.03",
+   "image": "grounding/spurious_3.png"
+  },
+  {
+   "task": "captioning",
+   "kind": "colour_mismatch",
+   "file_name": "947.jpg",
+   "category": "excavator",
+   "gt_bbox": [
+    826.0,
+    37.0,
+    93.0,
+    192.0
+   ],
+   "pred_bboxes": [],
+   "best_iou": 0.0,
+   "detail": "reference: A black excavator is digging soil | prediction: An orange excavator is located on soil | black -> orange",
+   "image": "captioning/colour_mismatch_1.png"
+  },
+  {
+   "task": "captioning",
+   "kind": "colour_mismatch",
+   "file_name": "1026.jpg",
+   "category": "drilling_rig",
+   "gt_bbox": [
+    518.0,
+    144.0,
+    107.0,
+    101.0
+   ],
+   "pred_bboxes": [],
+   "best_iou": 0.0,
+   "detail": "reference: A gray drilling is drilling on soil | prediction: A white drilling is located on soil | gray -> white",
+   "image": "captioning/colour_mismatch_2.png"
+  },
+  {
+   "task": "captioning",
+   "kind": "colour_mismatch",
+   "file_name": "124.jpg",
+   "category": "excavator",
+   "gt_bbox": [
+    827.0,
+    51.0,
+    72.0,
+    173.0
+   ],
+   "pred_bboxes": [],
+   "best_iou": 0.0,
+   "detail": "reference: A black excavator is located on rocks | prediction: An orange excavator is located on soil | black -> orange",
+   "image": "captioning/colour_mismatch_3.png"
+  },
+  {
+   "task": "captioning",
+   "kind": "count_mismatch",
+   "file_name": "524.jpg",
+   "category": "h_beam",
+   "gt_bbox": [
+    35.0,
+    259.0,
+    136.0,
+    87.0
+   ],
+   "pred_bboxes": [],
+   "best_iou": 0.0,
+   "detail": "reference: A pile of H-beam is located on soil | prediction: Three piles of H-beams are located on soil | (1, 'pile') -> (3, 'pile')",
+   "image": "captioning/count_mismatch_1.png"
+  },
+  {
+   "task": "captioning",
+   "kind": "count_mismatch",
+   "file_name": "1178.jpg",
+   "category": "excavator",
+   "gt_bbox": [
+    403.0,
+    270.0,
+    94.0,
+    60.0
+   ],
+   "pred_bboxes": [],
+   "best_iou": 0.0,
+   "detail": "reference: A yellow excavator is located on soil | prediction: Two yellow excavators are located on soil | (1, 'item') -> (2, 'item')",
+   "image": "captioning/count_mismatch_2.png"
+  },
+  {
+   "task": "captioning",
+   "kind": "count_mismatch",
+   "file_name": "1134.jpg",
+   "category": "worker",
+   "gt_bbox": [
+    383.0,
+    339.0,
+    209.0,
+    81.0
+   ],
+   "pred_bboxes": [],
+   "best_iou": 0.0,
+   "detail": "reference: Three workers are located on concrete | prediction: Two workers are located on rebars | (3, 'item') -> (2, 'item')",
+   "image": "captioning/count_mismatch_3.png"
+  },
+  {
+   "task": "captioning",
+   "kind": "resource_mismatch",
+   "file_name": "1116.jpg",
+   "category": "dump_truck",
+   "gt_bbox": [
+    14.0,
+    352.0,
+    145.0,
+    109.0
+   ],
+   "pred_bboxes": [],
+   "best_iou": 0.0,
+   "detail": "reference: A blue dump truck is empty | prediction: A container is installed on soil | dump_truck -> container",
+   "image": "captioning/resource_mismatch_1.png"
+  },
+  {
+   "task": "captioning",
+   "kind": "resource_mismatch",
+   "file_name": "944.jpg",
+   "category": "fence",
+   "gt_bbox": [
+    144.0,
+    7.0,
+    808.0,
+    523.0
+   ],
+   "pred_bboxes": [],
+   "best_iou": 0.0,
+   "detail": "reference: Fences are installed in a line | prediction: A temporary building is installed on soil | fence -> temporary_building",
+   "image": "captioning/resource_mismatch_2.png"
+  },
+  {
+   "task": "captioning",
+   "kind": "resource_mismatch",
+   "file_name": "1186.jpg",
+   "category": "rebar",
+   "gt_bbox": [
+    560.0,
+    394.0,
+    124.0,
+    136.0
+   ],
+   "pred_bboxes": [],
+   "best_iou": 0.0,
+   "detail": "reference: Three piles of rebars are located on soil | prediction: Three piles of molds are located on a temporary building | rebar -> mold",
+   "image": "captioning/resource_mismatch_3.png"
+  },
+  {
+   "task": "captioning",
+   "kind": "state_mismatch",
+   "file_name": "440.jpg",
+   "category": "dump_truck",
+   "gt_bbox": [
+    551.0,
+    259.0,
+    126.0,
+    215.0
+   ],
+   "pred_bboxes": [],
+   "best_iou": 0.0,
+   "detail": "reference: A white dump truck is located on soil | prediction: A white dump truck is loaded with concrete pipes | located -> loaded",
+   "image": "captioning/state_mismatch_1.png"
+  },
+  {
+   "task": "captioning",
+   "kind": "state_mismatch",
+   "file_name": "955.jpg",
+   "category": "excavator",
+   "gt_bbox": [
+    737.0,
+    98.0,
+    103.0,
+    157.0
+   ],
+   "pred_bboxes": [],
+   "best_iou": 0.0,
+   "detail": "reference: A yellow excavator is digging a rock, | prediction: A yellow excavator is located on soil | digging -> located",
+   "image": "captioning/state_mismatch_2.png"
+  },
+  {
+   "task": "captioning",
+   "kind": "state_mismatch",
+   "file_name": "218.jpg",
+   "category": "dump_truck",
+   "gt_bbox": [
+    644.0,
+    144.0,
+    268.0,
+    85.0
+   ],
+   "pred_bboxes": [],
+   "best_iou": 0.0,
+   "detail": "reference: A white dump truck is located on soil | prediction: A white dump truck is loaded with soil | located -> loaded",
+   "image": "captioning/state_mismatch_3.png"
+  },
+  {
+   "task": "captioning",
+   "kind": "target_mismatch",
+   "file_name": "190.jpg",
+   "category": "dump_truck",
+   "gt_bbox": [
+    684.0,
+    39.0,
+    64.0,
+    187.0
+   ],
+   "pred_bboxes": [],
+   "best_iou": 0.0,
+   "detail": "reference: A white dump truck is loaded with soil and rocks | prediction: A white dump truck is loaded with rocks and soil | ('with', 'soil and rocks', None) -> ('with', 'rocks and soil', None)",
+   "image": "captioning/target_mismatch_1.png"
+  },
+  {
+   "task": "captioning",
+   "kind": "target_mismatch",
+   "file_name": "551.jpg",
+   "category": "mold",
+   "gt_bbox": [
+    58.0,
+    98.0,
+    63.0,
+    80.0
+   ],
+   "pred_bboxes": [],
+   "best_iou": 0.0,
+   "detail": "reference: Three piles of molds are located on a temporary building | prediction: Three piles of molds are located on soil | ('on', 'temporary building', None) -> ('on', 'soil', None)",
+   "image": "captioning/target_mismatch_2.png"
+  },
+  {
+   "task": "captioning",
+   "kind": "target_mismatch",
+   "file_name": "83.jpg",
+   "category": "mold",
+   "gt_bbox": [
+    86.0,
+    337.0,
+    124.0,
+    63.0
+   ],
+   "pred_bboxes": [],
+   "best_iou": 0.0,
+   "detail": "reference: A pile of molds is located on concrete | prediction: A pile of molds are located on a temporary building | ('on', 'concrete', None) -> ('on', 'temporary building', None)",
+   "image": "captioning/target_mismatch_3.png"
+  },
+  {
+   "task": "captioning",
+   "kind": "unparsed",
+   "file_name": "1187.jpg",
+   "category": "dust_protection",
+   "gt_bbox": [
+    787.0,
+    5.0,
+    161.0,
+    320.0
+   ],
+   "pred_bboxes": [],
+   "best_iou": 0.0,
+   "detail": "reference: A black dust protection is covering soil | prediction: A black rock is located on soil | prediction does not fit the dataset template",
+   "image": "captioning/unparsed_1.png"
+  },
+  {
+   "task": "captioning",
+   "kind": "unparsed",
+   "file_name": "1047.jpg",
+   "category": "safety_cone",
+   "gt_bbox": [
+    793.0,
+    359.0,
+    38.0,
+    54.0
+   ],
+   "pred_bboxes": [],
+   "best_iou": 0.0,
+   "detail": "reference: Two safety cones are located on soil | prediction: Two red buckets are located on soil | prediction does not fit the dataset template",
+   "image": "captioning/unparsed_2.png"
+  }
+ ]
+}

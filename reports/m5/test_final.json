@@ -1,0 +1,1691 @@
+[
+ {
+  "ground_truth": {
+   "annotations_in_split": 1189,
+   "evaluated": 1186,
+   "excluded_unparsed": 3,
+   "images": 214
+  },
+  "images_evaluated": 214,
+  "model": "florence-2-base-lora-epoch_4-grounding",
+  "model_info": {
+   "adapter": "/content/run/epoch_4",
+   "decoding": "greedy",
+   "device": "cuda",
+   "florence_task": "<CAPTION_TO_PHRASE_GROUNDING>",
+   "limit": null,
+   "machine": "x86_64",
+   "model_id": "florence-community/Florence-2-base",
+   "n_score_fallbacks": 0,
+   "queried_classes": "present",
+   "sample_seed": 0,
+   "score": "geometric-mean token probability of the 4 location tokens of each box",
+   "seconds_per_image_this_session": 1.1396620229025867,
+   "split": "test",
+   "task": "grounding",
+   "torch_version": "2.14.1+cu130",
+   "transformers_version": "5.22.1"
+  },
+  "n_predictions": 1006,
+  "presence_summary": null,
+  "protocols": {
+   "given_phrases": {
+    "breakdown": {
+     "crowding": {
+      "crowded": {
+       "n_gt": 397,
+       "recall": 0.32997481108312343
+      },
+      "medium": {
+       "n_gt": 530,
+       "recall": 0.5075471698113208
+      },
+      "sparse": {
+       "n_gt": 259,
+       "recall": 0.5868725868725869
+      }
+     },
+     "iou": 0.5,
+     "kind": {
+      "group": {
+       "n_gt": 597,
+       "recall": 0.35343383584589616
+      },
+      "single": {
+       "n_gt": 589,
+       "recall": 0.5789473684210527
+      }
+     },
+     "size": {
+      "large": {
+       "n_gt": 437,
+       "recall": 0.4965675057208238
+      },
+      "medium": {
+       "n_gt": 496,
+       "recall": 0.49193548387096775
+      },
+      "small": {
+       "n_gt": 253,
+       "recall": 0.35968379446640314
+      }
+     }
+    },
+    "calibration": {
+     "bins": [
+      {
+       "accuracy": 0.5345622119815668,
+       "bin": 0,
+       "hi": 0.1,
+       "lo": 0.0,
+       "mean_confidence": 0.051622786353325,
+       "n": 868
+      },
+      {
+       "accuracy": 0.5538461538461539,
+       "bin": 1,
+       "hi": 0.2,
+       "lo": 0.1,
+       "mean_confidence": 0.12247904421216527,
+       "n": 65
+      },
+      {
+       "accuracy": 0.0,
+       "bin": 2,
+       "hi": 0.3,
+       "lo": 0.2,
+       "mean_confidence": 0.28696063668430466,
+       "n": 1
+      },
+      {
+       "bin": 3,
+       "hi": 0.4,
+       "lo": 0.3,
+       "n": 0
+      },
+      {
+       "accuracy": 0.0,
+       "bin": 4,
+       "hi": 0.5,
+       "lo": 0.4,
+       "mean_confidence": 0.4490242607403584,
+       "n": 2
+      },
+      {
+       "accuracy": 0.8571428571428571,
+       "bin": 5,
+       "hi": 0.6,
+       "lo": 0.5,
+       "mean_confidence": 0.5570428692821643,
+       "n": 7
+      },
+      {
+       "accuracy": 0.7894736842105263,
+       "bin": 6,
+       "hi": 0.7,
+       "lo": 0.6,
+       "mean_confidence": 0.6507391012738138,
+       "n": 19
+      },
+      {
+       "accuracy": 0.5185185185185185,
+       "bin": 7,
+       "hi": 0.8,
+       "lo": 0.7,
+       "mean_confidence": 0.7430506071725117,
+       "n": 27
+      },
+      {
+       "accuracy": 1.0,
+       "bin": 8,
+       "hi": 0.9,
+       "lo": 0.8,
+       "mean_confidence": 0.8378543985158282,
+       "n": 16
+      },
+      {
+       "accuracy": 1.0,
+       "bin": 9,
+       "hi": 1.0,
+       "lo": 0.9,
+       "mean_confidence": 0.9291248577177056,
+       "n": 1
+      }
+     ],
+     "ece": 0.4591247722467171,
+     "n": 1006,
+     "n_bins": 10
+    },
+    "classes_without_gt_in_predictions_only": [],
+    "iou_thresholds": [
+     0.5,
+     0.75
+    ],
+    "map50": 0.34011952858201205,
+    "map75": 0.19374984442128182,
+    "n_gt": 1186,
+    "n_predictions_scored": 1006,
+    "per_class": {
+     "concrete": {
+      "ap50": 0.545191823452693,
+      "ap75": 0.4274243187286666,
+      "n_gt": 37,
+      "recall50": 0.5945945945945946,
+      "recall75": 0.4864864864864865
+     },
+     "concrete_pillar": {
+      "ap50": 0.23884140550807215,
+      "ap75": 0.23884140550807215,
+      "n_gt": 18,
+      "recall50": 0.3888888888888889,
+      "recall75": 0.3888888888888889
+     },
+     "concrete_pipe": {
+      "ap50": 0.31221719457013575,
+      "ap75": 0.20588235294117646,
+      "n_gt": 17,
+      "recall50": 0.47058823529411764,
+      "recall75": 0.35294117647058826
+     },
+     "concrete_structure": {
+      "ap50": 0.0,
+      "ap75": 0.0,
+      "n_gt": 2,
+      "recall50": 0.0,
+      "recall75": 0.0
+     },
+     "concrete_truck": {
+      "ap50": 0.8916666666666668,
+      "ap75": 0.7678571428571429,
+      "n_gt": 14,
+      "recall50": 0.9285714285714286,
+      "recall75": 0.7857142857142857
+     },
+     "container": {
+      "ap50": 0.17942583732057416,
+      "ap75": 0.0427807486631016,
+      "n_gt": 22,
+      "recall50": 0.36363636363636365,
+      "recall75": 0.18181818181818182
+     },
+     "crane": {
+      "ap50": 0.5,
+      "ap75": 0.5,
+      "n_gt": 2,
+      "recall50": 0.5,
+      "recall75": 0.5
+     },
+     "crane_truck": {
+      "ap50": 0.37048887931240876,
+      "ap75": 0.06461800406437085,
+      "n_gt": 51,
+      "recall50": 0.5294117647058824,
+      "recall75": 0.19607843137254902
+     },
+     "drilling_rig": {
+      "ap50": 0.2626728110599078,
+      "ap75": 0.11674347158218125,
+      "n_gt": 31,
+      "recall50": 0.41935483870967744,
+      "recall75": 0.25806451612903225
+     },
+     "dump_truck": {
+      "ap50": 0.4729781365146972,
+      "ap75": 0.35329105673392047,
+      "n_gt": 103,
+      "recall50": 0.6310679611650486,
+      "recall75": 0.5339805825242718
+     },
+     "dust_protection": {
+      "ap50": 0.14792899408284024,
+      "ap75": 0.057692307692307696,
+      "n_gt": 13,
+      "recall50": 0.38461538461538464,
+      "recall75": 0.23076923076923078
+     },
+     "excavator": {
+      "ap50": 0.486150898412175,
+      "ap75": 0.2654621160934961,
+      "n_gt": 150,
+      "recall50": 0.5933333333333334,
+      "recall75": 0.43333333333333335
+     },
+     "excavator_bucket": {
+      "ap50": 0.13061224489795917,
+      "ap75": 0.06666666666666665,
+      "n_gt": 14,
+      "recall50": 0.2857142857142857,
+      "recall75": 0.21428571428571427
+     },
+     "fence": {
+      "ap50": 0.4799358857683167,
+      "ap75": 0.15802484108875972,
+      "n_gt": 88,
+      "recall50": 0.625,
+      "recall75": 0.26136363636363635
+     },
+     "forklift": {
+      "ap50": 1.0,
+      "ap75": 0.41666666666666663,
+      "n_gt": 4,
+      "recall50": 1.0,
+      "recall75": 0.5
+     },
+     "foundation": {
+      "ap50": 0.10791925465838509,
+      "ap75": 0.06521739130434782,
+      "n_gt": 23,
+      "recall50": 0.21739130434782608,
+      "recall75": 0.13043478260869565
+     },
+     "h_beam": {
+      "ap50": 0.17684857746132254,
+      "ap75": 0.09193361173536319,
+      "n_gt": 117,
+      "recall50": 0.3333333333333333,
+      "recall75": 0.20512820512820512
+     },
+     "material": {
+      "ap50": 0.264172335600907,
+      "ap75": 0.09523809523809523,
+      "n_gt": 14,
+      "recall50": 0.35714285714285715,
+      "recall75": 0.14285714285714285
+     },
+     "mold": {
+      "ap50": 0.12971542346542347,
+      "ap75": 0.03787878787878788,
+      "n_gt": 66,
+      "recall50": 0.19696969696969696,
+      "recall75": 0.09090909090909091
+     },
+     "rebar": {
+      "ap50": 0.14521170837083375,
+      "ap75": 0.02302814938684504,
+      "n_gt": 64,
+      "recall50": 0.25,
+      "recall75": 0.078125
+     },
+     "safety_cone": {
+      "ap50": 0.2,
+      "ap75": 0.025,
+      "n_gt": 10,
+      "recall50": 0.4,
+      "recall75": 0.1
+     },
+     "structure": {
+      "ap50": 0.12585034013605442,
+      "ap75": 0.09523809523809523,
+      "n_gt": 14,
+      "recall50": 0.21428571428571427,
+      "recall75": 0.14285714285714285
+     },
+     "tarpaulin": {
+      "ap50": 0.5962058698783683,
+      "ap75": 0.24604399025376594,
+      "n_gt": 82,
+      "recall50": 0.7195121951219512,
+      "recall75": 0.47560975609756095
+     },
+     "temporary_building": {
+      "ap50": 0.2141544117647059,
+      "ap75": 0.08876811594202899,
+      "n_gt": 24,
+      "recall50": 0.4583333333333333,
+      "recall75": 0.2916666666666667
+     },
+     "tower_crane": {
+      "ap50": 1.0,
+      "ap75": 1.0,
+      "n_gt": 2,
+      "recall50": 1.0,
+      "recall75": 1.0
+     },
+     "truck": {
+      "ap50": 0.33147907239819,
+      "ap75": 0.1279611013986014,
+      "n_gt": 40,
+      "recall50": 0.475,
+      "recall75": 0.3
+     },
+     "wood_bar": {
+      "ap50": 0.21739130434782605,
+      "ap75": 0.0033444816053511705,
+      "n_gt": 23,
+      "recall50": 0.34782608695652173,
+      "recall75": 0.043478260869565216
+     },
+     "wood_fence": {
+      "ap50": 0.17766955266955264,
+      "ap75": 0.011363636363636364,
+      "n_gt": 22,
+      "recall50": 0.3181818181818182,
+      "recall75": 0.045454545454545456
+     },
+     "worker": {
+      "ap50": 0.15873770056033382,
+      "ap75": 0.025778932585724557,
+      "n_gt": 119,
+      "recall50": 0.33613445378151263,
+      "recall75": 0.11764705882352941
+     }
+    },
+    "protocol": "given_phrases",
+    "recall50": 0.4654300168634064,
+    "recall75": 0.2824620573355818,
+    "top_k": 10
+   }
+  },
+  "queried_classes": "present",
+  "split": "test",
+  "task": "grounding"
+ },
+ {
+  "bleu1": 0.7875991006981422,
+  "bleu2": 0.73557774546693,
+  "bleu3": 0.6917519614699227,
+  "bleu4": 0.648850013992409,
+  "cider_d": 5.5450509041518705,
+  "coverage": 1.0,
+  "examples": [
+   {
+    "prediction": "An orange excavator is located on soil",
+    "reference": "An orange excavator is located on soil"
+   },
+   {
+    "prediction": "A pile of molds is located on soil",
+    "reference": "A pile of molds is located on concrete"
+   },
+   {
+    "prediction": "A pile of rebars is located on soil",
+    "reference": "A pile of rebars is located on soil"
+   },
+   {
+    "prediction": "A pile of mold is located on a temporary building",
+    "reference": "A pile of molds is located on soil"
+   },
+   {
+    "prediction": "Fences are installed in a line",
+    "reference": "A temporary building is installed on soil"
+   },
+   {
+    "prediction": "A blue tarpaulin is located on soil",
+    "reference": "A pile of rebars is located on soil"
+   },
+   {
+    "prediction": "A blue tarpaulin is located on soil",
+    "reference": "Two blue tarpaulins are located on soil"
+   },
+   {
+    "prediction": "A worker is located on a temporary building",
+    "reference": "A worker is located on a temporary building"
+   }
+  ],
+  "fields": {
+   "colour_acc_loose": 0.7931034482758621,
+   "colour_acc_strict": 0.7890466531440162,
+   "colour_n_with_ground_truth": 493,
+   "count_acc_loose": 0.775609756097561,
+   "count_acc_strict": 0.7726829268292683,
+   "count_n_with_ground_truth": 1025,
+   "n": 1186,
+   "resource_acc_loose": 0.718381112984823,
+   "resource_acc_strict": 0.718381112984823,
+   "state_acc_strict": 0.8204047217537943,
+   "strict_parse_rate": 0.9966273187183811
+  },
+  "ground_truth": {
+   "annotations_in_split": 1189,
+   "evaluated": 1186,
+   "excluded_unparsed": 3,
+   "images": 214
+  },
+  "images_evaluated": 214,
+  "meteor_exact": 0.777074246176952,
+  "model": "florence-2-base-lora-epoch_4-regions",
+  "model_info": {
+   "adapter": "/content/run/epoch_4",
+   "decoding": "greedy",
+   "device": "cuda",
+   "florence_task": "<REGION_TO_DESCRIPTION>",
+   "limit": null,
+   "machine": "x86_64",
+   "model_id": "florence-community/Florence-2-base",
+   "n_score_fallbacks": 0,
+   "sample_seed": 0,
+   "score": "geometric-mean token probability of the description words",
+   "seconds_per_image_this_session": 1.1397030799188346,
+   "split": "test",
+   "task": "region_captioning",
+   "torch_version": "2.14.1+cu130",
+   "transformers_version": "5.22.1"
+  },
+  "n_evaluated": 1186,
+  "n_ground_truth_regions": 1186,
+  "split": "test",
+  "task": "region_captioning"
+ },
+ {
+  "ground_truth": {
+   "annotations_in_split": 1189,
+   "evaluated": 1186,
+   "excluded_unparsed": 3,
+   "images": 214
+  },
+  "images_evaluated": 214,
+  "model": "florence-2-base-grounding",
+  "model_info": {
+   "adapter": null,
+   "decoding": "greedy",
+   "device": "cuda",
+   "florence_task": "<CAPTION_TO_PHRASE_GROUNDING>",
+   "limit": null,
+   "machine": "x86_64",
+   "model_id": "florence-community/Florence-2-base",
+   "n_score_fallbacks": 0,
+   "queried_classes": "present",
+   "sample_seed": 0,
+   "score": "geometric-mean token probability of the 4 location tokens of each box",
+   "seconds_per_image_this_session": 1.2381460143026906,
+   "split": "test",
+   "task": "grounding",
+   "torch_version": "2.14.1+cu130",
+   "transformers_version": "5.22.1"
+  },
+  "n_predictions": 1339,
+  "presence_summary": null,
+  "protocols": {
+   "given_phrases": {
+    "breakdown": {
+     "crowding": {
+      "crowded": {
+       "n_gt": 397,
+       "recall": 0.19395465994962216
+      },
+      "medium": {
+       "n_gt": 530,
+       "recall": 0.3283018867924528
+      },
+      "sparse": {
+       "n_gt": 259,
+       "recall": 0.444015444015444
+      }
+     },
+     "iou": 0.5,
+     "kind": {
+      "group": {
+       "n_gt": 597,
+       "recall": 0.11390284757118928
+      },
+      "single": {
+       "n_gt": 589,
+       "recall": 0.5059422750424448
+      }
+     },
+     "size": {
+      "large": {
+       "n_gt": 437,
+       "recall": 0.37757437070938216
+      },
+      "medium": {
+       "n_gt": 496,
+       "recall": 0.3004032258064516
+      },
+      "small": {
+       "n_gt": 253,
+       "recall": 0.20553359683794467
+      }
+     }
+    },
+    "calibration": {
+     "bins": [
+      {
+       "accuracy": 0.15384615384615385,
+       "bin": 0,
+       "hi": 0.1,
+       "lo": 0.0,
+       "mean_confidence": 0.0815631192839894,
+       "n": 13
+      },
+      {
+       "accuracy": 0.27424749163879597,
+       "bin": 1,
+       "hi": 0.2,
+       "lo": 0.1,
+       "mean_confidence": 0.15896471730417652,
+       "n": 299
+      },
+      {
+       "accuracy": 0.32175925925925924,
+       "bin": 2,
+       "hi": 0.3,
+       "lo": 0.2,
+       "mean_confidence": 0.2508306422352097,
+       "n": 432
+      },
+      {
+       "accuracy": 0.3343949044585987,
+       "bin": 3,
+       "hi": 0.4,
+       "lo": 0.3,
+       "mean_confidence": 0.34217993917544426,
+       "n": 314
+      },
+      {
+       "accuracy": 0.18354430379746836,
+       "bin": 4,
+       "hi": 0.5,
+       "lo": 0.4,
+       "mean_confidence": 0.4455149194046993,
+       "n": 158
+      },
+      {
+       "accuracy": 0.0945945945945946,
+       "bin": 5,
+       "hi": 0.6,
+       "lo": 0.5,
+       "mean_confidence": 0.5462277510646752,
+       "n": 74
+      },
+      {
+       "accuracy": 0.030303030303030304,
+       "bin": 6,
+       "hi": 0.7,
+       "lo": 0.6,
+       "mean_confidence": 0.6600491164293589,
+       "n": 33
+      },
+      {
+       "accuracy": 0.08333333333333333,
+       "bin": 7,
+       "hi": 0.8,
+       "lo": 0.7,
+       "mean_confidence": 0.7475575068349798,
+       "n": 12
+      },
+      {
+       "accuracy": 0.0,
+       "bin": 8,
+       "hi": 0.9,
+       "lo": 0.8,
+       "mean_confidence": 0.838504018898693,
+       "n": 4
+      },
+      {
+       "bin": 9,
+       "hi": 1.0,
+       "lo": 0.9,
+       "n": 0
+      }
+     ],
+     "ece": 0.13100330864477228,
+     "n": 1339,
+     "n_bins": 10
+    },
+    "classes_without_gt_in_predictions_only": [],
+    "iou_thresholds": [
+     0.5,
+     0.75
+    ],
+    "map50": 0.1881669727929027,
+    "map75": 0.10622835935846833,
+    "n_gt": 1186,
+    "n_predictions_scored": 1339,
+    "per_class": {
+     "concrete": {
+      "ap50": 0.030712530712530717,
+      "ap75": 0.011232011232011233,
+      "n_gt": 37,
+      "recall50": 0.13513513513513514,
+      "recall75": 0.08108108108108109
+     },
+     "concrete_pillar": {
+      "ap50": 0.15384615384615383,
+      "ap75": 0.15384615384615383,
+      "n_gt": 18,
+      "recall50": 0.3333333333333333,
+      "recall75": 0.3333333333333333
+     },
+     "concrete_pipe": {
+      "ap50": 0.03529411764705882,
+      "ap75": 0.0196078431372549,
+      "n_gt": 17,
+      "recall50": 0.17647058823529413,
+      "recall75": 0.11764705882352941
+     },
+     "concrete_structure": {
+      "ap50": 0.5,
+      "ap75": 0.5,
+      "n_gt": 2,
+      "recall50": 1.0,
+      "recall75": 1.0
+     },
+     "concrete_truck": {
+      "ap50": 0.3516483516483517,
+      "ap75": 0.3516483516483517,
+      "n_gt": 14,
+      "recall50": 0.5714285714285714,
+      "recall75": 0.5714285714285714
+     },
+     "container": {
+      "ap50": 0.008658008658008658,
+      "ap75": 0.0,
+      "n_gt": 22,
+      "recall50": 0.09090909090909091,
+      "recall75": 0.0
+     },
+     "crane": {
+      "ap50": 0.5,
+      "ap75": 0.0,
+      "n_gt": 2,
+      "recall50": 0.5,
+      "recall75": 0.0
+     },
+     "crane_truck": {
+      "ap50": 0.33775766716943184,
+      "ap75": 0.1559423769507803,
+      "n_gt": 51,
+      "recall50": 0.5686274509803921,
+      "recall75": 0.37254901960784315
+     },
+     "drilling_rig": {
+      "ap50": 0.4717116092415939,
+      "ap75": 0.28663145701215315,
+      "n_gt": 31,
+      "recall50": 0.7741935483870968,
+      "recall75": 0.6129032258064516
+     },
+     "dump_truck": {
+      "ap50": 0.24597084315877787,
+      "ap75": 0.177982205719731,
+      "n_gt": 103,
+      "recall50": 0.36893203883495146,
+      "recall75": 0.30097087378640774
+     },
+     "dust_protection": {
+      "ap50": 0.05641025641025641,
+      "ap75": 0.038461538461538464,
+      "n_gt": 13,
+      "recall50": 0.23076923076923078,
+      "recall75": 0.15384615384615385
+     },
+     "excavator": {
+      "ap50": 0.31517948717948724,
+      "ap75": 0.1226398846431344,
+      "n_gt": 150,
+      "recall50": 0.64,
+      "recall75": 0.3933333333333333
+     },
+     "excavator_bucket": {
+      "ap50": 0.0,
+      "ap75": 0.0,
+      "n_gt": 14,
+      "recall50": 0.0,
+      "recall75": 0.0
+     },
+     "fence": {
+      "ap50": 0.08738952771013733,
+      "ap75": 0.006392045454545454,
+      "n_gt": 88,
+      "recall50": 0.2840909090909091,
+      "recall75": 0.06818181818181818
+     },
+     "forklift": {
+      "ap50": 0.5,
+      "ap75": 0.0,
+      "n_gt": 4,
+      "recall50": 0.5,
+      "recall75": 0.0
+     },
+     "foundation": {
+      "ap50": 0.013377926421404682,
+      "ap75": 0.0033444816053511705,
+      "n_gt": 23,
+      "recall50": 0.08695652173913043,
+      "recall75": 0.043478260869565216
+     },
+     "h_beam": {
+      "ap50": 0.00210945586520446,
+      "ap75": 0.0007468259895444362,
+      "n_gt": 117,
+      "recall50": 0.042735042735042736,
+      "recall75": 0.02564102564102564
+     },
+     "material": {
+      "ap50": 0.0,
+      "ap75": 0.0,
+      "n_gt": 14,
+      "recall50": 0.0,
+      "recall75": 0.0
+     },
+     "mold": {
+      "ap50": 0.003409090909090909,
+      "ap75": 0.0,
+      "n_gt": 66,
+      "recall50": 0.045454545454545456,
+      "recall75": 0.0
+     },
+     "rebar": {
+      "ap50": 0.010227272727272727,
+      "ap75": 0.001201923076923077,
+      "n_gt": 64,
+      "recall50": 0.09375,
+      "recall75": 0.03125
+     },
+     "safety_cone": {
+      "ap50": 0.0,
+      "ap75": 0.0,
+      "n_gt": 10,
+      "recall50": 0.0,
+      "recall75": 0.0
+     },
+     "structure": {
+      "ap50": 0.02197802197802198,
+      "ap75": 0.0,
+      "n_gt": 14,
+      "recall50": 0.14285714285714285,
+      "recall75": 0.0
+     },
+     "tarpaulin": {
+      "ap50": 0.16903313654363872,
+      "ap75": 0.05805281193307801,
+      "n_gt": 82,
+      "recall50": 0.5,
+      "recall75": 0.2926829268292683
+     },
+     "temporary_building": {
+      "ap50": 0.10027418723070898,
+      "ap75": 0.06284141284141286,
+      "n_gt": 24,
+      "recall50": 0.4166666666666667,
+      "recall75": 0.2916666666666667
+     },
+     "tower_crane": {
+      "ap50": 1.0,
+      "ap75": 1.0,
+      "n_gt": 2,
+      "recall50": 1.0,
+      "recall75": 1.0
+     },
+     "truck": {
+      "ap50": 0.3494047619047619,
+      "ap75": 0.11790674603174603,
+      "n_gt": 40,
+      "recall50": 0.4,
+      "recall75": 0.225
+     },
+     "wood_bar": {
+      "ap50": 0.012228260869565216,
+      "ap75": 0.001976284584980237,
+      "n_gt": 23,
+      "recall50": 0.13043478260869565,
+      "recall75": 0.043478260869565216
+     },
+     "wood_fence": {
+      "ap50": 0.13181818181818183,
+      "ap75": 0.0,
+      "n_gt": 22,
+      "recall50": 0.36363636363636365,
+      "recall75": 0.0
+     },
+     "worker": {
+      "ap50": 0.048403361344537814,
+      "ap75": 0.010168067226890756,
+      "n_gt": 119,
+      "recall50": 0.20168067226890757,
+      "recall75": 0.09243697478991597
+     }
+    },
+    "protocol": "given_phrases",
+    "recall50": 0.3086003372681282,
+    "recall75": 0.18296795952782463,
+    "top_k": 10
+   }
+  },
+  "queried_classes": "present",
+  "split": "test",
+  "task": "grounding"
+ },
+ {
+  "bleu1": 0.02857319346724516,
+  "bleu2": 0.013422734943231913,
+  "bleu3": 0.005143105879706665,
+  "bleu4": 0.0,
+  "cider_d": 0.1573123242472738,
+  "coverage": 1.0,
+  "examples": [
+   {
+    "prediction": "orange excavator",
+    "reference": "An orange excavator is located on soil"
+   },
+   {
+    "prediction": "window",
+    "reference": "A pile of molds is located on concrete"
+   },
+   {
+    "prediction": "vehicle",
+    "reference": "A pile of rebars is located on soil"
+   },
+   {
+    "prediction": "window",
+    "reference": "A pile of molds is located on soil"
+   },
+   {
+    "prediction": "concrete wall",
+    "reference": "A temporary building is installed on soil"
+   },
+   {
+    "prediction": "land vehicle",
+    "reference": "A pile of rebars is located on soil"
+   },
+   {
+    "prediction": "tarpaulin",
+    "reference": "Two blue tarpaulins are located on soil"
+   },
+   {
+    "prediction": "person",
+    "reference": "A worker is located on a temporary building"
+   }
+  ],
+  "fields": {
+   "colour_acc_loose": 0.22515212981744423,
+   "colour_acc_strict": 0.0,
+   "colour_n_with_ground_truth": 493,
+   "count_acc_loose": 0.000975609756097561,
+   "count_acc_strict": 0.0,
+   "count_n_with_ground_truth": 1025,
+   "n": 1186,
+   "resource_acc_loose": 0.14839797639123103,
+   "resource_acc_strict": 0.0,
+   "state_acc_strict": 0.0,
+   "strict_parse_rate": 0.0
+  },
+  "ground_truth": {
+   "annotations_in_split": 1189,
+   "evaluated": 1186,
+   "excluded_unparsed": 3,
+   "images": 214
+  },
+  "images_evaluated": 214,
+  "meteor_exact": 0.03145387416807012,
+  "model": "florence-2-base-regions",
+  "model_info": {
+   "adapter": null,
+   "decoding": "greedy",
+   "device": "cuda",
+   "florence_task": "<REGION_TO_DESCRIPTION>",
+   "limit": null,
+   "machine": "x86_64",
+   "model_id": "florence-community/Florence-2-base",
+   "n_score_fallbacks": 0,
+   "sample_seed": 0,
+   "score": "geometric-mean token probability of the description words",
+   "seconds_per_image_this_session": 1.238195199832738,
+   "split": "test",
+   "task": "region_captioning",
+   "torch_version": "2.14.1+cu130",
+   "transformers_version": "5.22.1"
+  },
+  "n_evaluated": 1186,
+  "n_ground_truth_regions": 1186,
+  "split": "test",
+  "task": "region_captioning"
+ },
+ {
+  "ground_truth": {
+   "annotations_in_split": 1189,
+   "evaluated": 1186,
+   "excluded_unparsed": 3,
+   "images": 214
+  },
+  "images_evaluated": 214,
+  "model": "owlv2-base-patch16-ensemble",
+  "model_info": {
+   "device": "cuda",
+   "limit": null,
+   "machine": "x86_64",
+   "max_per_class": 100,
+   "min_score": 0.01,
+   "model_id": "google/owlv2-base-patch16-ensemble",
+   "n_score_fallbacks": 0,
+   "nms_iou": 0.5,
+   "prompt_template": "a photo of a {}",
+   "queried_classes": "all",
+   "sample_seed": 0,
+   "score": "sigmoid(logit) of the (box, query) pair",
+   "seconds_per_image_this_session": 0.960055658750445,
+   "split": "test",
+   "task": "grounding",
+   "torch_version": "2.14.1+cu130",
+   "transformers_version": "5.22.1"
+  },
+  "n_predictions": 526883,
+  "presence_summary": {
+   "n_images": 214,
+   "n_true_pairs": 893,
+   "thresholds": {
+    "0.1": {
+     "f1": 0.2556526982212843,
+     "n_predicted_pairs": 5741,
+     "precision": 0.14770945828252918,
+     "recall": 0.9496080627099664
+    },
+    "0.3": {
+     "f1": 0.3096179183135705,
+     "n_predicted_pairs": 2143,
+     "precision": 0.21931871208586096,
+     "recall": 0.5263157894736842
+    },
+    "0.5": {
+     "f1": 0.23282134195634596,
+     "n_predicted_pairs": 344,
+     "precision": 0.4186046511627907,
+     "recall": 0.1612541993281075
+    }
+   }
+  },
+  "protocols": {
+   "detection": {
+    "breakdown": {
+     "crowding": {
+      "crowded": {
+       "n_gt": 397,
+       "recall": 0.47858942065491183
+      },
+      "medium": {
+       "n_gt": 530,
+       "recall": 0.5981132075471698
+      },
+      "sparse": {
+       "n_gt": 259,
+       "recall": 0.6756756756756757
+      }
+     },
+     "iou": 0.5,
+     "kind": {
+      "group": {
+       "n_gt": 597,
+       "recall": 0.40033500837520936
+      },
+      "single": {
+       "n_gt": 589,
+       "recall": 0.7521222410865874
+      }
+     },
+     "size": {
+      "large": {
+       "n_gt": 437,
+       "recall": 0.6338672768878718
+      },
+      "medium": {
+       "n_gt": 496,
+       "recall": 0.5645161290322581
+      },
+      "small": {
+       "n_gt": 253,
+       "recall": 0.49407114624505927
+      }
+     }
+    },
+    "calibration": {
+     "bins": [
+      {
+       "accuracy": 0.0004410008398006423,
+       "bin": 0,
+       "hi": 0.1,
+       "lo": 0.0,
+       "mean_confidence": 0.036631401001740074,
+       "n": 473922
+      },
+      {
+       "accuracy": 0.004619766857361706,
+       "bin": 1,
+       "hi": 0.2,
+       "lo": 0.1,
+       "mean_confidence": 0.13404435800008543,
+       "n": 41777
+      },
+      {
+       "accuracy": 0.019790144773542302,
+       "bin": 2,
+       "hi": 0.3,
+       "lo": 0.2,
+       "mean_confidence": 0.23946736259975984,
+       "n": 7529
+      },
+      {
+       "accuracy": 0.04745762711864407,
+       "bin": 3,
+       "hi": 0.4,
+       "lo": 0.3,
+       "mean_confidence": 0.3426689456958892,
+       "n": 2360
+      },
+      {
+       "accuracy": 0.11074561403508772,
+       "bin": 4,
+       "hi": 0.5,
+       "lo": 0.4,
+       "mean_confidence": 0.44235763421053426,
+       "n": 912
+      },
+      {
+       "accuracy": 0.26666666666666666,
+       "bin": 5,
+       "hi": 0.6,
+       "lo": 0.5,
+       "mean_confidence": 0.538490750392278,
+       "n": 300
+      },
+      {
+       "accuracy": 0.36764705882352944,
+       "bin": 6,
+       "hi": 0.7,
+       "lo": 0.6,
+       "mean_confidence": 0.6365281062967637,
+       "n": 68
+      },
+      {
+       "accuracy": 0.3333333333333333,
+       "bin": 7,
+       "hi": 0.8,
+       "lo": 0.7,
+       "mean_confidence": 0.7471769518322415,
+       "n": 9
+      },
+      {
+       "accuracy": 1.0,
+       "bin": 8,
+       "hi": 0.9,
+       "lo": 0.8,
+       "mean_confidence": 0.8427404363950094,
+       "n": 6
+      },
+      {
+       "bin": 9,
+       "hi": 1.0,
+       "lo": 0.9,
+       "n": 0
+      }
+     ],
+     "ece": 0.048048572269870374,
+     "n": 526883,
+     "n_bins": 10
+    },
+    "classes_without_gt_in_predictions_only": [
+     "safety_fence",
+     "water_tank"
+    ],
+    "iou_thresholds": [
+     0.5,
+     0.75
+    ],
+    "map50": 0.09497844508648817,
+    "map75": 0.040910159185161304,
+    "n_gt": 1186,
+    "n_predictions_scored": 526883,
+    "per_class": {
+     "concrete": {
+      "ap50": 0.050714886712798446,
+      "ap75": 0.020805200391587852,
+      "n_gt": 37,
+      "recall50": 0.8378378378378378,
+      "recall75": 0.4594594594594595
+     },
+     "concrete_pillar": {
+      "ap50": 0.042445330853998285,
+      "ap75": 0.033501409626434255,
+      "n_gt": 18,
+      "recall50": 0.6666666666666666,
+      "recall75": 0.5555555555555556
+     },
+     "concrete_pipe": {
+      "ap50": 0.030747001517210774,
+      "ap75": 0.012783951736531383,
+      "n_gt": 17,
+      "recall50": 0.7647058823529411,
+      "recall75": 0.4117647058823529
+     },
+     "concrete_structure": {
+      "ap50": 0.0007069635913750442,
+      "ap75": 0.00017674089784376105,
+      "n_gt": 2,
+      "recall50": 0.5,
+      "recall75": 0.0
+     },
+     "concrete_truck": {
+      "ap50": 0.30817856082919076,
+      "ap75": 0.3005542373870768,
+      "n_gt": 14,
+      "recall50": 1.0,
+      "recall75": 0.7857142857142857
+     },
+     "container": {
+      "ap50": 0.0069476774385636856,
+      "ap75": 0.0007308026337591396,
+      "n_gt": 22,
+      "recall50": 0.45454545454545453,
+      "recall75": 0.045454545454545456
+     },
+     "crane": {
+      "ap50": 0.02197802197802198,
+      "ap75": 0.0,
+      "n_gt": 2,
+      "recall50": 1.0,
+      "recall75": 0.0
+     },
+     "crane_truck": {
+      "ap50": 0.12832939010546648,
+      "ap75": 0.04297491696556271,
+      "n_gt": 51,
+      "recall50": 0.803921568627451,
+      "recall75": 0.39215686274509803
+     },
+     "drilling_rig": {
+      "ap50": 0.23362330984696017,
+      "ap75": 0.16096566940911416,
+      "n_gt": 31,
+      "recall50": 0.8387096774193549,
+      "recall75": 0.5806451612903226
+     },
+     "dump_truck": {
+      "ap50": 0.1231725708860189,
+      "ap75": 0.049840070373686464,
+      "n_gt": 103,
+      "recall50": 0.5825242718446602,
+      "recall75": 0.39805825242718446
+     },
+     "dust_protection": {
+      "ap50": 0.3059848061081064,
+      "ap75": 0.07268738640931965,
+      "n_gt": 13,
+      "recall50": 0.6923076923076923,
+      "recall75": 0.3076923076923077
+     },
+     "excavator": {
+      "ap50": 0.4979202101778896,
+      "ap75": 0.20171697919235682,
+      "n_gt": 150,
+      "recall50": 0.7666666666666667,
+      "recall75": 0.38666666666666666
+     },
+     "excavator_bucket": {
+      "ap50": 0.005712052578211759,
+      "ap75": 0.0009652509652509653,
+      "n_gt": 14,
+      "recall50": 0.42857142857142855,
+      "recall75": 0.07142857142857142
+     },
+     "fence": {
+      "ap50": 0.13516381005210273,
+      "ap75": 0.03094902804515198,
+      "n_gt": 88,
+      "recall50": 0.6931818181818182,
+      "recall75": 0.19318181818181818
+     },
+     "forklift": {
+      "ap50": 0.02309782608695652,
+      "ap75": 0.02309782608695652,
+      "n_gt": 4,
+      "recall50": 0.75,
+      "recall75": 0.75
+     },
+     "foundation": {
+      "ap50": 0.01664697660173078,
+      "ap75": 0.012791152355156892,
+      "n_gt": 23,
+      "recall50": 0.2608695652173913,
+      "recall75": 0.08695652173913043
+     },
+     "h_beam": {
+      "ap50": 0.031070514743620704,
+      "ap75": 0.004134016524324164,
+      "n_gt": 117,
+      "recall50": 0.38461538461538464,
+      "recall75": 0.1452991452991453
+     },
+     "material": {
+      "ap50": 0.0002567384837947514,
+      "ap75": 0.0,
+      "n_gt": 14,
+      "recall50": 0.14285714285714285,
+      "recall75": 0.0
+     },
+     "mold": {
+      "ap50": 0.002730423500468187,
+      "ap75": 0.0004612765557511519,
+      "n_gt": 66,
+      "recall50": 0.10606060606060606,
+      "recall75": 0.030303030303030304
+     },
+     "rebar": {
+      "ap50": 0.035336376120323906,
+      "ap75": 0.005060883580080277,
+      "n_gt": 64,
+      "recall50": 0.453125,
+      "recall75": 0.125
+     },
+     "safety_cone": {
+      "ap50": 0.0006408546096379608,
+      "ap75": 0.0,
+      "n_gt": 10,
+      "recall50": 0.1,
+      "recall75": 0.0
+     },
+     "structure": {
+      "ap50": 0.011374989031348598,
+      "ap75": 0.000345830639948287,
+      "n_gt": 14,
+      "recall50": 0.5714285714285714,
+      "recall75": 0.14285714285714285
+     },
+     "tarpaulin": {
+      "ap50": 0.34359803655930254,
+      "ap75": 0.10922559323885843,
+      "n_gt": 82,
+      "recall50": 0.8536585365853658,
+      "recall75": 0.45121951219512196
+     },
+     "temporary_building": {
+      "ap50": 0.042537630358339275,
+      "ap75": 0.008028775148756244,
+      "n_gt": 24,
+      "recall50": 0.9583333333333334,
+      "recall75": 0.375
+     },
+     "tower_crane": {
+      "ap50": 0.03240740740740741,
+      "ap75": 0.0,
+      "n_gt": 2,
+      "recall50": 1.0,
+      "recall75": 0.0
+     },
+     "truck": {
+      "ap50": 0.21526583976059382,
+      "ap75": 0.06427217487110676,
+      "n_gt": 40,
+      "recall50": 0.875,
+      "recall75": 0.5
+     },
+     "wood_bar": {
+      "ap50": 0.004647581692847988,
+      "ap75": 9.320098793047206e-06,
+      "n_gt": 23,
+      "recall50": 0.21739130434782608,
+      "recall75": 0.0
+     },
+     "wood_fence": {
+      "ap50": 0.046415514827979544,
+      "ap75": 0.005170756522855838,
+      "n_gt": 22,
+      "recall50": 0.7727272727272727,
+      "recall75": 0.2727272727272727
+     },
+     "worker": {
+      "ap50": 0.056723605047889515,
+      "ap75": 0.02514536671341447,
+      "n_gt": 119,
+      "recall50": 0.23529411764705882,
+      "recall75": 0.058823529411764705
+     }
+    },
+    "protocol": "detection",
+    "recall50": 0.5750421585160203,
+    "recall75": 0.26812816188870153,
+    "top_k": 10
+   },
+   "given_phrases": {
+    "breakdown": {
+     "crowding": {
+      "crowded": {
+       "n_gt": 397,
+       "recall": 0.47858942065491183
+      },
+      "medium": {
+       "n_gt": 530,
+       "recall": 0.5981132075471698
+      },
+      "sparse": {
+       "n_gt": 259,
+       "recall": 0.6756756756756757
+      }
+     },
+     "iou": 0.5,
+     "kind": {
+      "group": {
+       "n_gt": 597,
+       "recall": 0.40033500837520936
+      },
+      "single": {
+       "n_gt": 589,
+       "recall": 0.7521222410865874
+      }
+     },
+     "size": {
+      "large": {
+       "n_gt": 437,
+       "recall": 0.6338672768878718
+      },
+      "medium": {
+       "n_gt": 496,
+       "recall": 0.5645161290322581
+      },
+      "small": {
+       "n_gt": 253,
+       "recall": 0.49407114624505927
+      }
+     }
+    },
+    "calibration": {
+     "bins": [
+      {
+       "accuracy": 0.0031938140864010756,
+       "bin": 0,
+       "hi": 0.1,
+       "lo": 0.0,
+       "mean_confidence": 0.03987609693667626,
+       "n": 65439
+      },
+      {
+       "accuracy": 0.02355381986819624,
+       "bin": 1,
+       "hi": 0.2,
+       "lo": 0.1,
+       "mean_confidence": 0.1347621388666101,
+       "n": 8194
+      },
+      {
+       "accuracy": 0.0963777490297542,
+       "bin": 2,
+       "hi": 0.3,
+       "lo": 0.2,
+       "mean_confidence": 0.23971226311169497,
+       "n": 1546
+      },
+      {
+       "accuracy": 0.2066420664206642,
+       "bin": 3,
+       "hi": 0.4,
+       "lo": 0.3,
+       "mean_confidence": 0.3461410540716235,
+       "n": 542
+      },
+      {
+       "accuracy": 0.38549618320610685,
+       "bin": 4,
+       "hi": 0.5,
+       "lo": 0.4,
+       "mean_confidence": 0.4444248658100157,
+       "n": 262
+      },
+      {
+       "accuracy": 0.6299212598425197,
+       "bin": 5,
+       "hi": 0.6,
+       "lo": 0.5,
+       "mean_confidence": 0.5430971463834207,
+       "n": 127
+      },
+      {
+       "accuracy": 0.8064516129032258,
+       "bin": 6,
+       "hi": 0.7,
+       "lo": 0.6,
+       "mean_confidence": 0.6326915506393679,
+       "n": 31
+      },
+      {
+       "accuracy": 1.0,
+       "bin": 7,
+       "hi": 0.8,
+       "lo": 0.7,
+       "mean_confidence": 0.7417738835016886,
+       "n": 3
+      },
+      {
+       "accuracy": 1.0,
+       "bin": 8,
+       "hi": 0.9,
+       "lo": 0.8,
+       "mean_confidence": 0.8427404363950094,
+       "n": 6
+      },
+      {
+       "bin": 9,
+       "hi": 1.0,
+       "lo": 0.9,
+       "n": 0
+      }
+     ],
+     "ece": 0.047832793936999275,
+     "n": 76150,
+     "n_bins": 10
+    },
+    "classes_without_gt_in_predictions_only": [
+     "safety_fence",
+     "water_tank"
+    ],
+    "iou_thresholds": [
+     0.5,
+     0.75
+    ],
+    "map50": 0.30176066948642394,
+    "map75": 0.11330968000062774,
+    "n_gt": 1186,
+    "n_predictions_scored": 76150,
+    "per_class": {
+     "concrete": {
+      "ap50": 0.3206252886592589,
+      "ap75": 0.13878796139904026,
+      "n_gt": 37,
+      "recall50": 0.8378378378378378,
+      "recall75": 0.4594594594594595
+     },
+     "concrete_pillar": {
+      "ap50": 0.2519167771615637,
+      "ap75": 0.2049147246316729,
+      "n_gt": 18,
+      "recall50": 0.6666666666666666,
+      "recall75": 0.5555555555555556
+     },
+     "concrete_pipe": {
+      "ap50": 0.1885060911088324,
+      "ap75": 0.07065613062079232,
+      "n_gt": 17,
+      "recall50": 0.7647058823529411,
+      "recall75": 0.4117647058823529
+     },
+     "concrete_structure": {
+      "ap50": 0.044444444444444446,
+      "ap75": 0.011111111111111112,
+      "n_gt": 2,
+      "recall50": 0.5,
+      "recall75": 0.0
+     },
+     "concrete_truck": {
+      "ap50": 0.6836301743851292,
+      "ap75": 0.6055210799053163,
+      "n_gt": 14,
+      "recall50": 1.0,
+      "recall75": 0.7857142857142857
+     },
+     "container": {
+      "ap50": 0.03734108616896239,
+      "ap75": 0.003897624093504405,
+      "n_gt": 22,
+      "recall50": 0.45454545454545453,
+      "recall75": 0.045454545454545456
+     },
+     "crane": {
+      "ap50": 0.8333333333333333,
+      "ap75": 0.0,
+      "n_gt": 2,
+      "recall50": 1.0,
+      "recall75": 0.0
+     },
+     "crane_truck": {
+      "ap50": 0.37808031534563286,
+      "ap75": 0.13712089121885318,
+      "n_gt": 51,
+      "recall50": 0.803921568627451,
+      "recall75": 0.39215686274509803
+     },
+     "drilling_rig": {
+      "ap50": 0.5660146806717545,
+      "ap75": 0.34887332772501034,
+      "n_gt": 31,
+      "recall50": 0.8387096774193549,
+      "recall75": 0.5806451612903226
+     },
+     "dump_truck": {
+      "ap50": 0.27925717254117777,
+      "ap75": 0.1222378945641938,
+      "n_gt": 103,
+      "recall50": 0.5825242718446602,
+      "recall75": 0.39805825242718446
+     },
+     "dust_protection": {
+      "ap50": 0.5475431855726883,
+      "ap75": 0.12007198844228739,
+      "n_gt": 13,
+      "recall50": 0.6923076923076923,
+      "recall75": 0.3076923076923077
+     },
+     "excavator": {
+      "ap50": 0.5878015062037935,
+      "ap75": 0.23202363025804842,
+      "n_gt": 150,
+      "recall50": 0.7666666666666667,
+      "recall75": 0.38666666666666666
+     },
+     "excavator_bucket": {
+      "ap50": 0.06579864517922554,
+      "ap75": 0.014285714285714285,
+      "n_gt": 14,
+      "recall50": 0.42857142857142855,
+      "recall75": 0.07142857142857142
+     },
+     "fence": {
+      "ap50": 0.24214668315489754,
+      "ap75": 0.03802681246162415,
+      "n_gt": 88,
+      "recall50": 0.6931818181818182,
+      "recall75": 0.19318181818181818
+     },
+     "forklift": {
+      "ap50": 0.6875,
+      "ap75": 0.6875,
+      "n_gt": 4,
+      "recall50": 0.75,
+      "recall75": 0.75
+     },
+     "foundation": {
+      "ap50": 0.12064739523582706,
+      "ap75": 0.08778874622900226,
+      "n_gt": 23,
+      "recall50": 0.2608695652173913,
+      "recall75": 0.08695652173913043
+     },
+     "h_beam": {
+      "ap50": 0.050501535747862945,
+      "ap75": 0.007733304627207647,
+      "n_gt": 117,
+      "recall50": 0.38461538461538464,
+      "recall75": 0.1452991452991453
+     },
+     "material": {
+      "ap50": 0.00299691150071757,
+      "ap75": 0.0,
+      "n_gt": 14,
+      "recall50": 0.14285714285714285,
+      "recall75": 0.0
+     },
+     "mold": {
+      "ap50": 0.010383646762870354,
+      "ap75": 0.001687373321884196,
+      "n_gt": 66,
+      "recall50": 0.10606060606060606,
+      "recall75": 0.030303030303030304
+     },
+     "rebar": {
+      "ap50": 0.08686907920260464,
+      "ap75": 0.012562284250072414,
+      "n_gt": 64,
+      "recall50": 0.453125,
+      "recall75": 0.125
+     },
+     "safety_cone": {
+      "ap50": 0.004259634888438134,
+      "ap75": 0.0,
+      "n_gt": 10,
+      "recall50": 0.1,
+      "recall75": 0.0
+     },
+     "structure": {
+      "ap50": 0.1420808700073078,
+      "ap75": 0.0044162060516268736,
+      "n_gt": 14,
+      "recall50": 0.5714285714285714,
+      "recall75": 0.14285714285714285
+     },
+     "tarpaulin": {
+      "ap50": 0.47035209151622254,
+      "ap75": 0.1461477244324491,
+      "n_gt": 82,
+      "recall50": 0.8536585365853658,
+      "recall75": 0.45121951219512196
+     },
+     "temporary_building": {
+      "ap50": 0.2647128816129095,
+      "ap75": 0.05033839379462051,
+      "n_gt": 24,
+      "recall50": 0.9583333333333334,
+      "recall75": 0.375
+     },
+     "tower_crane": {
+      "ap50": 1.0,
+      "ap75": 0.0,
+      "n_gt": 2,
+      "recall50": 1.0,
+      "recall75": 0.0
+     },
+     "truck": {
+      "ap50": 0.48164626093370616,
+      "ap75": 0.16451246306477635,
+      "n_gt": 40,
+      "recall50": 0.875,
+      "recall75": 0.5
+     },
+     "wood_bar": {
+      "ap50": 0.013721229466020543,
+      "ap75": 4.250074376301585e-05,
+      "n_gt": 23,
+      "recall50": 0.21739130434782608,
+      "recall75": 0.0
+     },
+     "wood_fence": {
+      "ap50": 0.3113135293478515,
+      "ap75": 0.043122984398152174,
+      "n_gt": 22,
+      "recall50": 0.7727272727272727,
+      "recall75": 0.2727272727272727
+     },
+     "worker": {
+      "ap50": 0.07763496495326237,
+      "ap75": 0.032599848387480986,
+      "n_gt": 119,
+      "recall50": 0.23529411764705882,
+      "recall75": 0.058823529411764705
+     }
+    },
+    "protocol": "given_phrases",
+    "recall50": 0.5750421585160203,
+    "recall75": 0.26812816188870153,
+    "top_k": 10
+   }
+  },
+  "queried_classes": "all",
+  "split": "test",
+  "task": "grounding"
+ }
+]
