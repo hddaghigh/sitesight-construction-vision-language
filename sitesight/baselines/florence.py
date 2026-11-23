@@ -35,15 +35,23 @@ MODEL_ID = "florence-community/Florence-2-base"
 
 
 class FlorenceRunner:
-    def __init__(self, model_id: str = MODEL_ID, device: str = "cpu") -> None:
+    def __init__(
+        self, model_id: str = MODEL_ID, device: str = "cpu", adapter: str | None = None
+    ) -> None:
         import torch
         from transformers import AutoProcessor, Florence2ForConditionalGeneration
 
         self._torch = torch
         self.device = device
         self.model_id = model_id
+        self.adapter = adapter
         self.processor = AutoProcessor.from_pretrained(model_id)
-        self.model = Florence2ForConditionalGeneration.from_pretrained(model_id).eval().to(device)
+        model = Florence2ForConditionalGeneration.from_pretrained(model_id)
+        if adapter:  # LoRA weights from sitesight.train.lora, folded into the base weights
+            from peft import PeftModel
+
+            model = PeftModel.from_pretrained(model, adapter).merge_and_unload()
+        self.model = model.eval().to(device)
         # grounding outputs whose box count did not match the token groups (reported, never hidden)
         self.n_score_fallbacks = 0
         self._install_image_feature_cache()

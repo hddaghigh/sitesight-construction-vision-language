@@ -180,6 +180,13 @@ def test_sanitize_and_from_metrics_cli(ds: Dataset, tmp_path: Path) -> None:
     assert "Grounding on `val`" in out.with_suffix(".md").read_text()
     with pytest.raises(SystemExit):  # neither mode given
         main(["--out", str(out)])
+    # several metrics files are merged in order (zero-shot + fine-tuned side by side)
+    second = tmp_path / "second.json"
+    other = dict(res, model="fine-tuned")
+    second.write_text(json.dumps([other]))
+    both = tmp_path / "both.json"
+    assert main(["--from-metrics", str(old), str(second), "--out", str(both)]) == 0
+    assert [r["model"] for r in json.loads(both.read_text())] == [res["model"], "fine-tuned"]
 
 
 def test_restrict_intersects_with_the_images_a_file_covers(ds: Dataset) -> None:

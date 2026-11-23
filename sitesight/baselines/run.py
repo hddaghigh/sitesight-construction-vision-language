@@ -15,7 +15,9 @@ Models:
 ``--limit N`` takes a seeded random sample of N images (same seed, same sample, so repeated and
 resumed runs cover the same images, and two models run with the same ``--limit/--seed`` are
 scored on the same images). Progress is saved every ``--save-every`` images and existing output
-files are resumed, so an interrupted run loses little. The ``test`` split is refused: it is
+files are resumed, so an interrupted run loses little. ``--adapter DIR`` runs a LoRA-fine-tuned
+Florence-2 (from ``sitesight.train.lora``). The ``test`` split is refused unless ``--allow-test`` is
+given (for the one final evaluation only): it is
 reserved for the final evaluation.
 """
 
@@ -78,6 +80,7 @@ def build_tasks(
     names: list[str],
     device: str,
     model_id: str | None = None,
+    adapter: str | None = None,
 ) -> tuple[list[Task], Any]:
     gts, regions, _ = build_ground_truth(ds, split, set(names))
     present: dict[str, set[str]] = {}
@@ -122,8 +125,12 @@ def build_tasks(
         from sitesight.baselines.florence import FlorenceRunner
 
         MODEL_ID = model_id or DEFAULT_ID
-        flo = FlorenceRunner(MODEL_ID, device=device)
+        flo = FlorenceRunner(MODEL_ID, device=device, adapter=adapter)
         flo_name = MODEL_ID.split("/")[-1].lower()
+        if (
+            adapter
+        ):  # fine-tuned: name it after the run and epoch, e.g. florence-2-base-lora-epoch_3
+            flo_name += "-lora-" + Path(adapter).name
 
         def ground_answer(name: str, image: Image.Image) -> list[Prediction]:
             preds = []
@@ -141,7 +148,7 @@ def build_tasks(
                 preds.append(Prediction(name, r.bbox, score, caption, None, r.ann_id))
             return preds
 
-        base = {"model_id": MODEL_ID, "decoding": "greedy"}
+        base = {"model_id": MODEL_ID, "decoding": "greedy", "adapter": adapter}
         g_path = out.with_name(out.stem + "_grounding.json")
         r_path = out.with_name(out.stem + "_regions.json")
         g_info = {
@@ -195,10 +202,11 @@ def run(
     device: str = "cpu",
     save_every: int = 5,
     model_id: str | None = None,
+    adapter: str | None = None,
 ) -> list[PredictionSet]:
     names = select_images(ds, split, limit, seed)
     meta = {"split": split, "sample_seed": seed, "limit": limit}
-    tasks, runner = build_tasks(model, out, ds, split, names, device, model_id)
+    tasks, runner = build_tasks(model, out, ds, split, names, device, model_id, adapter)
     # An image counts as done only if EVERY output file has it; others are redone cleanly.
     done = set.intersection(*(set(t.pset.model_info.get("images", [])) for t in tasks))
     todo = [n for n in names if n not in done]
@@ -242,12 +250,20 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--device", default="cpu")
     p.add_argument("--save-every", type=int, default=5)
     p.add_argument("--model-id", help="override the Hugging Face model (e.g. Florence-2-large)")
+    p.add_argument("--adapter", help="LoRA adapter directory from sitesight.train.lora")
+    p.add_argument(
+        "--allow-test",
+        action="store_true",
+        help="permit --split test: ONLY for the single final evaluation, never to choose anything",
+    )
     args = p.parse_args(argv)
-    if args.split == "test":
-        p.error("the test split is reserved for the final evaluation; zero-shot runs use train/val")
+    if args.split == "test" and not args.allow_test:
+        p.error("the test split is reserved for the final evaluation (pass --allow-test once)")
+    if args.adapter and args.model != "florence":
+        p.error("--adapter applies to --model florence")
     ds = Dataset.load(args.annotations)
     run(args.model, ds, args.images, args.split, args.out, args.limit, args.seed,
-        args.device, args.save_every, args.model_id)  # fmt: skip
+        args.device, args.save_every, args.model_id, args.adapter)  # fmt: skip
     return 0
 
 

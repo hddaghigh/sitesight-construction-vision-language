@@ -1,0 +1,30 @@
+# LoRA fine-tuning of Florence-2-base for region captioning + phrase grounding (milestone M5).
+#
+# These values were fixed BEFORE any fine-tuning result existed; they are the single planned run.
+# The epoch kept is the one with the lowest validation LOSS (a rule decided in advance). Validation
+# generation metrics are computed for that epoch only; the test split is evaluated once, at the end.
+
+[model]
+id = "florence-community/Florence-2-base"   # MIT; native transformers code, no remote code
+
+[lora]
+r = 16
+alpha = 32            # scaling = alpha / r = 2
+dropout = 0.05
+# Applied to the language model's attention and MLP projections only. The vision tower and the
+# multimodal projector stay frozen, so image features can be computed once per image and cached.
+target_regex = ".*language_model.*\\.(q_proj|k_proj|v_proj|out_proj|fc1|fc2)"
+
+[train]
+seed = 0
+epochs = 5
+batch_size = 16
+lr = 1e-4
+weight_decay = 0.01
+warmup_frac = 0.05    # of total steps, then cosine decay to 0
+grad_clip = 1.0
+max_target_tokens = 256
+
+[data]
+train_split = "train"
+val_split = "val"

@@ -21,6 +21,7 @@ CLI_MODULES = [
     "sitesight.data.download",
     "sitesight.eval.run",
     "sitesight.baselines.run",
+    "sitesight.train.lora",
 ]
 
 

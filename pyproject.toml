@@ -27,6 +27,7 @@ embed = [
     "torch",
     "transformers",
     "scipy",  # required by the OWLv2 image processor (zero-shot baseline)
+    "peft",  # LoRA fine-tuning (M5)
 ]
 
 [build-system]
@@ -56,7 +57,7 @@ strict = true
 files = ["sitesight", "scripts", "tests"]
 
 [[tool.mypy.overrides]]
-module = ["torch.*", "transformers.*"]
+module = ["torch.*", "transformers.*", "peft.*"]
 ignore_missing_imports = true  # optional heavy deps, only in the `embed` group
 
 [tool.pytest.ini_options]

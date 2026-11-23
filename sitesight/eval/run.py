@@ -260,12 +260,16 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument(
         "--from-metrics",
         type=Path,
-        help="re-render tables from an existing metrics JSON (no predictions needed)",
+        nargs="+",
+        help="re-render tables from existing metrics JSON file(s), merged in the order given "
+        "(no predictions needed; e.g. zero-shot + fine-tuned side by side)",
     )
     args = p.parse_args(argv)
-    if args.from_metrics is not None:
-        results = sanitize_results(json.loads(args.from_metrics.read_text(encoding="utf-8")))
-        return _write(results, args.out)
+    if args.from_metrics:
+        results: list[dict[str, Any]] = []
+        for path in args.from_metrics:
+            results += json.loads(path.read_text(encoding="utf-8"))
+        return _write(sanitize_results(results), args.out)
     if args.annotations is None or not args.predictions:
         p.error("--annotations and --predictions are required (or use --from-metrics)")
     ds = Dataset.load(args.annotations)

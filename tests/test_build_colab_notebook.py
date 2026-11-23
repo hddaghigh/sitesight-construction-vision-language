@@ -14,6 +14,27 @@ from pathlib import Path
 from scripts.build_colab_notebook import main
 
 
+def test_m5_notebook_trains_on_train_never_touches_test_and_embeds_its_inputs(
+    tmp_path: Path,
+) -> None:
+    out = tmp_path / "m5.ipynb"
+    assert main(["--out", str(out), "--kind", "m5"]) == 0
+    nb = json.loads(out.read_text(encoding="utf-8"))
+    text = "".join("".join(c["source"]) for c in nb["cells"])
+    assert "sitesight.train.lora" in text and "--adapter" in text and "peft" in text
+    assert "--limit-images 4" in text  # a quick smoke stage precedes the real training
+    assert "GITHUB_TOKEN" not in text and "--split test" not in text and "--allow-test" not in text
+    m = re.search(r'B64 = "([^"]+)"', "".join(nb["cells"][1]["source"]))
+    assert m is not None
+    names = set(zipfile.ZipFile(io.BytesIO(base64.b64decode(m.group(1)))).namelist())
+    for needed in (
+        "configs/train.toml",
+        "sitesight/train/lora.py",
+        "reports/m4/zero_shot_val.json",
+    ):
+        assert needed in names, needed
+
+
 def test_notebook_is_valid_and_embeds_the_code(tmp_path: Path) -> None:
     out = tmp_path / "nb.ipynb"
     assert main(["--out", str(out)]) == 0
