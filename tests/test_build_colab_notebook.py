@@ -11,6 +11,8 @@ import sys
 import zipfile
 from pathlib import Path
 
+import pytest
+
 from scripts.build_colab_notebook import main
 
 
@@ -82,3 +84,23 @@ def test_m6_notebook_is_resumable_smoke_tested_and_never_touches_test(tmp_path: 
     assert m is not None
     names = set(zipfile.ZipFile(io.BytesIO(base64.b64decode(m.group(1)))).namelist())
     assert {"configs/active.toml", "sitesight/active/simulate.py"} <= names
+
+
+def test_m7_notebook_embeds_the_adapter_and_benchmarks_validation_only(tmp_path: Path) -> None:
+    adapter = tmp_path / "ad"
+    adapter.mkdir()
+    (adapter / "adapter_config.json").write_text("{}")
+    (adapter / "adapter_model.safetensors").write_bytes(b"weights")
+    out = tmp_path / "m7.ipynb"
+    assert main(["--out", str(out), "--kind", "m7", "--adapter-dir", str(adapter)]) == 0
+    nb = json.loads(out.read_text(encoding="utf-8"))
+    text = "".join("".join(c["source"]) for c in nb["cells"])
+    assert "sitesight.serve.export" in text and "sitesight.serve.bench" in text
+    assert "--n-regions 20" in text and "GITHUB_TOKEN" not in text and "--split test" not in text
+    m = re.search(r'B64 = "([^"]+)"', "".join(nb["cells"][1]["source"]))
+    assert m is not None
+    z = zipfile.ZipFile(io.BytesIO(base64.b64decode(m.group(1))))
+    assert z.read("adapter/epoch_4/adapter_model.safetensors") == b"weights"
+    assert "sitesight/serve/onnx_backend.py" in z.namelist()
+    with pytest.raises(SystemExit):  # the adapter is required: no silent export of the base model
+        main(["--out", str(out), "--kind", "m7"])

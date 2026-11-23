@@ -23,6 +23,9 @@ CLI_MODULES = [
     "sitesight.baselines.run",
     "sitesight.train.lora",
     "sitesight.active.simulate",
+    "sitesight.serve.cli",
+    "sitesight.serve.export",
+    "sitesight.serve.bench",
 ]
 
 

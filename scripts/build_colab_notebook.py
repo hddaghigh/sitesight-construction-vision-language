@@ -30,13 +30,16 @@ EMBED_FILES = (
 )
 
 
-def embedded_zip() -> bytes:
+def embedded_zip(extra: dict[str, Path] | None = None) -> bytes:
+    """Project code as a zip; ``extra`` maps an archive name to a file outside the repository."""
     files = [p for g in EMBED_GLOBS for p in ROOT.glob(g) if "__pycache__" not in p.parts]
     files += [ROOT / f for f in EMBED_FILES]
     buf = io.BytesIO()
     with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as z:
         for p in sorted(set(files)):
             z.write(p, p.relative_to(ROOT).as_posix())
+        for name, path in sorted((extra or {}).items()):
+            z.write(path, name)
     return buf.getvalue()
 
 
@@ -330,15 +333,99 @@ print("METRICS_JSON_END")
     }
 
 
+def build_m7_notebook(zip_bytes: bytes) -> dict[str, object]:
+    """ONNX export (fp32 + int8) and the PyTorch / ONNX fp32 / ONNX int8 benchmark on CPU."""
+    b64 = base64.b64encode(zip_bytes).decode()
+    cells = [
+        _md(
+            """
+# SiteSight M7: ONNX export, int8 and CPU benchmark
+
+Self-contained (code and the M5 LoRA adapter embedded, no GitHub token). Use a **CPU** runtime (the
+point is CPU latency; the hardware is logged in the result). Exports the fine-tuned Florence-2 to
+ONNX fp32 and int8, then compares PyTorch, ONNX fp32 and ONNX int8 on one fixed sample of
+**validation** regions: preprocessing parity, strict field accuracy, agreement with PyTorch and
+cold-request latency (p50/p95). The test split is not read.
+"""
+        ),
+        _code(
+            f"""
+import base64, io, os, zipfile
+B64 = "{b64}"
+zipfile.ZipFile(io.BytesIO(base64.b64decode(B64))).extractall("/content/sitesight")
+print(sorted(os.listdir("/content/sitesight")))
+"""
+        ),
+        _code(
+            """
+%cd /content/sitesight
+%pip -q install -e . transformers scipy peft onnx onnxruntime tokenizers
+%pip -q uninstall -y torchao
+import torch, onnxruntime, os
+print("torch", torch.__version__, "| onnxruntime", onnxruntime.__version__, "| cpus", os.cpu_count())
+"""
+        ),
+        _code(
+            """
+DATA = "/content/sitesight_data"
+!python scripts/download_data.py --data-dir {DATA} --min-free-gb 3
+!python -m sitesight.data.via_parse --via {DATA}/extracted/via_region_data_final.json     --images {DATA}/extracted/UAVdata --out {DATA}/derived/annotations.json
+!python -m sitesight.data.caption_fields --annotations {DATA}/derived/annotations.json     --out {DATA}/derived/annotations_fields.json
+!python -m sitesight.data.splits --annotations {DATA}/derived/annotations_fields.json     --splits reports/m2/splits.json --out {DATA}/derived/annotations_curated.json
+ANN, IMG = f"{DATA}/derived/annotations_curated.json", f"{DATA}/extracted/UAVdata"
+"""
+        ),
+        _code(
+            """
+# Export: merges the adapter, writes export/fp32 and export/int8 (+ tokenizer.json).
+!python -m sitesight.serve.export --adapter adapter/epoch_4 --out /content/export
+!ls -la /content/export/fp32 /content/export/int8
+"""
+        ),
+        _code(
+            """
+# Smoke (20 regions): fails fast if parity is broken before the long run.
+!python -m sitesight.serve.bench --annotations {ANN} --images {IMG} --adapter adapter/epoch_4     --onnx-dir /content/export --out-dir /content/bench_smoke --n-regions 20
+"""
+        ),
+        _code(
+            """
+# The real benchmark (300 validation regions, seed 0).
+!python -m sitesight.serve.bench --annotations {ANN} --images {IMG} --adapter adapter/epoch_4     --onnx-dir /content/export --out-dir /content/bench --n-regions 300
+"""
+        ),
+    ]
+    return {
+        "cells": cells,
+        "metadata": {
+            "colab": {"provenance": []},
+            "kernelspec": {"display_name": "Python 3", "name": "python3"},
+            "language_info": {"name": "python"},
+        },
+        "nbformat": 4,
+        "nbformat_minor": 5,
+    }
+
+
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--out", type=Path, required=True)
+    p.add_argument("--adapter-dir", type=Path, help="m7: LoRA adapter directory to embed")
     p.add_argument(
-        "--kind", choices=["m4", "m5", "m6"], default="m4", help="which notebook to build"
+        "--kind", choices=["m4", "m5", "m6", "m7"], default="m4", help="which notebook to build"
     )
     args = p.parse_args(argv)
     builders = {"m4": build_notebook, "m5": build_m5_notebook, "m6": build_m6_notebook}
-    nb = builders[args.kind](embedded_zip())
+    if args.kind == "m7":
+        if not args.adapter_dir:
+            p.error("--kind m7 needs --adapter-dir (the M5 LoRA adapter to export)")
+        extra = {
+            f"adapter/epoch_4/{n}": args.adapter_dir / n
+            for n in ("adapter_config.json", "adapter_model.safetensors")
+        }
+        nb = build_m7_notebook(embedded_zip(extra))
+    else:
+        nb = builders[args.kind](embedded_zip())
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(json.dumps(nb, indent=1) + "\n", encoding="utf-8", newline="\n")
     print(f"wrote {args.out} ({args.out.stat().st_size // 1024} KB, {len(nb['cells'])} cells)")  # type: ignore[arg-type]

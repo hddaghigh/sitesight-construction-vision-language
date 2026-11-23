@@ -17,6 +17,16 @@ dev = [
     "pytest>=8",
     "ruff>=0.6",
     "mypy>=1.11",
+    "httpx2>=2.0",  # what starlette.testclient imports
+    {include-group = "serve"},
+]
+# Serving (M7): HTTP API + ONNX Runtime inference. No torch: the image stays small.
+serve = [
+    "fastapi>=0.110",
+    "uvicorn>=0.29",
+    "python-multipart>=0.0.9",
+    "onnxruntime>=1.18",
+    "tokenizers>=0.19",
 ]
 # Desktop review/audit tool (laptop only; Colab has no display).
 viewer = [
@@ -28,6 +38,7 @@ embed = [
     "transformers",
     "scipy",  # required by the OWLv2 image processor (zero-shot baseline)
     "peft",  # LoRA fine-tuning (M5)
+    "onnx",  # ONNX export (M7)
 ]
 
 [build-system]
@@ -57,7 +68,11 @@ strict = true
 files = ["sitesight", "scripts", "tests"]
 
 [[tool.mypy.overrides]]
-module = ["torch.*", "transformers.*", "peft.*"]
+module = ["sitesight.serve.export"]
+disallow_subclassing_any = false  # torch.nn.Module is untyped here
+
+[[tool.mypy.overrides]]
+module = ["torch.*", "transformers.*", "peft.*", "onnx.*", "onnxruntime.*", "tokenizers.*"]
 ignore_missing_imports = true  # optional heavy deps, only in the `embed` group
 
 [tool.pytest.ini_options]

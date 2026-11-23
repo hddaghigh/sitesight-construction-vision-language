@@ -36,3 +36,12 @@ jobs:
       - run: pip install uv
       - run: uv sync --group viewer
       - run: uv run pytest -m viewer
+
+  docker:
+    # Builds the CPU serving image and checks the installed package imports inside it. The model
+    # is not baked in, so this does not start the API (that needs exported weights).
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t sitesight:ci .
+      - run: docker run --rm sitesight:ci python -c "import sitesight.serve.api, sitesight.serve.onnx_backend, onnxruntime, tokenizers, fastapi; print('imports ok')"
