@@ -97,10 +97,26 @@ def test_m7_notebook_embeds_the_adapter_and_benchmarks_validation_only(tmp_path:
     text = "".join("".join(c["source"]) for c in nb["cells"])
     assert "sitesight.serve.export" in text and "sitesight.serve.bench" in text
     assert "--n-regions 20" in text and "GITHUB_TOKEN" not in text and "--split test" not in text
-    m = re.search(r'B64 = "([^"]+)"', "".join(nb["cells"][1]["source"]))
+    cell = "".join(nb["cells"][1]["source"])
+    m = re.search(r"B64 = '''(.*?)'''", cell, re.S)
     assert m is not None
-    z = zipfile.ZipFile(io.BytesIO(base64.b64decode(m.group(1))))
+    assert max(len(line) for line in cell.splitlines()) <= 4100  # no giant lines (editor freeze)
+    z = zipfile.ZipFile(io.BytesIO(base64.b64decode("".join(m.group(1).split()))))
     assert z.read("adapter/epoch_4/adapter_model.safetensors") == b"weights"
     assert "sitesight/serve/onnx_backend.py" in z.namelist()
     with pytest.raises(SystemExit):  # the adapter is required: no silent export of the base model
         main(["--out", str(out), "--kind", "m7"])
+
+
+@pytest.mark.embed
+def test_adapter_fp16_rounds_weights_within_half_precision(tmp_path: Path) -> None:
+    import numpy as np
+    from safetensors.numpy import load_file, save_file
+
+    from scripts.build_colab_notebook import adapter_as_fp16
+
+    w = np.random.default_rng(0).standard_normal((8, 4)).astype(np.float32)
+    save_file({"a": w, "n": np.array([3], dtype=np.int64)}, tmp_path / "a.safetensors")
+    out = load_file(adapter_as_fp16(tmp_path / "a.safetensors", tmp_path / "b.safetensors"))
+    assert out["a"].dtype == np.float16 and out["n"].dtype == np.int64  # only floats are rounded
+    assert np.max(np.abs(out["a"].astype(np.float32) - w) / np.abs(w)) <= 2**-11 * 1.0001

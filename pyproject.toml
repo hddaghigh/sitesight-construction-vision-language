@@ -72,7 +72,7 @@ module = ["sitesight.serve.export"]
 disallow_subclassing_any = false  # torch.nn.Module is untyped here
 
 [[tool.mypy.overrides]]
-module = ["torch.*", "transformers.*", "peft.*", "onnx.*", "onnxruntime.*", "tokenizers.*"]
+module = ["torch.*", "transformers.*", "peft.*", "onnx.*", "onnxruntime.*", "tokenizers.*", "safetensors.*"]
 ignore_missing_imports = true  # optional heavy deps, only in the `embed` group
 
 [tool.pytest.ini_options]

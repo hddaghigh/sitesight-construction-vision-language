@@ -43,6 +43,23 @@ def embedded_zip(extra: dict[str, Path] | None = None) -> bytes:
     return buf.getvalue()
 
 
+def adapter_as_fp16(path: Path, dest: Path) -> Path:
+    """Copy a LoRA ``.safetensors`` file with every float32 tensor rounded to float16.
+
+    Only to get the notebook under the browser-upload size limit (13.0 MB -> 6.5 MB). Each weight
+    changes by at most a relative 2**-11 (about 0.05%); the benchmark compares engines that all load
+    this same file, and the report states that the adapter was rounded.
+    """
+    import numpy as np
+    from safetensors.numpy import load_file, save_file
+
+    tensors = {
+        k: v.astype(np.float16) if v.dtype == np.float32 else v for k, v in load_file(path).items()
+    }
+    save_file(tensors, dest)
+    return dest
+
+
 def _md(text: str) -> dict[str, object]:
     return {"cell_type": "markdown", "metadata": {}, "source": text.strip("\n").splitlines(True)}
 
@@ -335,13 +352,16 @@ print("METRICS_JSON_END")
 
 def build_m7_notebook(zip_bytes: bytes) -> dict[str, object]:
     """ONNX export (fp32 + int8) and the PyTorch / ONNX fp32 / ONNX int8 benchmark on CPU."""
-    b64 = base64.b64encode(zip_bytes).decode()
+    raw = base64.b64encode(zip_bytes).decode()
+    # Wrapped in short lines: the Colab editor freezes on a single multi-megabyte line.
+    b64 = chr(10).join(raw[i : i + 4000] for i in range(0, len(raw), 4000))
     cells = [
         _md(
             """
 # SiteSight M7: ONNX export, int8 and CPU benchmark
 
-Self-contained (code and the M5 LoRA adapter embedded, no GitHub token). Use a **CPU** runtime (the
+Self-contained (code and the M5 LoRA adapter embedded, no GitHub token; the adapter is rounded to
+float16 when built with `--adapter-fp16`, to fit the browser-upload limit). Use a **CPU** runtime (the
 point is CPU latency; the hardware is logged in the result). Exports the fine-tuned Florence-2 to
 ONNX fp32 and int8, then compares PyTorch, ONNX fp32 and ONNX int8 on one fixed sample of
 **validation** regions: preprocessing parity, strict field accuracy, agreement with PyTorch and
@@ -351,8 +371,10 @@ cold-request latency (p50/p95). The test split is not read.
         _code(
             f"""
 import base64, io, os, zipfile
-B64 = "{b64}"
-zipfile.ZipFile(io.BytesIO(base64.b64decode(B64))).extractall("/content/sitesight")
+B64 = '''
+{b64}
+'''
+zipfile.ZipFile(io.BytesIO(base64.b64decode("".join(B64.split())))).extractall("/content/sitesight")
 print(sorted(os.listdir("/content/sitesight")))
 """
         ),
@@ -412,6 +434,9 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--out", type=Path, required=True)
     p.add_argument("--adapter-dir", type=Path, help="m7: LoRA adapter directory to embed")
     p.add_argument(
+        "--adapter-fp16", action="store_true", help="m7: round the adapter to float16 (smaller)"
+    )
+    p.add_argument(
         "--kind", choices=["m4", "m5", "m6", "m7"], default="m4", help="which notebook to build"
     )
     args = p.parse_args(argv)
@@ -423,6 +448,11 @@ def main(argv: list[str] | None = None) -> int:
             f"adapter/epoch_4/{n}": args.adapter_dir / n
             for n in ("adapter_config.json", "adapter_model.safetensors")
         }
+        if args.adapter_fp16:
+            tmp = args.out.parent / "adapter_model_fp16.safetensors"
+            extra["adapter/epoch_4/adapter_model.safetensors"] = adapter_as_fp16(
+                args.adapter_dir / "adapter_model.safetensors", tmp
+            )
         nb = build_m7_notebook(embedded_zip(extra))
     else:
         nb = builders[args.kind](embedded_zip())

@@ -140,3 +140,21 @@ def test_int8_graphs_run_and_stay_close(
     assert np.isfinite(q[1]).all() and len(q[0]) >= 1
     # int8 may change a token, but the first-step log-probability must stay in the same ballpark
     assert abs(q[1][0] - fp[1][0]) < 1.0
+
+
+def test_weights_are_initializers_and_int8_really_stores_int8(
+    exported: tuple[Any, Path, dict[str, Any]], tmp_path: Path
+) -> None:
+    """Dynamic quantisation only touches initializers: a graph that inlines its weights as Constant
+    nodes quantises to nothing (this happened on the real model: int8 files were fp32-sized)."""
+    import onnx
+
+    _, d, _ = exported
+    quantize_int8(d, tmp_path)
+    for name in ("encoder", "decoder"):
+        fp = onnx.load(str(d / f"{name}.onnx"))
+        assert len(fp.graph.initializer) >= 10, f"{name}: weights were inlined as constants"
+        q = onnx.load(str(tmp_path / f"{name}.onnx"))
+        int8 = [t for t in q.graph.initializer if t.data_type == onnx.TensorProto.INT8]
+        assert int8, f"{name}: no int8 weights after quantisation"
+        assert any(n.op_type == "MatMulInteger" for n in q.graph.node)

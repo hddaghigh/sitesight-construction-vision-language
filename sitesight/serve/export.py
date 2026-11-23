@@ -45,10 +45,18 @@ def _wrappers(model: Any) -> tuple[Any, Any, Any]:
     image_token_id = int(model.config.image_token_id)
 
     class Vision(nn.Module):
+        def __init__(self) -> None:
+            super().__init__()
+            self.model = model  # registered: weights export as initializers, not constants
+
         def forward(self, pixel_values: Any) -> Any:
             return inner.get_image_features(pixel_values).pooler_output
 
     class Encoder(nn.Module):
+        def __init__(self) -> None:
+            super().__init__()
+            self.model = model  # registered: weights export as initializers, not constants
+
         def forward(self, input_ids: Any, image_features: Any, attention_mask: Any) -> Any:
             embeds = inner.get_input_embeddings()(input_ids)
             is_img = input_ids == image_token_id  # (1, L)
@@ -59,6 +67,10 @@ def _wrappers(model: Any) -> tuple[Any, Any, Any]:
             return out[0]
 
     class Decoder(nn.Module):
+        def __init__(self) -> None:
+            super().__init__()
+            self.model = model  # registered: weights export as initializers, not constants
+
         def forward(self, decoder_input_ids: Any, encoder_hidden_states: Any, mask: Any) -> Any:
             out = inner.language_model.decoder(
                 input_ids=decoder_input_ids,
