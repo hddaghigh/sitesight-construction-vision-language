@@ -189,6 +189,12 @@ Estimated total local add ≈ 0.7 GB (M1–M7) beyond the dataset, leaving rough
 | Label audit not done by you | Replace with model-vs-label disagreement review; mark it clearly as *not* a human audit |
 | Free disk < 3 GB | Stop and ask; move heavy models to Colab |
 
+## 10b. Progress log
+
+- **M1 done** (2026-11-22): parser/validator/schema/downloader; real-data findings reproduced.
+- **M2 done** (2026-11-22): caption-field parser (99.63% coverage), pHash + DINOv2-small dedup, grouped split (428 groups; naive split leaks a mean 1,210 train-test pairs vs 0), DATASHEET.md. Embeddings were computed on the laptop (710 MB venv `.venv-embed`) rather than Colab, by agreement, so results could be verified; the Colab notebook is written but not yet run.
+- **New risk found in M2:** residual same-site leakage under looser similarity (297 train-test pairs at pHash <= 16 / cosine >= 0.85). Mitigation options for M5: report val/test scores with this caveat; try average-linkage clustering (needs scipy) or manual site labels from the M3 audit set; never describe the test set as "unseen sites".
+
 ## 11. Open items for you
 
 1. Okay to delete the 0.59 GB zip now that the SHA-256 matched and the content is extracted (frees space; the original stays re-downloadable)?

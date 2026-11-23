@@ -12,6 +12,7 @@ from pathlib import Path
 
 import pytest
 
+from sitesight.data.caption_fields import apply_caption_fields
 from sitesight.data.validate import validate_dataset
 from sitesight.data.via_parse import parse_via
 
@@ -26,6 +27,25 @@ def extracted() -> Path:
     path = Path(root) / "extracted"
     assert (path / "via_region_data_final.json").is_file(), f"dataset not found in {path}"
     return path
+
+
+def test_real_caption_field_coverage(extracted: Path) -> None:
+    """Parser coverage measured on the real captions (also written to reports/m2)."""
+    ds, _ = parse_via(extracted / "via_region_data_final.json", extracted / "UAVdata")
+    rep = apply_caption_fields(ds)
+    assert (rep.n_annotations, rep.n_parsed, rep.n_unparsed, rep.n_empty) == (8428, 8396, 31, 1)
+    assert rep.coverage == pytest.approx(8396 / 8427)
+    assert rep.failure_reasons == {
+        "bad_target:are": 2,
+        "glued_captions": 15,
+        "multiple_clauses": 9,
+        "no_resource": 3,
+        "unknown_predicate:piles": 1,
+        "unknown_predicate:rebars": 1,
+    }
+    assert rep.n_with_repairs == 42 and rep.n_with_count == 7239
+    assert rep.resource_counts["excavator"] == 1558 and rep.resource_counts["worker"] == 884
+    assert validate_dataset(ds) == []
 
 
 def test_real_dataset_findings(extracted: Path) -> None:

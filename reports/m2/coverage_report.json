@@ -1,0 +1,95 @@
+{
+ "coverage": 0.9963213480479411,
+ "failure_examples": {
+  "bad_target": [
+   "Two workers located are located on soil"
+  ],
+  "glued_captions": [
+   "A yellow excavator is located on soilA yellow excavator is digging soil",
+   "A pile of rebars is located on soilA black dust protection is located on soil",
+   "Fences are installedTwenty six H-beams are installed on soil in a line",
+   "A temporary building is installed on soilA white dump truck is loaded with materials"
+  ],
+  "multiple_clauses": [
+   "Fences are installed in a line A concrete pipe is covered with",
+   "Three piles of molds are located on concrete Four piles of molds are located on concrete",
+   "Fences are installed in a line H-beams are installed on soil",
+   "Fences are installed in a line Four workers are located on fences",
+   "A white truck is located is located on soil"
+  ],
+  "no_resource": [
+   "An orange is located on soil",
+   "An orange exca",
+   "An orange excavato digging soil"
+  ],
+  "unknown_predicate": [
+   "Nine concrete piles are located on soil",
+   "A white concrete truck Rebars are installed on soil"
+  ]
+ },
+ "failure_reasons": {
+  "bad_target:are": 2,
+  "glued_captions": 15,
+  "multiple_clauses": 9,
+  "no_resource": 3,
+  "unknown_predicate:piles": 1,
+  "unknown_predicate:rebars": 1
+ },
+ "n_annotations": 8428,
+ "n_distinct_captions": 734,
+ "n_distinct_parsed": 719,
+ "n_empty": 1,
+ "n_parsed": 8396,
+ "n_unparsed": 31,
+ "n_with_count": 7239,
+ "n_with_repairs": 42,
+ "resource_counts": {
+  "concrete": 163,
+  "concrete_pillar": 185,
+  "concrete_pipe": 245,
+  "concrete_structure": 14,
+  "concrete_truck": 125,
+  "container": 111,
+  "crane": 8,
+  "crane_truck": 223,
+  "drilling_rig": 238,
+  "dump_truck": 703,
+  "dust_protection": 37,
+  "excavator": 1558,
+  "excavator_bucket": 156,
+  "fence": 821,
+  "forklift": 11,
+  "foundation": 169,
+  "h_beam": 616,
+  "material": 67,
+  "mold": 290,
+  "rebar": 414,
+  "safety_cone": 54,
+  "safety_fence": 2,
+  "structure": 49,
+  "tarpaulin": 481,
+  "temporary_building": 181,
+  "tower_crane": 20,
+  "truck": 286,
+  "water_tank": 29,
+  "wood_bar": 167,
+  "wood_fence": 89,
+  "worker": 884
+ },
+ "state_counts": {
+  "covered": 93,
+  "covering": 27,
+  "digging": 341,
+  "drilling": 13,
+  "embedded": 2,
+  "empty": 81,
+  "installed": 2190,
+  "lifting": 45,
+  "loaded": 255,
+  "located": 5222,
+  "on": 15,
+  "placed": 1,
+  "pouring": 14,
+  "putting": 97
+ }
+}

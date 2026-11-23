@@ -103,7 +103,12 @@ def test_each_breach_is_detected(
 def test_known_category_is_accepted(parsed: Dataset) -> None:
     parsed.categories.append(CategoryRecord(id=1, name="worker"))
     parsed.annotations[0].category_id = 1
+    parsed.annotations[0].fields = {"resource": "worker"}
     assert validate_dataset(parsed) == []
+    parsed.annotations[0].fields = {"resource": "excavator"}  # category and fields disagree
+    assert "category_resource_mismatch" in codes(parsed)
+    parsed.annotations[0].fields = None  # category without fields
+    assert "fields_category_mismatch" in codes(parsed)
 
 
 def test_duplicate_image_rows_detected(parsed: Dataset) -> None:

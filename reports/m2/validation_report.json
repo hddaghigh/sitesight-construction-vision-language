@@ -1,0 +1,242 @@
+{
+ "counts": {
+  "clipped": 6,
+  "duplicate": 12,
+  "empty_caption": 1,
+  "zero_regions": 19
+ },
+ "issues": [
+  {
+   "code": "duplicate",
+   "detail": "A green drilling is located on soil",
+   "image": "21.jpg",
+   "region": "10"
+  },
+  {
+   "code": "zero_regions",
+   "detail": "",
+   "image": "46.jpg",
+   "region": null
+  },
+  {
+   "code": "zero_regions",
+   "detail": "",
+   "image": "66.jpg",
+   "region": null
+  },
+  {
+   "code": "zero_regions",
+   "detail": "",
+   "image": "169.jpg",
+   "region": null
+  },
+  {
+   "code": "duplicate",
+   "detail": "A green drilling is located on soil",
+   "image": "215.jpg",
+   "region": "11"
+  },
+  {
+   "code": "duplicate",
+   "detail": "A green drilling is located on soil",
+   "image": "220.jpg",
+   "region": "13"
+  },
+  {
+   "code": "zero_regions",
+   "detail": "",
+   "image": "247.jpg",
+   "region": null
+  },
+  {
+   "code": "empty_caption",
+   "detail": "",
+   "image": "268.jpg",
+   "region": "1"
+  },
+  {
+   "code": "clipped",
+   "detail": "[-41, 13, 652, 489] -> [0, 13, 611, 489]",
+   "image": "423.jpg",
+   "region": "0"
+  },
+  {
+   "code": "zero_regions",
+   "detail": "",
+   "image": "632.jpg",
+   "region": null
+  },
+  {
+   "code": "zero_regions",
+   "detail": "",
+   "image": "633.jpg",
+   "region": null
+  },
+  {
+   "code": "zero_regions",
+   "detail": "",
+   "image": "634.jpg",
+   "region": null
+  },
+  {
+   "code": "zero_regions",
+   "detail": "",
+   "image": "635.jpg",
+   "region": null
+  },
+  {
+   "code": "zero_regions",
+   "detail": "",
+   "image": "636.jpg",
+   "region": null
+  },
+  {
+   "code": "duplicate",
+   "detail": "Four red rebars are installed on soil",
+   "image": "645.jpg",
+   "region": "5"
+  },
+  {
+   "code": "duplicate",
+   "detail": "A blue tarpaulin is located on soil",
+   "image": "672.jpg",
+   "region": "3"
+  },
+  {
+   "code": "duplicate",
+   "detail": "A yellow excavator is lifting two H-beams",
+   "image": "694.jpg",
+   "region": "3"
+  },
+  {
+   "code": "duplicate",
+   "detail": "A concrete pipe is covered with soil",
+   "image": "716.jpg",
+   "region": "13"
+  },
+  {
+   "code": "zero_regions",
+   "detail": "",
+   "image": "857.jpg",
+   "region": null
+  },
+  {
+   "code": "zero_regions",
+   "detail": "",
+   "image": "858.jpg",
+   "region": null
+  },
+  {
+   "code": "zero_regions",
+   "detail": "",
+   "image": "859.jpg",
+   "region": null
+  },
+  {
+   "code": "clipped",
+   "detail": "[233, 5, 121, 539] -> [233, 5, 121, 535]",
+   "image": "939.jpg",
+   "region": "9"
+  },
+  {
+   "code": "zero_regions",
+   "detail": "",
+   "image": "960.jpg",
+   "region": null
+  },
+  {
+   "code": "zero_regions",
+   "detail": "",
+   "image": "961.jpg",
+   "region": null
+  },
+  {
+   "code": "zero_regions",
+   "detail": "",
+   "image": "962.jpg",
+   "region": null
+  },
+  {
+   "code": "zero_regions",
+   "detail": "",
+   "image": "963.jpg",
+   "region": null
+  },
+  {
+   "code": "zero_regions",
+   "detail": "",
+   "image": "968.jpg",
+   "region": null
+  },
+  {
+   "code": "zero_regions",
+   "detail": "",
+   "image": "969.jpg",
+   "region": null
+  },
+  {
+   "code": "clipped",
+   "detail": "[-1, 4, 144, 122] -> [0, 4, 143, 122]",
+   "image": "976.jpg",
+   "region": "1"
+  },
+  {
+   "code": "duplicate",
+   "detail": "A white dump truck is loaded with soil",
+   "image": "1012.jpg",
+   "region": "5"
+  },
+  {
+   "code": "duplicate",
+   "detail": "A yellow excavator is digging soil",
+   "image": "1069.jpg",
+   "region": "1"
+  },
+  {
+   "code": "duplicate",
+   "detail": "A yellow excavator is located on soil",
+   "image": "1086.jpg",
+   "region": "1"
+  },
+  {
+   "code": "zero_regions",
+   "detail": "",
+   "image": "1123.jpg",
+   "region": null
+  },
+  {
+   "code": "duplicate",
+   "detail": "A pile of molds is located on concrete",
+   "image": "1144.jpg",
+   "region": "4"
+  },
+  {
+   "code": "clipped",
+   "detail": "[804, 278, 153, 273] -> [804, 278, 153, 262]",
+   "image": "1185.jpg",
+   "region": "2"
+  },
+  {
+   "code": "clipped",
+   "detail": "[734, 220, 215, 326] -> [734, 220, 215, 320]",
+   "image": "1186.jpg",
+   "region": "4"
+  },
+  {
+   "code": "duplicate",
+   "detail": "An orange excavator is located on soil",
+   "image": "1300.jpg",
+   "region": "3"
+  },
+  {
+   "code": "clipped",
+   "detail": "[351, 339, 418, 205] -> [351, 339, 418, 201]",
+   "image": "1428.jpg",
+   "region": "1"
+  }
+ ],
+ "n_annotations_kept": 8428,
+ "n_dropped": 0,
+ "n_images": 1431,
+ "n_regions_in_source": 8428
+}

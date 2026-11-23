@@ -1,0 +1,451 @@
+{
+ "chosen_rule": {
+  "max_hamming": 12,
+  "min_cosine": 0.9
+ },
+ "config": {
+  "dedup": {
+   "max_hamming": 12,
+   "min_cosine": 0.9
+  },
+  "leakage": {
+   "looser_rules": [
+    [
+     16,
+     0.85
+    ],
+    [
+     20,
+     0.8
+    ]
+   ],
+   "naive_seeds": 20
+  },
+  "sensitivity": {
+   "max_hamming": [
+    0,
+    4,
+    8,
+    12,
+    16
+   ],
+   "min_cosine": [
+    0.97,
+    0.95,
+    0.9,
+    0.85,
+    0.8
+   ]
+  },
+  "split": {
+   "fractions": [
+    0.7,
+    0.15,
+    0.15
+   ],
+   "seed": 0
+  }
+ },
+ "grouped_split_leakage": {
+  "crossing_train_test": 0,
+  "crossing_train_val": 0,
+  "crossing_val_test": 0,
+  "n_pairs_total": 5901,
+  "n_test": 214,
+  "test_fraction_with_train_neighbour": 0.0,
+  "test_images_with_train_neighbour": 0
+ },
+ "grouped_split_residual_under_looser_rules": [
+  {
+   "max_hamming": 16,
+   "min_cosine": 0.85,
+   "test_fraction_with_train_neighbour": 0.4485981308411215,
+   "train_test_pairs": 297
+  },
+  {
+   "max_hamming": 20,
+   "min_cosine": 0.8,
+   "test_fraction_with_train_neighbour": 0.9813084112149533,
+   "train_test_pairs": 2787
+  }
+ ],
+ "groups": {
+  "largest_group": 74,
+  "largest_group_fraction": 0.0517120894479385,
+  "median_group_size": 1.0,
+  "n_groups": 428,
+  "n_images": 1431,
+  "n_singletons": 230
+ },
+ "n_images": 1431,
+ "n_near_duplicate_pairs": 5901,
+ "naive_split_leakage": {
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12,
+   13,
+   14,
+   15,
+   16,
+   17,
+   18,
+   19
+  ],
+  "test_fraction_with_train_neighbour_max": 0.8177570093457944,
+  "test_fraction_with_train_neighbour_mean": 0.7663551401869159,
+  "test_fraction_with_train_neighbour_min": 0.705607476635514,
+  "train_test_pairs_max": 1360,
+  "train_test_pairs_mean": 1209.7,
+  "train_test_pairs_min": 1076,
+  "train_test_pairs_std": 74.30527359622954
+ },
+ "sensitivity": [
+  {
+   "grouped_train_test_pairs": 0,
+   "largest_group": 22,
+   "max_hamming": 0,
+   "min_cosine": 0.97,
+   "n_edges": 586,
+   "n_groups": 1099,
+   "naive_train_test_pairs_mean": 119.0
+  },
+  {
+   "grouped_train_test_pairs": 0,
+   "largest_group": 40,
+   "max_hamming": 0,
+   "min_cosine": 0.95,
+   "n_edges": 1397,
+   "n_groups": 859,
+   "naive_train_test_pairs_mean": 288.65
+  },
+  {
+   "grouped_train_test_pairs": 0,
+   "largest_group": 74,
+   "max_hamming": 0,
+   "min_cosine": 0.9,
+   "n_edges": 4449,
+   "n_groups": 447,
+   "naive_train_test_pairs_mean": 926.55
+  },
+  {
+   "grouped_train_test_pairs": 0,
+   "largest_group": 915,
+   "max_hamming": 0,
+   "min_cosine": 0.85,
+   "n_edges": 9267,
+   "n_groups": 197,
+   "naive_train_test_pairs_mean": 1929.75
+  },
+  {
+   "grouped_train_test_pairs": 0,
+   "largest_group": 1235,
+   "max_hamming": 0,
+   "min_cosine": 0.8,
+   "n_edges": 21892,
+   "n_groups": 79,
+   "naive_train_test_pairs_mean": 4533.25
+  },
+  {
+   "grouped_train_test_pairs": 0,
+   "largest_group": 40,
+   "max_hamming": 4,
+   "min_cosine": 0.97,
+   "n_edges": 1909,
+   "n_groups": 951,
+   "naive_train_test_pairs_mean": 381.6
+  },
+  {
+   "grouped_train_test_pairs": 0,
+   "largest_group": 40,
+   "max_hamming": 4,
+   "min_cosine": 0.95,
+   "n_edges": 2411,
+   "n_groups": 804,
+   "naive_train_test_pairs_mean": 488.45
+  },
+  {
+   "grouped_train_test_pairs": 0,
+   "largest_group": 74,
+   "max_hamming": 4,
+   "min_cosine": 0.9,
+   "n_edges": 4894,
+   "n_groups": 443,
+   "naive_train_test_pairs_mean": 1013.25
+  },
+  {
+   "grouped_train_test_pairs": 0,
+   "largest_group": 915,
+   "max_hamming": 4,
+   "min_cosine": 0.85,
+   "n_edges": 9412,
+   "n_groups": 197,
+   "naive_train_test_pairs_mean": 1957.55
+  },
+  {
+   "grouped_train_test_pairs": 0,
+   "largest_group": 1235,
+   "max_hamming": 4,
+   "min_cosine": 0.8,
+   "n_edges": 21920,
+   "n_groups": 79,
+   "naive_train_test_pairs_mean": 4538.5
+  },
+  {
+   "grouped_train_test_pairs": 0,
+   "largest_group": 40,
+   "max_hamming": 8,
+   "min_cosine": 0.97,
+   "n_edges": 3459,
+   "n_groups": 852,
+   "naive_train_test_pairs_mean": 701.4
+  },
+  {
+   "grouped_train_test_pairs": 0,
+   "largest_group": 40,
+   "max_hamming": 8,
+   "min_cosine": 0.95,
+   "n_edges": 3691,
+   "n_groups": 756,
+   "naive_train_test_pairs_mean": 752.35
+  },
+  {
+   "grouped_train_test_pairs": 0,
+   "largest_group": 74,
+   "max_hamming": 8,
+   "min_cosine": 0.9,
+   "n_edges": 5377,
+   "n_groups": 436,
+   "naive_train_test_pairs_mean": 1109.55
+  },
+  {
+   "grouped_train_test_pairs": 0,
+   "largest_group": 915,
+   "max_hamming": 8,
+   "min_cosine": 0.85,
+   "n_edges": 9589,
+   "n_groups": 197,
+   "naive_train_test_pairs_mean": 1990.3
+  },
+  {
+   "grouped_train_test_pairs": 0,
+   "largest_group": 1235,
+   "max_hamming": 8,
+   "min_cosine": 0.8,
+   "n_edges": 21967,
+   "n_groups": 79,
+   "naive_train_test_pairs_mean": 4547.45
+  },
+  {
+   "grouped_train_test_pairs": 0,
+   "largest_group": 40,
+   "max_hamming": 12,
+   "min_cosine": 0.97,
+   "n_edges": 4594,
+   "n_groups": 791,
+   "naive_train_test_pairs_mean": 933.15
+  },
+  {
+   "grouped_train_test_pairs": 0,
+   "largest_group": 40,
+   "max_hamming": 12,
+   "min_cosine": 0.95,
+   "n_edges": 4731,
+   "n_groups": 715,
+   "naive_train_test_pairs_mean": 963.65
+  },
+  {
+   "grouped_train_test_pairs": 0,
+   "largest_group": 74,
+   "max_hamming": 12,
+   "min_cosine": 0.9,
+   "n_edges": 5901,
+   "n_groups": 428,
+   "naive_train_test_pairs_mean": 1209.7
+  },
+  {
+   "grouped_train_test_pairs": 0,
+   "largest_group": 916,
+   "max_hamming": 12,
+   "min_cosine": 0.85,
+   "n_edges": 9810,
+   "n_groups": 196,
+   "naive_train_test_pairs_mean": 2031.25
+  },
+  {
+   "grouped_train_test_pairs": 0,
+   "largest_group": 1236,
+   "max_hamming": 12,
+   "min_cosine": 0.8,
+   "n_edges": 22067,
+   "n_groups": 78,
+   "naive_train_test_pairs_mean": 4565.5
+  },
+  {
+   "grouped_train_test_pairs": 0,
+   "largest_group": 178,
+   "max_hamming": 16,
+   "min_cosine": 0.97,
+   "n_edges": 5418,
+   "n_groups": 652,
+   "naive_train_test_pairs_mean": 1098.95
+  },
+  {
+   "grouped_train_test_pairs": 0,
+   "largest_group": 180,
+   "max_hamming": 16,
+   "min_cosine": 0.95,
+   "n_edges": 5519,
+   "n_groups": 592,
+   "naive_train_test_pairs_mean": 1120.7
+  },
+  {
+   "grouped_train_test_pairs": 0,
+   "largest_group": 351,
+   "max_hamming": 16,
+   "min_cosine": 0.9,
+   "n_edges": 6521,
+   "n_groups": 328,
+   "naive_train_test_pairs_mean": 1332.4
+  },
+  {
+   "grouped_train_test_pairs": 0,
+   "largest_group": 1147,
+   "max_hamming": 16,
+   "min_cosine": 0.85,
+   "n_edges": 10267,
+   "n_groups": 140,
+   "naive_train_test_pairs_mean": 2122.3
+  },
+  {
+   "grouped_train_test_pairs": 0,
+   "largest_group": 1329,
+   "max_hamming": 16,
+   "min_cosine": 0.8,
+   "n_edges": 22386,
+   "n_groups": 53,
+   "naive_train_test_pairs_mean": 4629.85
+  }
+ ],
+ "splits": {
+  "annotations": {
+   "test": 1189,
+   "train": 6128,
+   "val": 1111
+  },
+  "class_counts": {
+   "test": {
+    "concrete": 37,
+    "concrete_pillar": 18,
+    "concrete_pipe": 17,
+    "concrete_structure": 2,
+    "concrete_truck": 14,
+    "container": 22,
+    "crane": 2,
+    "crane_truck": 51,
+    "drilling_rig": 31,
+    "dump_truck": 103,
+    "dust_protection": 13,
+    "excavator": 150,
+    "excavator_bucket": 14,
+    "fence": 88,
+    "forklift": 4,
+    "foundation": 23,
+    "h_beam": 117,
+    "material": 14,
+    "mold": 66,
+    "rebar": 64,
+    "safety_cone": 10,
+    "structure": 14,
+    "tarpaulin": 82,
+    "temporary_building": 24,
+    "tower_crane": 2,
+    "truck": 40,
+    "wood_bar": 23,
+    "wood_fence": 22,
+    "worker": 119
+   },
+   "train": {
+    "concrete": 96,
+    "concrete_pillar": 147,
+    "concrete_pipe": 214,
+    "concrete_structure": 11,
+    "concrete_truck": 102,
+    "container": 66,
+    "crane": 6,
+    "crane_truck": 146,
+    "drilling_rig": 192,
+    "dump_truck": 504,
+    "dust_protection": 12,
+    "excavator": 1240,
+    "excavator_bucket": 114,
+    "fence": 666,
+    "forklift": 6,
+    "foundation": 128,
+    "h_beam": 423,
+    "material": 44,
+    "mold": 163,
+    "rebar": 252,
+    "safety_cone": 37,
+    "structure": 17,
+    "tarpaulin": 332,
+    "temporary_building": 140,
+    "tower_crane": 18,
+    "truck": 213,
+    "water_tank": 29,
+    "wood_bar": 102,
+    "wood_fence": 34,
+    "worker": 652
+   },
+   "val": {
+    "concrete": 30,
+    "concrete_pillar": 20,
+    "concrete_pipe": 14,
+    "concrete_structure": 1,
+    "concrete_truck": 9,
+    "container": 23,
+    "crane_truck": 26,
+    "drilling_rig": 15,
+    "dump_truck": 96,
+    "dust_protection": 12,
+    "excavator": 168,
+    "excavator_bucket": 28,
+    "fence": 67,
+    "forklift": 1,
+    "foundation": 18,
+    "h_beam": 76,
+    "material": 9,
+    "mold": 61,
+    "rebar": 98,
+    "safety_cone": 7,
+    "safety_fence": 2,
+    "structure": 18,
+    "tarpaulin": 67,
+    "temporary_building": 17,
+    "truck": 33,
+    "wood_bar": 42,
+    "wood_fence": 33,
+    "worker": 113
+   }
+  },
+  "classes_missing_in_test": [
+   "safety_fence",
+   "water_tank"
+  ],
+  "images": {
+   "test": 214,
+   "train": 1002,
+   "val": 215
+  }
+ }
+}

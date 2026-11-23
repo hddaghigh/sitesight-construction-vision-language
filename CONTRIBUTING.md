@@ -9,7 +9,7 @@ Read [PLAN.md](PLAN.md) first (scope, models, milestones). This file holds the w
 - **Findings are flagged, not dropped.** Clipped / empty / duplicate annotations stay in the file with `flags`; evaluation code decides what to exclude and says so.
 - **Explain the maths** (losses, metrics, drift statistics) in docstrings.
 - **Disk rule (laptop):** check free space before any download/install; stop if it would leave < 3 GB free. Data, caches and the managed Python live on F: outside the repo.
-- **Colab runs the heavy steps** (torch, models, training, benchmarks). Laptop: code, tests, viewer. Notebooks only call CLI entry points.
+- **Colab runs the heavy steps** (torch, models, training, benchmarks). Laptop: code, tests, viewer. Notebooks only call CLI entry points. Exception (M2): small jobs may run on the laptop in `.venv-embed` after reporting sizes, when that lets me verify results.
 - **Commits:** small, one per milestone step; commit only when asked.
 
 ## Environment (Windows laptop)
@@ -36,5 +36,13 @@ Quality gate before any commit: `ruff check`, `ruff format --check`, `mypy`, `py
 ## Real-data findings that shape later milestones
 8,428 regions (page says 8,601); 795 raw / 746 trimmed / 735 normalised distinct captions; 6 clipped boxes; 12 duplicates; 1 empty caption; 19 images without regions; 9 regions with two captions glued together (e.g. "...on soilA black dust protection..."); 25% of boxes < 1% of image area. The M2 caption-field parser must report these glued captions as unparsed rather than guess.
 
+## M2 results (details and evidence: DATASHEET.md, reports/m2/)
+- Caption-field parser: 8,396 / 8,427 non-empty captions parsed (99.63%); 31 unparsed with reasons; 31 resource categories (`sitesight/data/caption_fields.py`).
+- Groups (pHash <= 12 OR DINOv2-small cosine >= 0.90, single linkage): 428 groups, largest 74. Split 1,002 / 215 / 214 images. Naive random split leaks a mean 1,210 train-test near-duplicate pairs (76.6% of test images have a train neighbour); grouped split 0.
+- **Residual leak:** under looser similarity (pHash <= 16 or cosine >= 0.85) the grouped split still has 297 train-test pairs (44.9% of test images). Held-out scores mean "unseen scenes", not provably "unseen sites". `safety_fence` and `water_tank` are absent from test.
+- Local torch exception: embeddings were computed on the laptop in a separate venv `.venv-embed` (`uv sync --group embed`; 710 MB) with HF cache in `sitesight_data\.hf`, because 1,431 images take only ~4 min. The Colab notebook `notebooks/01_data_splits.ipynb` runs the same CLIs but has **not been executed** yet.
+- Opt-in tests: `pytest -m real_data` (needs `SITESIGHT_DATA_DIR`), `pytest -m embed` (run in `.venv-embed`).
+
 ## Status
-- **M1 done** (parser, validator, schema, downloader, tests, CI). Next: **M2** (dedup, grouped split, caption-field parser, datasheet); embeddings/splits run in Colab.
+- **M1 done** (parser, validator, schema, downloader, tests, CI).
+- **M2 done** (caption parser, pHash+DINOv2 dedup, grouped split, leakage report, datasheet, Colab notebook not yet run). Next: **M3** (PyQt6 viewer + 100-image label audit).

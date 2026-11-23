@@ -39,7 +39,8 @@ from typing import Any
 FLAG_CLIPPED = "clipped"  # box extended past the image and was clipped
 FLAG_EMPTY_CAPTION = "empty_caption"  # caption is empty after stripping whitespace
 FLAG_DUPLICATE = "duplicate"  # same box and caption as an earlier row in the same image
-FLAG_VALUES = frozenset({FLAG_CLIPPED, FLAG_EMPTY_CAPTION, FLAG_DUPLICATE})
+FLAG_UNPARSED = "unparsed"  # set by the caption-field parser (M2) when a non-empty caption fails
+FLAG_VALUES = frozenset({FLAG_CLIPPED, FLAG_EMPTY_CAPTION, FLAG_DUPLICATE, FLAG_UNPARSED})
 
 LICENSE_CC_BY_4 = {
     "id": 1,

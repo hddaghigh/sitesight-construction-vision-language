@@ -1,0 +1,19 @@
+# Curation config. Every number in the datasheet/curation report is reproducible from this file.
+# Thresholds below are PROVISIONAL until chosen from the DINOv2 similarity distribution
+# (see PLAN.md M2); they are updated, with the evidence, in the same commit.
+
+[split]
+seed = 0
+fractions = [0.70, 0.15, 0.15]   # train / val / test
+
+[dedup]
+max_hamming = 12      # pHash distance (0..64, always even) at or below which two images are "near-duplicates"
+min_cosine = 0.90     # DINOv2 CLS cosine similarity at or above which two images are "near-duplicates"
+
+[leakage]
+naive_seeds = 20                  # random splits averaged for the naive baseline
+looser_rules = [[16, 0.85], [20, 0.80]]   # [max_hamming, min_cosine]: residual leak if "similar" is defined more loosely
+
+[sensitivity]
+max_hamming = [0, 4, 8, 12, 16]
+min_cosine = [0.97, 0.95, 0.90, 0.85, 0.80]

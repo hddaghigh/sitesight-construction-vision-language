@@ -15,6 +15,7 @@ from sitesight.data.schema import (
     FLAG_CLIPPED,
     FLAG_DUPLICATE,
     FLAG_EMPTY_CAPTION,
+    FLAG_UNPARSED,
     FLAG_VALUES,
     Dataset,
 )
@@ -55,6 +56,7 @@ def validate_dataset(ds: Dataset) -> list[Violation]:
             bad("bad_split", None, f"{img.file_name}: split={img.split!r}")
 
     category_ids = {c.id for c in ds.categories}
+    category_names = {c.id: c.name for c in ds.categories}
     for aid, n in Counter(a.id for a in ds.annotations).items():
         if n > 1:
             bad("duplicate_annotation_id", aid, f"annotation id appears {n} times")
@@ -80,6 +82,21 @@ def validate_dataset(ds: Dataset) -> list[Violation]:
         for flag in a.flags:
             if flag not in FLAG_VALUES:
                 bad("unknown_flag", a.id, flag)
+        # Parse results (M2): fields and category_id travel together; 'unparsed' means neither.
+        if (a.fields is None) != (a.category_id is None):
+            bad("fields_category_mismatch", a.id, f"fields set={a.fields is not None}")
+        if FLAG_UNPARSED in a.flags and a.fields is not None:
+            bad("unparsed_flag_mismatch", a.id, "flag 'unparsed' but fields are set")
+        if (
+            a.fields is not None
+            and a.category_id in category_names
+            and category_names[a.category_id] != a.fields.get("resource")
+        ):
+            bad(
+                "category_resource_mismatch",
+                a.id,
+                f"{a.category_id} vs {a.fields.get('resource')}",
+            )
         if a.caption != _norm(a.caption_raw):
             bad("caption_not_normalised", a.id, f"{a.caption!r} vs raw {a.caption_raw!r}")
         if (not a.caption) != (FLAG_EMPTY_CAPTION in a.flags):

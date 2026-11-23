@@ -20,3 +20,4 @@ sitesight_data/
 
 # Local tooling
 .env
+.venv-embed/

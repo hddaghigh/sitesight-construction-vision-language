@@ -3,7 +3,7 @@
 DATA_DIR ?= sitesight_data
 RUN = uv run
 
-.PHONY: sync lint format typecheck test check download data parse check-real
+.PHONY: sync lint format typecheck test check download data parse fields embed curate check-real
 
 sync:
 	uv sync
@@ -37,6 +37,24 @@ parse: download
 	  --report $(DATA_DIR)/derived/validation_report.json
 
 data: parse
+
+# M2: caption fields -> embeddings (needs the embed venv / Colab GPU) -> groups + split + report
+fields: parse
+	$(RUN) python -m sitesight.data.caption_fields \
+	  --annotations $(DATA_DIR)/derived/annotations.json \
+	  --out $(DATA_DIR)/derived/annotations_fields.json \
+	  --report $(DATA_DIR)/derived/coverage_report.json
+
+embed: fields
+	python scripts/embed_images.py --annotations $(DATA_DIR)/derived/annotations_fields.json \
+	  --images $(DATA_DIR)/extracted/UAVdata --out $(DATA_DIR)/derived/dinov2_small.npy
+
+curate:
+	$(RUN) python -m sitesight.data.curate --config configs/data.toml \
+	  --annotations $(DATA_DIR)/derived/annotations_fields.json \
+	  --images $(DATA_DIR)/extracted/UAVdata \
+	  --embeddings $(DATA_DIR)/derived/dinov2_small.npy \
+	  --out-dir $(DATA_DIR)/derived/curated
 
 # Assert the parser reproduces the independently measured findings on the real data.
 check-real:
