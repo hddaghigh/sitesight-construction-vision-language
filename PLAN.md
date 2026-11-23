@@ -52,7 +52,8 @@ Contents: `UAVdata/<n>.jpg` (1,431 files) and **`via_region_data_final.json`**, 
 | Images / regions | 1,431 / **8,428** |
 | Regions per image | min 0, median 5, mean 5.89, max 17 |
 | Images with 0 regions | 19 (e.g. `46.jpg`, `66.jpg`, `169.jpg`) |
-| Distinct caption strings | **746**; vocabulary 136 words |
+| Distinct caption strings | 795 raw / **746** after `strip()` / **735** after whitespace normalisation (13 regions have internal double spaces or a newline); vocabulary 136 words (counted on stripped text) |
+| Glued captions | 9 regions hold two captions run together (e.g. "…on soilA black dust protection…"): a label-error class for the audit; the M2 parser must report them as unparsed |
 | Caption length | 6–9 words typical (median 7, max 16) |
 | Boxes < 1% of image area | 2,103 of 8,428 (25%); median box = 2.75% of image |
 | Out-of-bounds boxes | 6 (e.g. `423.jpg` x=−41; `1185.jpg` extends past the right edge) |
@@ -64,7 +65,7 @@ Most frequent captions: "Fences are installed in a line" (803), "An orange excav
 
 ### Discrepancies and what the data cannot support
 1. **8,428 regions in the file vs 8,601 captions stated on the Mendeley page** (173 fewer). Cause unknown (possibly regions removed after the page text was written). I will report 8,428 everywhere and say so; I will not pad or guess.
-2. **Captions are highly templated**: `[quantity] [colour] [resource] [is/are] [state/relation]`, built from 746 strings. Consequence: CIDEr/BLEU will be inflated for any model that learns the template, and a zero-shot VLM will score low for style rather than for being wrong. Field-level accuracy (resource, count, colour, state) is the metric that matters; caption n-gram metrics are reported alongside with this caveat.
+2. **Captions are highly templated**: `[quantity] [colour] [resource] [is/are] [state/relation]`, built from ~735 distinct strings. Consequence: CIDEr/BLEU will be inflated for any model that learns the template, and a zero-shot VLM will score low for style rather than for being wrong. Field-level accuracy (resource, count, colour, state) is the metric that matters; caption n-gram metrics are reported alongside with this caveat.
 3. **No activity vocabulary beyond a few verbs** ("digging", "loaded with", "covered with", "installed", "located"). The brief's example `activities: ["rebar placement"]` is not supported by this data. Closest alternative: `activity` = verb/state field ∈ {digging, loaded with, covered with, installed, located, empty, …}, produced by the parser.
 4. **No site/flight identifiers.** Group splits must be derived (embedding clustering). File names are numeric; adjacency may or may not mean same flight: tested in M2, not assumed.
 5. **Counts are partial.** Captions describe regions; "Fences are installed in a line" has no count. Image-level summaries are aggregates of annotated regions, not ground-truth site counts, and are labelled so.

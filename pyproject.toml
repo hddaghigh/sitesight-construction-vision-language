@@ -1,0 +1,44 @@
+[project]
+name = "sitesight"
+version = "0.1.0"
+description = "Grounded construction-site understanding from drone images (region captions, boxes, structured summary)."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+# M1 is deliberately dependency-free at runtime: the VIA parser, validator and
+# downloader use only the standard library, so they run anywhere (laptop, CI, Colab).
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "pytest>=8",
+    "ruff>=0.6",
+    "mypy>=1.11",
+    "pillow>=10",   # tests only: builds tiny JPEG fixtures
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["sitesight"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM", "RUF"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+files = ["sitesight", "scripts", "tests"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# Tests marked real_data need the extracted dataset (SITESIGHT_DATA_DIR) and are
+# run explicitly with:  pytest -m real_data
+addopts = "-m 'not real_data' -ra"
+markers = ["real_data: needs the real extracted dataset; run with -m real_data"]

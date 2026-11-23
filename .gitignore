@@ -9,7 +9,7 @@ __pycache__/
 
 # Data and model artefacts live outside the repo; never commit them
 sitesight_data/
-data/
+/data/
 *.zip
 *.safetensors
 *.onnx
