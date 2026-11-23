@@ -35,6 +35,18 @@ FIXTURE_IMAGE_SIZES = {"1.jpg": (100, 60), "2.jpg": (100, 60), "10.jpg": (80, 40
 WRONG_SIZE_FOR_10 = 12345
 
 
+def pytest_ignore_collect(collection_path: Path, config: pytest.Config) -> bool | None:
+    """Do not even import the GUI test module unless the `viewer` marker is selected.
+
+    It imports PyQt6 at module level, which needs system graphics libraries that a plain CI
+    or laptop run may not have; marker deselection happens only AFTER collection.
+    """
+    if collection_path.name == "test_viewer_gui.py":
+        expr = str(config.getoption("markexpr") or "")
+        return "viewer" not in expr or "not viewer" in expr
+    return None
+
+
 def rect(x: int, y: int, w: int, h: int) -> dict[str, Any]:
     return {"name": "rect", "x": x, "y": y, "width": w, "height": h}
 
