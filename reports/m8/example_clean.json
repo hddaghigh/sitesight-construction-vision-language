@@ -1,0 +1,72 @@
+{
+  "status": "ok",
+  "n_reference": 501,
+  "n_batch": 40,
+  "alpha": 0.01,
+  "tests": [
+    {
+      "name": "ks",
+      "feature": "width",
+      "statistic": 0.0,
+      "p_value": 1.0,
+      "threshold": 0.0007142857142857143,
+      "alerted": false
+    },
+    {
+      "name": "ks",
+      "feature": "height",
+      "statistic": 0.0,
+      "p_value": 1.0,
+      "threshold": 0.0007142857142857143,
+      "alerted": false
+    },
+    {
+      "name": "ks",
+      "feature": "brightness",
+      "statistic": 0.20309381237524948,
+      "p_value": 0.0818444758688616,
+      "threshold": 0.0007142857142857143,
+      "alerted": false
+    },
+    {
+      "name": "ks",
+      "feature": "contrast",
+      "statistic": 0.14635728542914173,
+      "p_value": 0.3777553527624647,
+      "threshold": 0.0007142857142857143,
+      "alerted": false
+    },
+    {
+      "name": "ks",
+      "feature": "sharpness",
+      "statistic": 0.19935129740518961,
+      "p_value": 0.0919730843200457,
+      "threshold": 0.0007142857142857143,
+      "alerted": false
+    },
+    {
+      "name": "ks",
+      "feature": "dark_frac",
+      "statistic": 0.15958083832335324,
+      "p_value": 0.27726888005399414,
+      "threshold": 0.0007142857142857143,
+      "alerted": false
+    },
+    {
+      "name": "ks",
+      "feature": "bright_frac",
+      "statistic": 0.12534930139720568,
+      "p_value": 0.5766412807410147,
+      "threshold": 0.0007142857142857143,
+      "alerted": false
+    },
+    {
+      "name": "mmd",
+      "feature": null,
+      "statistic": 0.01469169756158073,
+      "p_value": 0.03986710963455149,
+      "threshold": 0.005,
+      "alerted": false
+    }
+  ]
+}

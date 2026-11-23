@@ -78,6 +78,11 @@ un\epoch_4`. Gallery images are regenerated, not committed.
 - Result (300 val regions, 2-vCPU Colab, cold): PyTorch p50 85.1 s, ONNX fp32 12.1 s, int8 9.5 s; int8 574 MB vs 1,242 MB; int8 identical caption 76%, field accuracy within 2 regions. Details and caveats in `reports/m7/README.md`.
 - Weights must be registered as initializers (model as submodule) or int8 quantisation silently does nothing. Docker image untested locally. API confidence is not calibrated.
 
+## M8 (monitoring)
+- Code: `sitesight/monitor/` (request_log, quality, drift, report, cli, perturb, demo). API logs with `SITESIGHT_REQUEST_LOG`; logs hold no images, file names, captions or boxes.
+- Drift = per-feature KS (Bonferroni) + MMD permutation test, alpha 0.01 split half/half; batches under 20 are `too_small`. `monitor.cli check` exit 0 ok / 1 alert / 2 too small.
+- Result (`reports/m8/`): same-site false alarms 0-1%; whole-batch degradations detected from n=40; 25%-degraded batches need ~80; mild JPEG/noise mostly missed; validation (new sites) alerts vs train. Output drift untested on real predictions; no embedding drift yet.
+
 ## Status
 - **M1 done** (parser, validator, schema, downloader, tests, CI).
 - **M2 done** (caption parser, pHash+DINOv2 dedup, grouped split, leakage report, datasheet, Colab notebook not yet run).

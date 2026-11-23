@@ -26,6 +26,8 @@ CLI_MODULES = [
     "sitesight.serve.cli",
     "sitesight.serve.export",
     "sitesight.serve.bench",
+    "sitesight.monitor.cli",
+    "sitesight.monitor.demo",
 ]
 
 

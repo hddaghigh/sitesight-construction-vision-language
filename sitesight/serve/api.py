@@ -26,6 +26,7 @@ from __future__ import annotations
 import io
 import json
 import os
+import time
 from collections import Counter
 from dataclasses import dataclass
 from typing import Annotated, Any, Protocol
@@ -35,6 +36,8 @@ from PIL import Image, UnidentifiedImageError
 from pydantic import BaseModel
 
 from sitesight.data.caption_fields import parse_caption
+from sitesight.monitor.quality import image_stats
+from sitesight.monitor.request_log import RequestLog
 
 
 class Backend(Protocol):
@@ -195,9 +198,12 @@ def summarise(regions: list[Region]) -> Counter[str]:
     return Counter(r.fields.resource for r in regions if r.fields)
 
 
-def create_app(backend: Backend, limits: Limits | None = None) -> FastAPI:
+def create_app(
+    backend: Backend, limits: Limits | None = None, request_log: RequestLog | None = None
+) -> FastAPI:
+    """Build the app. With ``request_log`` every request (also rejected ones) is logged."""
     lim = limits or Limits()
-    app = FastAPI(title="SiteSight", version="0.7")
+    app = FastAPI(title="SiteSight", version="0.8")
 
     @app.get("/health")
     def health() -> dict[str, Any]:
@@ -207,11 +213,30 @@ def create_app(backend: Backend, limits: Limits | None = None) -> FastAPI:
     async def describe(
         image: Annotated[UploadFile, File()], boxes: Annotated[str, Form()]
     ) -> DescribeResponse:
-        img = decode_image(await image.read(lim.max_upload_bytes + 1), lim)
-        w, h = img.size
-        valid, warnings = parse_boxes(boxes, w, h, lim)
-        regions = describe_regions(backend, img, valid, lim)
+        t0 = time.perf_counter()
+        stats: dict[str, float] | None = None
+        try:
+            img = decode_image(await image.read(lim.max_upload_bytes + 1), lim)
+            w, h = img.size
+            stats = image_stats(img) if request_log else None
+            valid, warnings = parse_boxes(boxes, w, h, lim)
+            regions = describe_regions(backend, img, valid, lim)
+        except HTTPException as e:
+            if request_log:
+                ms = (time.perf_counter() - t0) * 1000
+                request_log.failure("describe", e.status_code, str(e.detail), ms, stats)
+            raise
         tally = summarise(regions)
+        if request_log and stats is not None:
+            request_log.describe_ok(
+                latency_ms=(time.perf_counter() - t0) * 1000,
+                image=stats,
+                n_boxes=len(valid),
+                confidences=[r.confidence for r in regions],
+                n_parsed=sum(r.fields is not None for r in regions),
+                n_review=sum(r.review for r in regions),
+                summary=dict(sorted(tally.items())),
+            )
         return DescribeResponse(
             image_width=w,
             image_height=h,
@@ -224,11 +249,24 @@ def create_app(backend: Backend, limits: Limits | None = None) -> FastAPI:
     async def ground(
         image: Annotated[UploadFile, File()], phrase: Annotated[str, Form()]
     ) -> GroundResponse:
-        phrase = phrase.strip()
-        if not phrase or len(phrase) > lim.max_phrase_chars:
-            raise HTTPException(422, f"phrase must be 1 to {lim.max_phrase_chars} characters")
-        img = decode_image(await image.read(lim.max_upload_bytes + 1), lim)
+        t0 = time.perf_counter()
+        stats: dict[str, float] | None = None
+        try:
+            phrase = phrase.strip()
+            if not phrase or len(phrase) > lim.max_phrase_chars:
+                raise HTTPException(422, f"phrase must be 1 to {lim.max_phrase_chars} characters")
+            img = decode_image(await image.read(lim.max_upload_bytes + 1), lim)
+            stats = image_stats(img) if request_log else None
+        except HTTPException as e:
+            if request_log:
+                ms = (time.perf_counter() - t0) * 1000
+                request_log.failure("ground", e.status_code, str(e.detail), ms, stats)
+            raise
         found = backend.ground(img, phrase)
+        if request_log and stats is not None:
+            request_log.ground_ok(
+                latency_ms=(time.perf_counter() - t0) * 1000, image=stats, n_found=len(found)
+            )
         return GroundResponse(
             image_width=img.size[0],
             image_height=img.size[1],

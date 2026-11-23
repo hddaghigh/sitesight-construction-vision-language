@@ -5,6 +5,7 @@ Configuration comes from the environment so the same image serves fp32 or int8 w
 * ``SITESIGHT_MODEL_DIR``: directory with ``vision/encoder/decoder.onnx``, ``meta.json`` and
   ``tokenizer.json`` (required).
 * ``SITESIGHT_THREADS``: intra-op threads for ONNX Runtime (default: runtime's choice).
+* ``SITESIGHT_REQUEST_LOG``: path of the JSON-lines request log (monitoring; unset = no logging).
 * the ``SITESIGHT_MAX_*`` / ``SITESIGHT_REVIEW_THRESHOLD`` limits of :class:`api.Limits`.
 
 ``--factory`` builds the app (and loads the model) at start-up, so importing this module is free.
@@ -18,6 +19,7 @@ from typing import Any
 
 from fastapi import FastAPI
 
+from sitesight.monitor.request_log import RequestLog
 from sitesight.serve.api import Limits, create_app
 
 
@@ -35,4 +37,6 @@ def build_app() -> FastAPI:
     if not model_dir:
         raise RuntimeError("set SITESIGHT_MODEL_DIR to the exported ONNX model directory")
     threads = int(os.environ["SITESIGHT_THREADS"]) if "SITESIGHT_THREADS" in os.environ else None
-    return create_app(load_backend(Path(model_dir), threads), Limits.from_env())
+    log_path = os.environ.get("SITESIGHT_REQUEST_LOG")
+    log = RequestLog(Path(log_path)) if log_path else None
+    return create_app(load_backend(Path(model_dir), threads), Limits.from_env(), log)
