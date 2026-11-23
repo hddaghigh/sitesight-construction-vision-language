@@ -1,0 +1,22 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+*.egg-info/
+
+# Data and model artefacts live outside the repo; never commit them
+sitesight_data/
+data/
+*.zip
+*.safetensors
+*.onnx
+*.pt
+*.bin
+.cache/
+.hf/
+
+# Local tooling
+.env
