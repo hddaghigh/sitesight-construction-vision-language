@@ -83,6 +83,10 @@ un\epoch_4`. Gallery images are regenerated, not committed.
 - Drift = per-feature KS (Bonferroni) + MMD permutation test, alpha 0.01 split half/half; batches under 20 are `too_small`. `monitor.cli check` exit 0 ok / 1 alert / 2 too small.
 - Result (`reports/m8/`): same-site false alarms 0-1%; whole-batch degradations detected from n=40; 25%-degraded batches need ~80; mild JPEG/noise mostly missed; validation (new sites) alerts vs train. Output drift untested on real predictions; no embedding drift yet.
 
+## M9 (geometry, optional)
+- Code: `sitesight/geometry/` (tum.py reader, vo.py ORB+depth+PnP odometry, se3.py ATE/RPE, run.py). Colab notebook: `build_colab_notebook.py --kind m9`; heavy run stays in Colab (dataset not stored locally; F: is near the 3 GB floor).
+- Result (`reports/m9/`): ATE 8.9 cm frame-to-frame, 9.1 cm keyframe on fr1/desk (573 frames), evo agrees to 1e-6; keyframes did not help ATE. Odometry only, no loop closure; ground truth only for scoring.
+
 ## Status
 - **M1 done** (parser, validator, schema, downloader, tests, CI).
 - **M2 done** (caption parser, pHash+DINOv2 dedup, grouped split, leakage report, datasheet, Colab notebook not yet run).

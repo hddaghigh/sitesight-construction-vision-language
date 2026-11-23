@@ -1,0 +1,28 @@
+{
+  "sequence": "rgbd_dataset_freiburg1_desk",
+  "hardware": "Colab CPU runtime, 2 vCPUs (Python 3.13, opencv-python-headless 4.14.0, evo 1.38.1)",
+  "intrinsics": {"fx": 525.0, "fy": 525.0, "cx": 319.5, "cy": 239.5},
+  "modes": {
+    "frame2frame": {
+      "n_frames": 573, "n_with_ground_truth": 573, "n_tracking_failures": 0, "n_keyframes": 573,
+      "ate_rmse_m": 0.08928315769338897, "evo_ate_rmse_m": 0.089283,
+      "ate_median_m": 0.08401408467402018, "ate_max_m": 0.1786802183192495,
+      "rpe_1frame_trans_rmse_m": 0.009342778712288526, "rpe_1frame_rot_rmse_deg": 0.5883075122923234,
+      "rpe_30frames_trans_rmse_m": 0.058724023242422804, "rpe_30frames_rot_rmse_deg": 3.358572597969536,
+      "stationary_baseline_ate_rmse_m": 0.8714043201981037,
+      "seconds_per_frame_mean": 0.07043899049563568, "seconds_per_frame_p95": 0.10808990620002987,
+      "config": {"mode": "frame2frame", "n_features": 1500, "ratio": 0.75, "min_depth": 0.3, "max_depth": 5.0, "reproj_error": 3.0, "ransac_iters": 200, "min_inliers": 20, "kf_min_inliers": 60, "kf_max_translation": 0.15, "kf_max_rotation_deg": 15.0}
+    },
+    "keyframe": {
+      "n_frames": 573, "n_with_ground_truth": 573, "n_tracking_failures": 0, "n_keyframes": 62,
+      "ate_rmse_m": 0.09053093302205269, "evo_ate_rmse_m": 0.090531,
+      "ate_median_m": 0.07843902122304436, "ate_max_m": 0.2247610148113544,
+      "rpe_1frame_trans_rmse_m": 0.014637217086730873, "rpe_1frame_rot_rmse_deg": 0.836503599515872,
+      "rpe_30frames_trans_rmse_m": 0.04271637907375585, "rpe_30frames_rot_rmse_deg": 2.362597087396426,
+      "stationary_baseline_ate_rmse_m": 0.8714043201981037,
+      "seconds_per_frame_mean": 0.07498635983071687, "seconds_per_frame_p95": 0.11349099059996204,
+      "config": {"mode": "keyframe", "n_features": 1500, "ratio": 0.75, "min_depth": 0.3, "max_depth": 5.0, "reproj_error": 3.0, "ransac_iters": 200, "min_inliers": 20, "kf_min_inliers": 60, "kf_max_translation": 0.15, "kf_max_rotation_deg": 15.0}
+    }
+  },
+  "dataset": {"archive_bytes": 344011403, "rgb_images": 613, "depth_images": 595, "groundtruth_lines_incl_comments": 2338}
+}

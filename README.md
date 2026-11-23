@@ -2,7 +2,7 @@
 
 Grounded construction-site understanding from drone images: region descriptions, a bounding box for each described object, and a structured site summary.
 
-**Status: milestone M8 (monitoring and drift detection on top of the M7 service).** See [PLAN.md](PLAN.md) for scope, model choice and milestones, [DATASHEET.md](DATASHEET.md) for what the data is and its limits, [AUDIT.md](AUDIT.md) for the label-quality audit, and [DATA_LICENSES.md](DATA_LICENSES.md) for licences and citation.
+**Status: milestone M9 (RGB-D odometry); M10 (CI, final README, technical report) is next.** See [PLAN.md](PLAN.md) for scope, model choice and milestones, [DATASHEET.md](DATASHEET.md) for what the data is and its limits, [AUDIT.md](AUDIT.md) for the label-quality audit, and [DATA_LICENSES.md](DATA_LICENSES.md) for licences and citation.
 
 ## What exists so far
 | Milestone | What | Where |
@@ -15,6 +15,7 @@ Grounded construction-site understanding from drone images: region descriptions,
 | M6 | Active learning: random vs uncertainty vs uncertainty+diversity (3 seeds): about 238 images vs 283 for random to reach 90% of full-data caption accuracy | `sitesight/active/`, [`reports/m6/`](reports/m6/README.md) |
 | M7 | ONNX fp32/int8 export, FastAPI + batch CLI, Dockerfile: on a 2-vCPU Colab CPU cold p50 85 s (PyTorch) vs 12.1 s (ONNX fp32) vs 9.5 s (int8, 574 MB vs 1,242 MB); strict field accuracy within 2 regions of 300; 76% identical captions under int8 | `sitesight/serve/`, [`reports/m7/`](reports/m7/README.md) |
 | M8 | Request log, image-quality stats, KS + MMD drift tests, HTML report, alert exit codes: whole-batch degradations caught from batch size 40 (blur, darkening, rescale), false alarms 0-1% on seen sites; 25%-contaminated batches need ~80 images; mild JPEG/noise mostly missed; new sites alert | `sitesight/monitor/`, [`reports/m8/`](reports/m8/README.md) |
+| M9 | RGB-D visual odometry (ORB + depth + PnP/RANSAC) on TUM fr1/desk: ATE 8.9 cm (frame-to-frame) / 9.1 cm (keyframe) vs 87 cm for "never moved", cross-checked with evo; no loop closure | `sitesight/geometry/`, [`reports/m9/`](reports/m9/README.md) |
 
 ## Zero-shot results (validation split, 215 images, T4 GPU)
 

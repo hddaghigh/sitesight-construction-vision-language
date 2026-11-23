@@ -148,7 +148,7 @@ Deterministic grammar, no ML: `^(count)? (colour)* (resource) (is|are) (state) (
 | M6 (done) | Active-learning simulation | ≥ 3 seeds; uncertainty+diversity vs random; labels needed for N% of full-data score stated | 1 session | Colab (needs model scores/embeddings) | ~0 |
 | M7 (done) | ONNX/int8, FastAPI, batch CLI, latency benchmark, Dockerfile | fp32 vs int8 metrics side by side; p50/p95 on the Colab CPU (hardware logged); Docker build in CI or marked untested | 2 sessions | Export + benchmark in Colab; API unit tests local with a stub model | ~0.2 GB (fastapi, onnxruntime) |
 | M8 (done) | Request logging, quality checks, drift, alerts, HTML report | blurred / darkened / rescaled batches alert; clean held-out batch does not | 1–2 sessions | Quality-check/stat code local (numpy/Pillow); embedding drift demo in Colab | ~0 |
-| M9 | *(optional; ask first)* TUM RGB-D fr1/desk geometry | ATE vs mocap via `evo` | 3+ sessions | Colab or local (CPU-light) | +0.36 GB data if local (quoted by you) |
+| M9 (done) | *(optional; ask first)* TUM RGB-D fr1/desk geometry | ATE vs mocap via `evo` | 3+ sessions | Colab or local (CPU-light) | +0.36 GB data if local (quoted by you) |
 | M10 | CI, README, technical report, CONTRIBUTING.md | CI green; every README number traces to script+config+seed | 1 session | Local | ~0 |
 
 Colab notebooks (`notebooks/`): `01_data_splits.ipynb` (M2), `02_baselines.ipynb` (M4), `03_finetune_eval.ipynb` (M5), `04_active_learning.ipynb` (M6), `05_export_bench.ipynb` (M7), `06_drift_demo.ipynb` (M8). Each is a few cells: clone → install → run CLI → save outputs.
