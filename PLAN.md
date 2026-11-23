@@ -27,7 +27,7 @@ Consequences: the laptop cannot host torch, model weights and a viewer comfortab
 - **What comes back** (small, committed or attached to a release): derived COCO JSON + splits, metrics JSON, predictions JSON, LoRA adapters, benchmark JSON, HTML report. Drive is the scratch store between sessions; the repo is the source of truth.
 - **Things Colab cannot do, and what replaces them:** (1) **PyQt6 viewer** needs a desktop → stays local, reads the images already in `sitesight_data` plus predictions JSON from Colab; (2) **Docker build** → built in GitHub Actions or locally if Docker exists, otherwise marked untested; (3) **latency** → measured on the Colab runtime and reported as "Colab CPU, N vCPU" (hardware printed by the script); a laptop number is optional and only if disk allows; (4) the final quantised model is exported in Colab and the FastAPI service is smoke-tested locally against it only if the file fits.
 - **Colab constraints to design for:** sessions reset (every notebook starts from a clean clone and is idempotent), free-tier GPU availability is not guaranteed, runtimes disconnect (checkpoint adapters each epoch to Drive), hardware varies between sessions (log `nvidia-smi`/`lscpu` into every metrics JSON).
-- **Repo transport:** Colab needs the repo reachable (GitHub remote, private is fine) or a zip on Drive. No remote exists yet; I will not create or push one without your OK (§11).
+- **Repo transport (decided):** private GitHub repo `hddaghigh/sitesight` (created 2026-11-22). A notebook clones it with a **read-only fine-grained personal access token** (scope: this repo only, Contents: read) stored in Colab **Secrets** (`GITHUB_TOKEN`) and read with `google.colab.userdata.get`. The token is never written into a notebook, the repo or an output cell. Results are pulled back to the laptop via Drive or a downloaded file, not pushed from Colab with that token.
 
 ## 2. Dataset — what is actually there (measured)
 
@@ -193,5 +193,5 @@ Estimated total local add ≈ 0.7 GB (M1–M7) beyond the dataset, leaving rough
 1. Okay to delete the 0.59 GB zip now that the SHA-256 matched and the content is extracted (frees space; the original stays re-downloadable)?
 2. Approve installing **uv** (not yet installed; I will report package sizes first) for the M1 session. Only light dependencies are installed locally (no torch).
 3. M9 (TUM RGB-D geometry): decide at the end of M8; not part of the commitment yet.
-4. **How should Colab get the repo?** A private GitHub repo (I create it and push only after you say so) is the easiest; the alternative is zipping the repo to Drive each time.
+4. ~~How should Colab get the repo?~~ Decided: private GitHub repo (§1b). You still need to create the read-only token and add it to Colab Secrets before the first notebook runs (I will give the exact steps in M1).
 5. Colab account: the free tier is assumed (T4 when available, ~12 GB RAM). If you have Pro, the plan does not need it but runs faster.
