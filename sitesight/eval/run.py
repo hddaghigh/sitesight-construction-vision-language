@@ -50,9 +50,23 @@ def evaluate_grounding_file(
         "queried_classes": queried,
         "n_predictions": len(dets),
         "protocols": {p: evaluate_grounding(dets, gts, protocol=p) for p in protocols},
-        "presence_summary": presence_summary(dets, gts, images),
+        # Image-level presence F1 only makes sense when the model was asked about EVERY class in
+        # every image. If it was only asked about classes known to be present, every prediction is
+        # trivially "present" and precision/F1 are meaningless (this once printed 99% for Florence).
+        "presence_summary": presence_summary(dets, gts, images) if queried == "all" else None,
     }
     return out
+
+
+def sanitize_results(results: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Null the presence summary of grounding results that were queried only where present.
+
+    For metrics files produced before that rule existed; idempotent.
+    """
+    for r in results:
+        if r.get("task") == "grounding" and r.get("queried_classes") != "all":
+            r["presence_summary"] = None
+    return results
 
 
 def evaluate_captioning_file(pset: PredictionSet, regions: Sequence[RegionGT]) -> dict[str, Any]:
@@ -180,13 +194,22 @@ def markdown_table(results: Sequence[dict[str, Any]]) -> str:
     )
     lines += _table(head_b, rows)
 
-    lines += ["### Image-level resource presence (F1 at fixed score thresholds)", ""]
-    rows = []
-    for r in grounding:
-        t = r["presence_summary"]["thresholds"]
-        rows.append((r["model"], *[_pct(t[k]["f1"]) for k in t]))
-    thr = list(grounding[0]["presence_summary"]["thresholds"]) if grounding else []
-    lines += _table(("Model", *[f"F1 @ score>={k}" for k in thr]), rows)
+    with_presence = [r for r in grounding if r.get("presence_summary")]
+    if with_presence:
+        lines += ["### Image-level resource presence (F1 at fixed score thresholds)", ""]
+        rows = []
+        for r in with_presence:
+            t = r["presence_summary"]["thresholds"]
+            rows.append((r["model"], *[_pct(t[k]["f1"]) for k in t]))
+        thr = list(with_presence[0]["presence_summary"]["thresholds"])
+        lines += _table(("Model", *[f"F1 @ score>={k}" for k in thr]), rows)
+        skipped = [r["model"] for r in grounding if not r.get("presence_summary")]
+        if skipped:
+            lines += [
+                "Not computed for " + ", ".join(skipped) + ": those models were only queried for "
+                "classes already present, so their predictions cannot be false alarms.",
+                "",
+            ]
 
     if grounding:
         lines += ["### Per-class AP@0.5 (given_phrases protocol)", ""]
@@ -223,9 +246,9 @@ def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
     )
-    p.add_argument("--annotations", type=Path, required=True)
+    p.add_argument("--annotations", type=Path)
     p.add_argument("--split", default="val", choices=["train", "val", "test"])
-    p.add_argument("--predictions", type=Path, nargs="+", required=True)
+    p.add_argument("--predictions", type=Path, nargs="+")
     p.add_argument(
         "--out", type=Path, required=True, help="metrics JSON (a .md table is written next to it)"
     )
@@ -234,7 +257,17 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="score every file on the images ALL files cover (apples-to-apples comparison)",
     )
+    p.add_argument(
+        "--from-metrics",
+        type=Path,
+        help="re-render tables from an existing metrics JSON (no predictions needed)",
+    )
     args = p.parse_args(argv)
+    if args.from_metrics is not None:
+        results = sanitize_results(json.loads(args.from_metrics.read_text(encoding="utf-8")))
+        return _write(results, args.out)
+    if args.annotations is None or not args.predictions:
+        p.error("--annotations and --predictions are required (or use --from-metrics)")
     ds = Dataset.load(args.annotations)
     if not split_images(ds, args.split):
         p.error(f"no images in split {args.split!r}: run the curation step first")
@@ -245,10 +278,14 @@ def main(argv: list[str] | None = None) -> int:
         restrict = set.intersection(*covered) if covered else None
         print(f"--common-images: {len(restrict or [])} images are covered by every file")
     results = [evaluate_file(ps, ds, args.split, restrict) for ps in psets]
-    args.out.parent.mkdir(parents=True, exist_ok=True)
-    args.out.write_text(json.dumps(results, indent=1, sort_keys=True) + "\n", encoding="utf-8")
+    return _write(results, args.out)
+
+
+def _write(results: list[dict[str, Any]], out: Path) -> int:
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(results, indent=1, sort_keys=True) + "\n", encoding="utf-8")
     md = markdown_table(results)
-    args.out.with_suffix(".md").write_text(md, encoding="utf-8")
+    out.with_suffix(".md").write_text(md, encoding="utf-8")
     print(md)
     return 0
 

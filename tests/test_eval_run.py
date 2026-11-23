@@ -75,7 +75,8 @@ def test_perfect_grounding_scores_one(ds: Dataset) -> None:
         and m["breakdown"]["kind"]["group"]["n_gt"] == 2
     )
     assert r["images_evaluated"] == 3 and r["ground_truth"]["evaluated"] == 3
-    assert r["presence_summary"]["thresholds"]["0.5"]["f1"] == 1.0
+    # queried only where present -> image-level presence F1 would be trivially perfect: not computed
+    assert r["presence_summary"] is None
 
 
 def test_shifted_boxes_score_zero_and_all_queried_gets_both_protocols(ds: Dataset) -> None:
@@ -143,6 +144,42 @@ def test_partial_run_is_scored_on_the_images_it_covers(ds: Dataset) -> None:
     r = evaluate_file(pset, ds, "val")
     assert r["images_evaluated"] == 1 and r["ground_truth"]["evaluated"] == 1
     assert r["protocols"]["given_phrases"]["n_gt"] == 1
+
+
+def test_presence_summary_only_for_models_queried_on_all_classes(ds: Dataset) -> None:
+    """Regression: a model asked only about present classes scored 99% presence F1 (meaningless)."""
+    gts, _, _ = build_ground_truth(ds, "val")
+    preds = [Prediction(g.file_name, g.bbox, 0.9, None, CATEGORY_IDS[g.category]) for g in gts]
+    present = PredictionSet("p", preds, {"task": "grounding", "queried_classes": "present"})
+    everything = PredictionSet("a", preds, {"task": "grounding", "queried_classes": "all"})
+    assert evaluate_file(present, ds, "val")["presence_summary"] is None
+    assert (
+        evaluate_file(everything, ds, "val")["presence_summary"]["thresholds"]["0.5"]["f1"] == 1.0
+    )
+    md = markdown_table([evaluate_file(present, ds, "val"), evaluate_file(everything, ds, "val")])
+    assert "Not computed for p" in md and "| a | 100.0 |" in md
+    only_present = markdown_table([evaluate_file(present, ds, "val")])
+    assert "resource presence" not in only_present  # no section when there is nothing valid to show
+
+
+def test_sanitize_and_from_metrics_cli(ds: Dataset, tmp_path: Path) -> None:
+    """Old metrics files (made before the rule existed) are repaired when re-rendered."""
+    from sitesight.eval.run import sanitize_results
+
+    res = evaluate_file(_perfect_grounding(ds), ds, "val")
+    res["presence_summary"] = {"thresholds": {"0.5": {"f1": 0.99}}}  # as the old code wrote it
+    res["queried_classes"] = "present"
+    assert sanitize_results([res])[0]["presence_summary"] is None
+    assert sanitize_results([res])[0]["presence_summary"] is None  # idempotent
+    old = tmp_path / "old.json"
+    res["presence_summary"] = {"thresholds": {"0.5": {"f1": 0.99}}}
+    old.write_text(json.dumps([res]))
+    out = tmp_path / "fixed.json"
+    assert main(["--from-metrics", str(old), "--out", str(out)]) == 0
+    assert json.loads(out.read_text())[0]["presence_summary"] is None
+    assert "Grounding on `val`" in out.with_suffix(".md").read_text()
+    with pytest.raises(SystemExit):  # neither mode given
+        main(["--out", str(out)])
 
 
 def test_restrict_intersects_with_the_images_a_file_covers(ds: Dataset) -> None:

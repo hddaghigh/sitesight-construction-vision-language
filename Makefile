@@ -62,8 +62,9 @@ view:
 	  --annotations $(DATA_DIR)/derived/curated/annotations_curated.json \
 	  --images $(DATA_DIR)/extracted/UAVdata $(if $(PRED),--predictions $(PRED),)
 
-# M4: zero-shot baselines on val (torch venv: `uv sync --group embed`; slow on CPU, see CONTRIBUTING.md)
-#   OWLv2: all val images (~40 min on the dev laptop). Florence-2: seeded 30-image subset (~70 min).
+# M4: zero-shot baselines. The full validation run was done in Colab (see reports/m4/README.md);
+# these local targets exist for small smoke runs only (torch venv: `uv sync --group embed`).
+#   On the dev laptop CPU: OWLv2 ~11 s/image, Florence-2 ~140 s/image: use --limit.
 baseline-owlv2:
 	python -m sitesight.baselines.run --model owlv2 \
 	  --annotations $(DATA_DIR)/derived/curated/annotations_curated.json \
