@@ -14,7 +14,9 @@ jobs:
         with:
           python-version: "3.11"
       - run: pip install uv
-      - run: uv sync
+      # The viewer group is needed so mypy can see the PyQt6 type stubs; the default pytest
+      # run still skips GUI tests (they run in the `viewer` job below).
+      - run: uv sync --group viewer
       - run: uv run ruff check .
       - run: uv run ruff format --check .
       - run: uv run mypy
