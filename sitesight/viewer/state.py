@@ -107,8 +107,6 @@ class Document:
         self._redo: list[tuple[str, list[AnnotationRecord]]] = []
         self.dirty = False
 
-    # --- lookups ---------------------------------------------------------------------
-
     def image(self, file_name: str) -> ImageRecord:
         try:
             return self._by_name[file_name]
@@ -135,15 +133,11 @@ class Document:
     def sources(self) -> list[str]:
         return [SOURCE_ORIGINAL, SOURCE_EDIT, *[PRED_PREFIX + m for m in sorted(self.predictions)]]
 
-    # --- predictions -----------------------------------------------------------------
-
     def add_predictions(self, pset: PredictionSet) -> None:
         problems = validate_predictions(pset, self.original)
         if problems:
             raise DocumentError(f"invalid predictions ({len(problems)}): {problems[0]}")
         self.predictions[pset.model_name] = pset
-
-    # --- editing ---------------------------------------------------------------------
 
     def _snapshot(self, file_name: str) -> list[AnnotationRecord]:
         return copy.deepcopy(self.regions(file_name, SOURCE_EDIT))
@@ -228,8 +222,6 @@ class Document:
         self.dirty = True
         return True
 
-    # --- audit -----------------------------------------------------------------------
-
     def start_audit(self, audit: AuditFile) -> None:
         """Begin (or resume) an audit. Blind mode empties the edit layer for sample images that
         are not finished yet, so the auditor draws from scratch."""
@@ -307,8 +299,6 @@ class Document:
         done = sum(1 for n in audit.sample if audit.images.get(n, AuditImage()).status != "todo")
         return done, len(audit.sample)
 
-    # --- export ----------------------------------------------------------------------
-
     def export_edit(self, path: Path) -> list[str]:
         """Write the whole edit layer in the SiteSight schema. Returns validation problems
         (the file is only written when there are none)."""
@@ -336,9 +326,6 @@ class Document:
             return problems
         sub.save(path)
         return []
-
-
-# --- listing / filtering ------------------------------------------------------------------
 
 
 def list_images(

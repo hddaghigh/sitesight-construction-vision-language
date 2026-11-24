@@ -1,4 +1,4 @@
-# CONTRIBUTING.md: SiteSight conventions and current status
+# Contributing notes: SiteSight conventions and current status
 
 Read [PLAN.md](PLAN.md) first (scope, models, milestones). This file holds the working rules.
 
@@ -10,7 +10,7 @@ Read [PLAN.md](PLAN.md) first (scope, models, milestones). This file holds the w
 - **Explain the maths** (losses, metrics, drift statistics) in docstrings.
 - **Disk rule (laptop):** check free space before any download/install; stop if it would leave < 3 GB free. Data, caches and the managed Python live on F: outside the repo.
 - **Colab runs the heavy steps** (torch, models, training, benchmarks). Laptop: code, tests, viewer. Notebooks only call CLI entry points. Exception (M2): small jobs may run on the laptop in `.venv-embed` after reporting sizes, when that lets me verify results.
-- **Commits:** small, one per milestone step; commit only when asked.
+- **Commits:** small, one per milestone step.
 
 ## Environment (Windows laptop)
 ```powershell
@@ -46,15 +46,15 @@ Quality gate before any commit: `ruff check`, `ruff format --check`, `mypy`, `py
 ## M3 (viewer + audit)
 - Qt-free logic: `sitesight/viewer/state.py` (layers original/edit, undo/redo, blind-mode hiding, export), `sitesight/data/audit.py` (sampling, greedy IoU matching, agreement, kappa, bootstrap CI, taxonomy), `sitesight/data/predictions.py` (shared prediction file format for the viewer and M4). Qt layer: `sitesight/viewer/canvas.py`, `app.py`.
 - Run with `make view` / `make audit` (blind by default). Tests: default suite is Qt-free; `pytest -m viewer` runs the GUI headless (`QT_QPA_PLATFORM=offscreen`, set `QT_QPA_FONTDIR=C:\Windows\Fonts` to render text in screenshots).
-- **The audit has NOT been performed**; `reports/m3/audit_sample.json` is the fixed sample (seed 0). Never fabricate audit numbers; `audit_report.json` must come from the user's `audit.json`. Use throwaway audit files for tests/screenshots, never `sitesight_data\audit\audit.json`.
+- **The audit has NOT been performed**; `reports/m3/audit_sample.json` is the fixed sample (seed 0). Never fabricate audit numbers; `audit_report.json` must come from a real `audit.json`. Use throwaway audit files for tests/screenshots, never `sitesight_data\audit\audit.json`.
 - PyQt6 stub quirks are handled with targeted `# type: ignore[...]` (typed `pyqtSignal`, `QTest` static calls, `QGraphicsItem(parent=)`).
 
 ## M4 (zero-shot baselines + evaluation harness)
 - Harness (pure numpy, `sitesight/eval/`): `boxes.py` (IoU, NMS), `grounding.py` (AP all-point, COCO-style matching, recall@IoU with `top_k`, size/crowding/kind breakdowns, two protocols `detection` vs `given_phrases`: never compare across them), `calibration.py` (ECE, 10 equal-width bins), `captioning.py` (BLEU, CIDEr-D as in coco-caption, METEOR with **exact matching only**, loose + strict field accuracy), `summary.py` (image-level resource presence F1), `data.py` (GT building + exclusion report), `run.py` (CLI + markdown tables). Every formula has a hand-derived test; mutation-checked (12/13 killed, survivor is an equivalent mutant).
 - Baselines (`sitesight/baselines/`): OWLv2-base (all 31 classes, per-class NMS) and **native** `florence-community/Florence-2-base` (no `trust_remote_code`, MIT). Prompts are pre-registered in `prompts.py` and must not be tuned on val. Florence confidence = geometric-mean token probability under greedy decoding.
 - **Compute reality (laptop i7-8565U, 4 threads):** Florence-2-base vision tower ~45 s per image (80% of a query; `channels_last` does not help), so image features are cached per image and both Florence tasks run in one pass (~140 s/image total). OWLv2 ~11 s/image for all 31 classes. Full val for Florence is therefore a Colab job (`notebooks/02_baselines.ipynb`, not yet run); locally Florence runs on a seeded 30-image subset (`--limit 30 --seed 0`).
-- **Decision 2026-11-22 (user): the M4 baseline runs happen in Colab, not on the laptop CPU.** The local run was stopped (a partial `owlv2_val.json` remains; the runner resumes it). Do not start long model runs locally again without asking: the user's standing instruction is Colab for anything heavy (see the Rules section).
-- **M4 results exist** (`reports/m4/`): full validation split on a Colab T4 via the token-free notebook built by `scripts/build_colab_notebook.py` (no tokens or passwords are typed anywhere). OWLv2 `given_phrases` mAP@0.5 24.1, Florence-2-large 21.5, base 16.3; zero-shot captions ~0 on template metrics. Prediction files were NOT downloaded (OWLv2's are hundreds of MB); only the 40 KB metrics JSON was, with the user's OK.
+- **Decision 2026-11-22: the M4 baseline runs happen in Colab, not on the laptop CPU.** The local run was stopped (a partial `owlv2_val.json` remains; the runner resumes it). Long model runs stay in Colab (see the Rules section).
+- **M4 results exist** (`reports/m4/`): full validation split on a Colab T4 via the token-free notebook built by `scripts/build_colab_notebook.py` (no tokens or passwords are typed anywhere). OWLv2 `given_phrases` mAP@0.5 24.1, Florence-2-large 21.5, base 16.3; zero-shot captions ~0 on template metrics. Prediction files were NOT downloaded (OWLv2's are hundreds of MB); only the 40 KB metrics JSON was.
 - Bugs found only by really running on Colab (all fixed, regression-tested): (1) Mendeley returns 403 to urllib's default User-Agent; (2) `python -m sitesight.data.splits` silently did nothing (no `__main__` guard; `tests/test_cli_entrypoints.py` now launches every CLI with `-m`); (3) image-level presence F1 was computed for models queried only where a class is present (99% for Florence): now `None` for those (`sanitize_results`, `--from-metrics`).
 - Lesson: unit tests that call `main()` directly or use a local fake server do not prove the real entry point or the real host works; run the actual command and endpoint before declaring a pipeline done.
 - Predictions live in `sitesight_data\derived\predictions\` (tens of MB; not committed). Committed: metrics + tables in `reports/m4/`.
@@ -90,7 +90,7 @@ un\epoch_4`. Gallery images are regenerated, not committed.
 ## Status
 - **M1 done** (parser, validator, schema, downloader, tests, CI).
 - **M2 done** (caption parser, pHash+DINOv2 dedup, grouped split, leakage report, datasheet, Colab notebook not yet run).
-- **M3 done except the human part**: viewer, audit analysis, sample and protocol are built and tested; the 100-image audit awaits the user's labelling (label accuracy is unmeasured everywhere).
+- **M3 done except the human part**: viewer, audit analysis, sample and protocol are built and tested; the 100-image audit awaits my own labelling (label accuracy is unmeasured everywhere).
 - **M4 to M9 done** (zero-shot baselines and eval harness; LoRA fine-tune; active learning; ONNX/int8 serving; monitoring; RGB-D odometry). Results and caveats: `reports/m4` to `reports/m9`.
 - **M10 done**: README headline table with sources, `TECHNICAL_REPORT.md`, `tests/test_headline_numbers.py` (fails if a README number and its committed evidence disagree). When a report changes, update the README row and rerun that test.
-- Open items: the 100-image audit (the user's labelling), calibration (temperature scaling), KV-cached decoder, embedding drift and real output-drift logs, M6 raw per-round rows were never committed.
+- Open items: the 100-image audit (my own labelling), calibration (temperature scaling), KV-cached decoder, embedding drift and real output-drift logs, M6 raw per-round rows were never committed.

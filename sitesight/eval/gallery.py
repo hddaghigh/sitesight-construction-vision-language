@@ -94,7 +94,6 @@ def classify_grounding_failures(
             out.append(
                 Failure(kind, pair[0], pair[1], g.bbox, [d.bbox for d in d_sorted], best, detail)
             )
-        # predictions that matched nothing
         matched_boxes = [d.bbox for d, f in zip(d_sorted, flags, strict=True) if f]
         for d, f in zip(d_sorted, flags, strict=True):
             if f:

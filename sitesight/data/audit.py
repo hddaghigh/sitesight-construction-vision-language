@@ -337,9 +337,6 @@ def audit_images(
     )
 
 
-# --- sampling and the audit file ---------------------------------------------------------
-
-
 def _numeric_key(name: str) -> tuple[int, str]:
     stem = Path(name).stem
     return (int(stem) if stem.isdigit() else 10**9, name)

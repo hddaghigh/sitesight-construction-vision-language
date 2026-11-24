@@ -41,7 +41,7 @@ from typing import Any
 
 from sitesight.data.schema import FLAG_UNPARSED, CategoryRecord, Dataset
 
-# --- vocabulary (reviewed by hand against all 735 distinct captions) ------------------------
+# Vocabulary, reviewed by hand against all 735 distinct captions.
 
 COLOURS = frozenset(
     {"black", "blue", "brown", "gray", "grey", "green", "orange", "pink", "purple"}

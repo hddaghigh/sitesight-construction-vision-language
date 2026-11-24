@@ -147,7 +147,6 @@ def test_cli_end_to_end_with_real_files(tmp_path: Path, capsys: pytest.CaptureFi
         "split": curated.images[0].split,
         "group_id": curated.images[0].group_id,
     }
-    # pHash cache is written and reused.
     assert (out / "phash.npy").exists()
     first = compute_phashes(curated, images, out / "phash.npy")
     assert first == compute_phashes(curated, images, out / "phash.npy")

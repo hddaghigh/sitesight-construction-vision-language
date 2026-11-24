@@ -25,8 +25,6 @@ from sitesight.monitor.report import render_report
 from sitesight.monitor.request_log import RequestLog, error_rate, log_features, read_log
 from sitesight.serve.api import Limits, create_app
 
-# ---------------------------------------------------------------- quality statistics
-
 
 def test_laplacian_variance_by_hand() -> None:
     assert laplacian_variance(np.full((5, 5), 0.7)) == pytest.approx(0.0, abs=1e-12)
@@ -112,9 +110,6 @@ def test_reference_flags_unusual_images_and_needs_enough_data() -> None:
         QualityReference.fit(reference_rows(29))
     again = QualityReference.from_dict(json.loads(json.dumps(ref.to_dict())))
     assert again.band("sharpness") == ref.band("sharpness")
-
-
-# ---------------------------------------------------------------- drift tests
 
 
 def test_kolmogorov_survival_matches_the_published_critical_values() -> None:
@@ -203,9 +198,6 @@ def test_a_joint_shift_no_single_feature_shows_is_caught_by_mmd() -> None:
     assert [t.name for t in res.alerts] == ["mmd"]
 
 
-# ---------------------------------------------------------------- request log
-
-
 def test_log_round_trip_skips_bad_lines_and_stores_no_identifying_data(tmp_path: Path) -> None:
     log = RequestLog(tmp_path / "sub" / "r.jsonl", clock=lambda: 0.0)
     stats = image_stats(texture(5))
@@ -274,9 +266,6 @@ def test_api_logs_successes_and_rejections_but_not_when_disabled(tmp_path: Path)
     # no log object: the endpoints still work and nothing is written
     quiet = TestClient(create_app(Stub(), Limits()))
     assert quiet.post("/v1/ground", files=files, data={"phrase": "rebar"}).is_success
-
-
-# ---------------------------------------------------------------- report and CLI
 
 
 def test_report_states_the_verdict_and_escapes_untrusted_text() -> None:

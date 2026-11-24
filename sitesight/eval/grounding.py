@@ -188,7 +188,6 @@ def evaluate_grounding(
         {p[1] for p in det_pairs} - set(classes)
     )
 
-    # Breakdowns of recall at the first IoU threshold.
     thr0 = iou_thresholds[0]
     m0 = matched_at[thr0]
     groups: dict[str, dict[str, list[int]]] = {

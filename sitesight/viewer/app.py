@@ -154,8 +154,6 @@ class MainWindow(QMainWindow):
         if doc is not None:
             self.set_document(doc)
 
-    # --- construction --------------------------------------------------------------------
-
     def _build_left_dock(self) -> None:
         w = QWidget()
         lay = QVBoxLayout(w)
@@ -261,8 +259,6 @@ class MainWindow(QMainWindow):
         self._action("Skip image", a, self.mark_skipped)
         self._action("Next unfinished image", a, self.goto_next_todo, "Ctrl+J")
 
-    # --- document ------------------------------------------------------------------------
-
     def set_document(self, doc: Document) -> None:
         self.doc = doc
         self.caption_box.clear()
@@ -333,8 +329,6 @@ class MainWindow(QMainWindow):
         entry = self.doc.audit.images.get(name) if self.doc.audit else None
         self.notes.setText(entry.notes if entry else "")
         self._render()
-
-    # --- rendering -----------------------------------------------------------------------
 
     def _display_regions(self, source: str, name: str) -> list[DisplayRegion]:
         assert self.doc is not None
@@ -417,8 +411,6 @@ class MainWindow(QMainWindow):
         if self.doc.dirty:
             text += " | unsaved edits"
         self.status_label.setText(text)
-
-    # --- interaction -----------------------------------------------------------------------
 
     def _notify(self, message: str) -> None:
         bar = self.statusBar()
@@ -534,8 +526,6 @@ class MainWindow(QMainWindow):
                 return
         self.show_image(name)
 
-    # --- audit -----------------------------------------------------------------------------
-
     def start_audit(self, sample_json: Path, audit_path: Path, mode: str) -> None:
         """Load the sample and resume ``audit_path`` if it exists, else create it."""
         if self.doc is None:
@@ -592,7 +582,7 @@ class MainWindow(QMainWindow):
             if nxt is not None:
                 self.goto(nxt)
 
-    # --- dialogs (thin wrappers; logic lives in the methods above and in Document) ---------------
+    # Dialogs: thin wrappers; the logic lives in the methods above and in Document.
 
     def open_dataset(self, annotations: Path, images_dir: Path) -> None:
         self.set_document(Document(Dataset.load(annotations), images_dir))

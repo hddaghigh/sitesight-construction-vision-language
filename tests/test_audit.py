@@ -156,7 +156,6 @@ def test_audit_images_summary_values_and_ci() -> None:
     assert rep.taxonomy[COUNT_MISMATCH] == 1 and rep.taxonomy[MISSED_BY_ORIGINAL] == 1
     lo, hi = rep.ci95["precision"]
     assert lo is not None and hi is not None and lo <= 0.75 <= hi
-    # Same seed -> same interval.
     again = audit_images(
         {"1.jpg": (orig, audit), "2.jpg": (perfect, perfect)}, mode="blind", n_boot=200
     )

@@ -60,9 +60,6 @@ def _ngrams(tokens: Sequence[str], n: int) -> Counter[tuple[str, ...]]:
     return Counter(tuple(tokens[i : i + n]) for i in range(len(tokens) - n + 1))
 
 
-# --- BLEU ---------------------------------------------------------------------------------
-
-
 def bleu(
     candidates: Sequence[str], references: Sequence[Sequence[str]], max_n: int = 4
 ) -> dict[str, float]:
@@ -97,9 +94,6 @@ def bleu(
             else bp * math.exp(sum(math.log(p) for p in precisions) / n)
         )
     return out
-
-
-# --- CIDEr-D ------------------------------------------------------------------------------
 
 
 def cider_d(
@@ -151,9 +145,6 @@ def cider_d(
     return total / len(candidates) if candidates else 0.0
 
 
-# --- METEOR (exact) -----------------------------------------------------------------------
-
-
 def _align(hyp: list[str], ref: list[str]) -> list[tuple[int, int]]:
     """Greedy exact alignment that prefers continuing the previous match (fewer chunks)."""
     free: dict[str, list[int]] = defaultdict(list)
@@ -197,9 +188,6 @@ def meteor_exact(candidates: Sequence[str], references: Sequence[Sequence[str]])
         raise ValueError("need one reference list per candidate")
     scores = [meteor_exact_sentence(c, r) for c, r in zip(candidates, references, strict=True)]
     return sum(scores) / len(scores) if scores else 0.0
-
-
-# --- field-level accuracy -----------------------------------------------------------------
 
 
 @dataclass

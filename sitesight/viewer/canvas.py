@@ -224,8 +224,6 @@ class ImageView(QGraphicsView):
             if bar is not None:
                 bar.valueChanged.connect(self._emit_view_changed)
 
-    # --- content -----------------------------------------------------------------
-
     def image_rect(self) -> QRectF:
         return QRectF(self._image_rect)
 
@@ -286,8 +284,6 @@ class ImageView(QGraphicsView):
         if self._auto_fit:
             self._fit_quietly()
 
-    # --- view syncing --------------------------------------------------------------
-
     def _emit_view_changed(self) -> None:
         if not self._syncing:
             self.view_changed.emit()
@@ -306,8 +302,6 @@ class ImageView(QGraphicsView):
                     mine.setValue(theirs.value())
         finally:
             self._syncing = False
-
-    # --- events --------------------------------------------------------------------
 
     def wheelEvent(self, event: QWheelEvent | None) -> None:
         if event is None:

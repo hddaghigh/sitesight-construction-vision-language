@@ -142,13 +142,13 @@ Deterministic grammar, no ML: `^(count)? (colour)* (resource) (is|are) (state) (
 |---|---|---|---|---|---|
 | M1 | uv project (py3.11), ruff/mypy/pytest, VIA parser → COCO JSON, validator, fixture, `download_data.py` | `pytest` < 1 min; all 8,428 regions parsed or listed with reasons; 6/1/12/19 findings reproduced by tests | 1 session | Local code + tests (no torch); parse run locally (stdlib only) | ~0.3 GB |
 | M2 | pHash+embedding dedup, grouped split, field parser, DATASHEET.md | leak count + parser coverage reported by committed scripts; parser tests hand-checked | 1–2 sessions | Code/tests local; **embeddings + split run in Colab**; field parser runs locally | ~0 (torch only in Colab) |
-| M3 | PyQt6 viewer + 100-image audit | you can load, edit, export labels; audit agreement computed from your labels (IoU, label κ) | 1–2 sessions + your 1–2 h | **Local only** (desktop) | ~0.1 GB |
+| M3 | PyQt6 viewer + 100-image audit | labels can be loaded, edited and exported; audit agreement computed from the auditor's labels (IoU, label κ) | 1–2 sessions + 1–2 h of labelling | **Local only** (desktop) | ~0.1 GB |
 | M4 | OWLv2 + Florence-2 zero-shot; eval harness (mAP@0.5, recall@IoU, CIDEr/METEOR/BLEU, field accuracy, ECE) | every metric matches a hand-computed example in a test; zero-shot table on val | 2 sessions | Metrics code/tests local (numpy); **model runs in Colab** | ~0 locally (predictions JSON only) |
 | M5 | LoRA fine-tune, group-split eval, failure gallery | seeds + configs + experiment log committed; zero-shot vs fine-tuned table; ≥ 1 diagnosed failure per type | 2 sessions | **Colab** train + eval; gallery browsed in the local viewer | adapters, tens of MB |
 | M6 (done) | Active-learning simulation | ≥ 3 seeds; uncertainty+diversity vs random; labels needed for N% of full-data score stated | 1 session | Colab (needs model scores/embeddings) | ~0 |
 | M7 (done) | ONNX/int8, FastAPI, batch CLI, latency benchmark, Dockerfile | fp32 vs int8 metrics side by side; p50/p95 on the Colab CPU (hardware logged); Docker build in CI or marked untested | 2 sessions | Export + benchmark in Colab; API unit tests local with a stub model | ~0.2 GB (fastapi, onnxruntime) |
 | M8 (done) | Request logging, quality checks, drift, alerts, HTML report | blurred / darkened / rescaled batches alert; clean held-out batch does not | 1–2 sessions | Quality-check/stat code local (numpy/Pillow); embedding drift demo in Colab | ~0 |
-| M9 (done) | *(optional; ask first)* TUM RGB-D fr1/desk geometry | ATE vs mocap via `evo` | 3+ sessions | Colab or local (CPU-light) | +0.36 GB data if local (quoted by you) |
+| M9 (done) | *(optional; ask first)* TUM RGB-D fr1/desk geometry | ATE vs mocap via `evo` | 3+ sessions | Colab or local (CPU-light) | +0.36 GB data if local (size from the dataset page) |
 | M10 | CI, README, technical report, CONTRIBUTING.md | CI green; every README number traces to script+config+seed | 1 session | Local | ~0 |
 
 Colab notebooks (`notebooks/`): `01_data_splits.ipynb` (M2), `02_baselines.ipynb` (M4), `03_finetune_eval.ipynb` (M5), `04_active_learning.ipynb` (M6), `05_export_bench.ipynb` (M7), `06_drift_demo.ipynb` (M8). Each is a few cells: clone → install → run CLI → save outputs.
@@ -157,12 +157,12 @@ Adjustments from the data: M1 also produces a *data-findings* table (8,428 vs 8,
 
 ## 9. Disk budget (F:)
 
-Measured: F: free was 7.04 GB before the download and is 5.92 GB now (the zip, 0.59 GB, and the extracted folder, 0.61 GB, take ~1.2 GB). Local budget therefore stays within the ~3 GB you set, but the floor of 3 GB free is approached by M7.
+Measured: F: free was 7.04 GB before the download and is 5.92 GB now (the zip, 0.59 GB, and the extracted folder, 0.61 GB, take ~1.2 GB). Local budget therefore stays within the plan, but the 3 GB free floor is approached by M7.
 
 | Stage | Change (estimate unless noted) | Running F: free (GB) |
 |---|---|---|
 | Now (zip + extracted) | measured | **5.92** (measured) |
-| Delete zip after SHA verified (needs your OK) | +0.59 (measured) | 6.51 |
+| Delete zip after SHA verified | +0.59 (measured) | 6.51 |
 | M1 venv + deps (no torch) | −0.3 | 6.2 |
 | M3 PyQt6 | −0.1 | 6.1 |
 | M2/M4/M5/M6/M8 outputs brought back (JSON, adapters) | −0.1 | 6.0 |
@@ -184,24 +184,24 @@ Estimated total local add ≈ 0.7 GB (M1–M7) beyond the dataset, leaving rough
 | `trust_remote_code` risk / `transformers` version drift | Pin versions, read the remote code, keep a lockfile |
 | Colab session limits, resets, no GPU on a given day | Checkpoint adapters every epoch to Drive; idempotent notebooks; CPU-only fallback for evaluation (slow, stated) |
 | Results differ between Colab sessions (hardware varies) | Fixed seeds; log GPU/CPU model into every metrics JSON; report latency with the hardware named |
-| Colab cannot reach the repo | Private GitHub repo (needs your OK) or a zip on Drive |
+| Colab cannot reach the repo | Private GitHub repo or a zip on Drive |
 | Viewer needs images + predictions that now come from Colab | Images stay in `sitesight_data`; predictions JSON copied back; schema is shared so no conversion |
-| Label audit not done by you | Replace with model-vs-label disagreement review; mark it clearly as *not* a human audit |
+| Label audit not done | Replace with model-vs-label disagreement review; mark it clearly as *not* a human audit |
 | Free disk < 3 GB | Stop and ask; move heavy models to Colab |
 
 ## 10b. Progress log
 
 - **M1 done** (2026-11-22): parser/validator/schema/downloader; real-data findings reproduced.
 - **M2 done** (2026-11-22): caption-field parser (99.63% coverage), pHash + DINOv2-small dedup, grouped split (428 groups; naive split leaks a mean 1,210 train-test pairs vs 0), DATASHEET.md. Embeddings were computed on the laptop (710 MB venv `.venv-embed`) rather than Colab, by agreement, so results could be verified; the Colab notebook is written but not yet run.
-- **M3 built** (2026-11-23): PyQt6 review tool, shared predictions format, audit sampling/matching/agreement/taxonomy code, 100-image sample (`reports/m3/audit_sample.json`, seed 0), protocol in AUDIT.md. **Not done: the audit itself (needs your 2 to 3 h in blind mode, 45 to 90 min in review mode, both rough estimates) and therefore no agreement numbers or error-taxonomy results exist yet.**
+- **M3 built** (2026-11-23): PyQt6 review tool, shared predictions format, audit sampling/matching/agreement/taxonomy code, 100-image sample (`reports/m3/audit_sample.json`, seed 0), protocol in AUDIT.md. **Not done: the audit itself (needs 2 to 3 h of labelling in blind mode, 45 to 90 min in review mode, both rough estimates) and therefore no agreement numbers or error-taxonomy results exist yet.**
 - **M4 built** (2026-11-23): evaluation harness and baseline runners (OWLv2, Florence-2-base). Resolved: Florence-2's `trust_remote_code` risk (a native `transformers` conversion exists, MIT). New measured constraint: Florence-2-base's vision encoder takes ~45 s per image on the laptop CPU (OWLv2 ~11 s), so Florence on the full validation split is a Colab job; the local run uses a seeded 30-image subset and says so.
 - **M4 results** (2026-11-23, Colab T4, validation split, 215 images): OWLv2-base `given_phrases` mAP@0.5 24.1 / recall@0.5 50.8; Florence-2-large 21.5 / 33.8; Florence-2-base 16.3 / 27.5; OWLv2 `detection` protocol 7.9. Zero-shot Florence-2 region descriptions: loose resource accuracy 14.4% to 18.1%, 0% fit the template. Details and caveats in `reports/m4/README.md`. These are the numbers M5 fine-tuning must beat (same split, same harness).
 - **New risk found in M2:** residual same-site leakage under looser similarity (297 train-test pairs at pHash <= 16 / cosine >= 0.85). Mitigation options for M5: report val/test scores with this caveat; try average-linkage clustering (needs scipy) or manual site labels from the M3 audit set; never describe the test set as "unseen sites".
 
-## 11. Open items for you
+## 11. Open items
 
-1. Okay to delete the 0.59 GB zip now that the SHA-256 matched and the content is extracted (frees space; the original stays re-downloadable)?
-2. Approve installing **uv** (not yet installed; I will report package sizes first) for the M1 session. Only light dependencies are installed locally (no torch).
-3. M9 (TUM RGB-D geometry): decide at the end of M8; not part of the commitment yet.
-4. ~~How should Colab get the repo?~~ Decided: private GitHub repo (§1b). You still need to create the read-only token and add it to Colab Secrets before the first notebook runs (I will give the exact steps in M1).
-5. Colab account: the free tier is assumed (T4 when available, ~12 GB RAM). If you have Pro, the plan does not need it but runs faster.
+1. The 0.59 GB zip can be deleted once the SHA-256 matched and the content is extracted (it stays re-downloadable).
+2. uv is installed for M1; only light dependencies are installed locally (no torch).
+3. M9 (TUM RGB-D geometry) was optional and was decided at the end of M8.
+4. Colab gets the repo from the private GitHub repo (§1b) with a read-only token kept in Colab Secrets.
+5. Colab account: the free tier is assumed (T4 when available, ~12 GB RAM). A Pro account is not needed but runs faster.

@@ -5,7 +5,7 @@ for every phrase, and a structured site summary, evaluated honestly, served on C
 Built end to end on the public Bang & Kim UAV dataset (1,431 images, 8,428 region captions).
 
 **Status: all milestones M1 to M10 are built, tested and pushed.** The one human-dependent piece is
-still open: the 100-image label audit needs the user's own labelling ([AUDIT.md](AUDIT.md)), so label
+still open: the 100-image label audit needs my own labelling ([AUDIT.md](AUDIT.md)), so label
 accuracy is **unmeasured**. Read the [technical report](TECHNICAL_REPORT.md) for the whole story,
 [DATASHEET.md](DATASHEET.md) for what the data is and its limits, [PLAN.md](PLAN.md) for scope and
 decisions, [DATA_LICENSES.md](DATA_LICENSES.md) for licences and citation.

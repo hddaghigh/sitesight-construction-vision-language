@@ -30,8 +30,6 @@ from sitesight.geometry.se3 import (
 from sitesight.geometry.tum import ROS_DEFAULT, Intrinsics, associate, load_sequence, read_list
 from sitesight.geometry.vo import VOConfig, backproject, extract, run_vo
 
-# ---------------------------------------------------------------- rigid-body maths
-
 
 def rot_y(deg: float) -> np.ndarray:
     a = np.radians(deg)
@@ -102,9 +100,6 @@ def test_rpe_by_hand() -> None:
         rpe(gt[:3], gt[:3], 3)
 
 
-# ---------------------------------------------------------------- TUM reader
-
-
 def test_associate_matches_closest_pairs_one_to_one() -> None:
     assert associate([0.0, 1.0, 2.0], [0.015, 0.99, 1.02, 3.0]) == [(0, 0), (1, 1)]
     # 1.012 is 0.011 from 1.011 but 1.0 is 0.011 too; closest-first with ties by order
@@ -145,8 +140,6 @@ def test_only_depths_inside_the_valid_range_become_3d_points() -> None:
     z = feats.xyz[feats.valid, 2]
     assert (z == 2.0).all()
 
-
-# ---------------------------------------------------------------- synthetic sequence
 
 PLANE_Z = 2.0
 TEX_PX_PER_M = 340.0
