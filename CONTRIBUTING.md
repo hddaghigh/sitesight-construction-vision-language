@@ -30,7 +30,7 @@ Quality gate before any commit: `ruff check`, `ruff format --check`, `mypy`, `py
 
 ## Decisions
 - 2026-11-22: Florence-2-base primary (MIT, 463 MB); OWLv2 grounding baseline; Qwen2.5-VL-3B rejected (`qwen-research` licence); see PLAN.md section 3.
-- 2026-11-22: runs in Colab, repo stays local; private GitHub repo `hddaghigh/sitesight`; Colab clones it with a read-only token in Colab Secrets.
+- 2026-11-22: runs in Colab, repo stays local; private GitHub repo `hddaghigh/sitesight-construction-vision-language`; Colab clones it with a read-only token in Colab Secrets.
 - M1 parser is stdlib-only (JPEG size read from the SOF marker) so it runs anywhere without dependencies.
 
 ## Real-data findings that shape later milestones
