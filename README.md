@@ -1,4 +1,4 @@
-# SiteSight
+# SiteSight: Vision-Language Grounding and Captioning for Construction-Site Drone Imagery
 
 Grounded construction-site understanding from drone images: a described region for every box, a box
 for every phrase, and a structured site summary, evaluated honestly, served on CPU and monitored.
