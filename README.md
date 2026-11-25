@@ -75,10 +75,3 @@ Heavy steps (training, export, benchmarks, odometry on TUM) run in Colab from to
 that embed the code: `uv run python scripts/build_colab_notebook.py --kind m5|m6|m7|m9 --out colab/x.ipynb`
 (`m7` also needs `--adapter-dir`). `notebooks/01_data_splits.ipynb` (M2) is written but has not been
 run in Colab.
-
-## Limits that matter
-- One dataset, labels of unknown accuracy, same-site similarity possible beyond the chosen rule.
-- Results are single deterministic runs (or 3 seeds for M6); no confidence intervals elsewhere.
-- Output drift and embedding-based drift were not demonstrated on real model outputs.
-- The Docker image is built and import-checked in CI, never run with real weights.
-- Odometry has no map or loop closure.
