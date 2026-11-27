@@ -29,14 +29,6 @@ disagree. All are single runs on one dataset (seeds in the configs); small diffe
 | RGB-D odometry, TUM fr1/desk | ATE 8.9 cm (frame-to-frame), 9.1 cm (keyframe) vs 87 cm for a camera that never moved; evo agrees | `reports/m9/metrics.json` |
 | Label accuracy of the dataset | **not measured** (audit pending) | `reports/m3/audit_sample.json` fixes the 100 images |
 
-**Read before quoting anything:** the two grounding protocols are not comparable (`given_phrases` is
-told which classes are present); labels are incomplete and use group boxes; BLEU/CIDEr reward the
-dataset's rigid caption template, so field accuracy is the caption metric; the held-out split can
-still share sites with train under a looser similarity rule (DATASHEET section 6); the model's
-confidence is not calibrated. Negative results are reported, not hidden: diversity added nothing over
-plain uncertainty, keyframes did not improve odometry, int8 changes 24% of captions, and new sites
-trigger the drift alert.
-
 ## What is in the repository
 | Milestone | What | Where |
 |---|---|---|
